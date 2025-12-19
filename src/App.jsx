@@ -1,5 +1,7 @@
+import SearchBar from "./components/SearchBar";
+
 const App = () => {
-  return "hello world";
+  return <SearchBar />
 };
 
 export default App;
