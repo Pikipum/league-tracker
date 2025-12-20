@@ -1,25 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import MatchCard from "./MatchCard";
 
-const MatchHistory = ({ puuid }) => {
-  const [matchHistory, setMatchHistory] = useState();
+const MatchCard = ({ match }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [matchData, setMatchData] = useState();
   const url = process.env.REACT_APP_RIOT_URL;
   const api_key = process.env.REACT_APP_RIOT_API_KEY;
 
   useEffect(() => {
-    if (!puuid || !url || !api_key) return;
+    if (!url || !api_key) return;
 
     const fetchMatchHistory = async () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `${url}/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20&api_key=${api_key}`
+          `${url}/lol/match/v5/matches/${match}?api_key=${api_key}`
         );
-        setMatchHistory(response.data);
+        setMatchData(response.data);
       } catch (error) {
         console.error("Failed to fetch match history:", error);
       } finally {
@@ -28,20 +26,12 @@ const MatchHistory = ({ puuid }) => {
     };
 
     fetchMatchHistory();
-  }, [puuid, url, api_key]);
+  }, [match, url, api_key]);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  return (
-    <List>
-      {matchHistory.map((match) => (
-        <ListItem>
-          <MatchCard match={match} />
-        </ListItem>
-      ))}
-    </List>
-  );
+  return <ListItem>{JSON.stringify(matchData)}</ListItem>;
 };
 
-export default MatchHistory;
+export default MatchCard;

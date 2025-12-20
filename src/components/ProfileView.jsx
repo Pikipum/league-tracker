@@ -17,20 +17,30 @@ const ProfileView = () => {
   const { summonerName, tag } = tagSplitter(name);
   // REACT_APP_RIOT_URL=https://europe.api.riotgames.com/riot
   useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(
-        `${url}/riot/account/v1/accounts/by-riot-id/${summonerName}/${tag}?api_key=${api_key}`
-      )
-      .then((response) => setProfileData(response.data))
-      .finally(() => setIsLoading(false));
-  }, [summonerName, url, api_key, tag]);
+    if (!summonerName || !tag || !url || !api_key) return;
+
+    const fetchProfile = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `${url}/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
+            summonerName
+          )}/${encodeURIComponent(tag)}?api_key=${api_key}`
+        );
+        setProfileData(response.data);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [summonerName, tag, url, api_key]);
 
   if (!isLoading) {
     return (
       <div>
         Player name: {profileData.gameName}
-        Player tagline: {profileData.tagline}
+        Player tagline: {profileData.tagLine}
         <MatchHistory puuid={profileData.puuid} />
       </div>
     );
