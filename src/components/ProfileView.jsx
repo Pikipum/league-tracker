@@ -39,7 +39,7 @@ const ProfileView = () => {
   if (!isLoading) {
     return (
       <div>
-        Player name: {profileData.gameName}
+        Player name: {profileData.gameName} 
         Player tagline: {profileData.tagLine}
         <MatchHistory puuid={profileData.puuid} />
       </div>
