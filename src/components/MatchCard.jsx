@@ -22,24 +22,24 @@ const getChampionIconName = (championName) => {
 };
 const getSummonerSpellName = (summonerId) => {
   const nameMap = {
-    1: "SummonerBoost", // Cleanse
-    3: "SummonerExhaust", // Exhaust
-    4: "SummonerFlash", // Flash
-    6: "SummonerHaste", // Ghost
-    7: "SummonerHeal", // Heal
-    11: "SummonerSmite", // Smite
-    12: "SummonerTeleport", // Teleport
-    13: "SummonerMana", // Clarity
-    14: "SummonerDot", // Ignite
-    21: "SummonerBarrier", // Barrier
-    30: "SummonerPoroRecall", // To the King!
-    31: "SummonerPoroThrow", // Poro Toss
-    32: "SummonerSnowball", // Mark
-    39: "SummonerSnowURFSnowball_Mark", // Mark (URF)
+    1: "SummonerBoost",
+    3: "SummonerExhaust",
+    4: "SummonerFlash",
+    6: "SummonerHaste",
+    7: "SummonerHeal",
+    11: "SummonerSmite",
+    12: "SummonerTeleport",
+    13: "SummonerMana",
+    14: "SummonerDot",
+    21: "SummonerBarrier",
+    30: "SummonerPoroRecall",
+    31: "SummonerPoroThrow",
+    32: "SummonerSnowball",
+    39: "SummonerSnowURFSnowball_Mark",
     54: "Summoner_UltBookPlaceholder",
     55: "Summoner_UltBookSmitePlaceholder",
-    2201: "SummonerCherryHold", // Flee (Arena)
-    2202: "SummonerCherryFlash", // Flash (Arena)
+    2201: "SummonerCherryHold",
+    2202: "SummonerCherryFlash",
   };
 
   return nameMap[summonerId] || `SummonerSpell${summonerId}`;
@@ -69,29 +69,20 @@ const getTreeIconName = (treeId, treeName) => {
 
 const getKeystoneName = (keystoneId) => {
   const keystoneMap = {
-    // Precision
     8005: "PressTheAttack",
     8008: "LethalTempo",
     8021: "FleetFootwork",
     8010: "Conqueror",
-
-    // Domination
     8112: "Electrocute",
     8124: "Predator",
     8128: "DarkHarvest",
     9923: "HailOfBlades",
-
-    // Sorcery
     8214: "SummonAery",
     8229: "ArcaneComet",
     8230: "PhaseRush",
-
-    // Inspiration
     8351: "GlacialAugment",
     8360: "UnsealedSpellbook",
     8369: "FirstStrike",
-
-    // Resolve
     8437: "GraspOfTheUndying",
     8439: "Aftershock",
     8465: "Guardian",
@@ -116,7 +107,7 @@ const MatchCard = ({ matchData, puuid }) => {
   const primaryStyle = currentPlayer?.perks?.styles?.[0];
   const secondaryStyle = currentPlayer?.perks?.styles?.[1];
 
-  const keystoneId = primaryStyle?.selections?.[0]?.perk; // Keystone is always first
+  const keystoneId = primaryStyle?.selections?.[0]?.perk;
   const primaryTreeId = primaryStyle?.style;
   const secondaryTreeId = secondaryStyle?.style;
 
@@ -139,115 +130,214 @@ const MatchCard = ({ matchData, puuid }) => {
 
   if (info.gameMode === "CLASSIC") {
     return (
-      <div>
-        <div>
-          <Box
-            component="img"
-            src={`/assets/16.1.1/img/champion/${getChampionIconName(
-              currentPlayer?.championName
-            )}.png`}
-            alt={currentPlayer?.championName}
-            sx={{ width: 48, height: 48 }}
-          />
-          <Box sx={{ display: "flex", gap: 0.5 }}>
-            {items.map((itemId, index) => (
-              <Avatar
-                key={index}
-                variant="rounded"
-                src={`/assets/16.1.1/img/item/${itemId}.png`}
-                alt={`Item ${itemId}`}
-                sx={{ width: 28, height: 28 }}
+      <Card
+        sx={{
+          mb: 2,
+          bgcolor: "#2a2a2a",
+          borderLeft: 4,
+          borderColor: didWin ? "#f3c80a" : "#ff6b6b",
+          boxShadow: 2,
+          maxWidth: 1200,
+          width: "70%",
+          mx: "auto",
+        }}
+      >
+        <CardContent sx={{ "&:last-child": { pb: 2 } }}>
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Box
+                component="img"
+                src={`/assets/16.1.1/img/champion/${getChampionIconName(
+                  currentPlayer?.championName
+                )}.png`}
+                alt={currentPlayer?.championName}
+                sx={{ width: 48, height: 48, borderRadius: 1 }}
               />
-            ))}
+
+              <Stack spacing={0.5}>
+                <Box sx={{ display: "flex", gap: 0.5 }}>
+                  <Avatar
+                    variant="rounded"
+                    src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
+                      currentPlayer?.summoner1Id
+                    )}.png`}
+                    sx={{ width: 22, height: 22 }}
+                  />
+                  <Avatar
+                    variant="rounded"
+                    src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
+                      currentPlayer?.summoner2Id
+                    )}.png`}
+                    sx={{ width: 22, height: 22 }}
+                  />
+                </Box>
+                <Box sx={{ display: "flex", gap: 0.5 }}>
+                  <Avatar
+                    variant="rounded"
+                    src={`/assets/img/perk-images/Styles/${primaryTreeName}/${keystoneName}/${keystoneName}.png`}
+                    sx={{ width: 22, height: 22 }}
+                  />
+                  <Avatar
+                    variant="rounded"
+                    src={`/assets/img/perk-images/Styles/${getTreeIconName(
+                      secondaryTreeId
+                    )}.png`}
+                    sx={{ width: 22, height: 22 }}
+                  />
+                </Box>
+              </Stack>
+            </Box>
+
+            <Stack spacing={0.5} sx={{ minWidth: 120 }}>
+              <Typography variant="h6" sx={{ color: "#f5f5f5" }}>
+                {currentPlayer?.kills}/{currentPlayer?.deaths}/
+                {currentPlayer?.assists}
+              </Typography>
+              <Typography variant="body2" sx={{ color: "#cfcfcf" }}>
+                {Math.round(
+                  ((currentPlayer?.kills + currentPlayer?.assists) /
+                    Math.max(currentPlayer?.deaths, 1)) *
+                    10
+                ) / 10}{" "}
+                KDA
+              </Typography>
+              <Typography variant="caption" sx={{ color: "#999" }}>
+                {currentPlayer.totalMinionsKilled} CS (
+                {Math.round(
+                  (currentPlayer?.totalMinionsKilled /
+                    (info.gameDuration / 60)) *
+                    10
+                ) / 10}
+                /min)
+              </Typography>
+            </Stack>
+
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 28px)",
+                gridTemplateRows: "repeat(2, 28px)",
+                gap: 0.5,
+              }}
+            >
+              {items.slice(0, 6).map((itemId, index) => (
+                <Avatar
+                  key={index}
+                  variant="rounded"
+                  src={`/assets/16.1.1/img/item/${itemId}.png`}
+                  alt={`Item ${itemId}`}
+                  sx={{ width: 28, height: 28 }}
+                />
+              ))}
+              {Array.from({ length: 6 - items.length }).map((_, index) => (
+                <Box
+                  key={`empty-${index}`}
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    bgcolor: "#1a1a1a",
+                    borderRadius: 0.5,
+                  }}
+                />
+              ))}
+            </Box>
+
             <Avatar
               variant="rounded"
               src={`/assets/16.1.1/img/item/${currentPlayer?.item6}.png`}
               alt="Trinket"
-              sx={{ width: 28, height: 28, ml: 0.5 }}
-            />
-          </Box>
-          <Avatar
-            variant="rounded"
-            src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
-              currentPlayer?.summoner1Id
-            )}.png`}
-            alt="Trinket"
-            sx={{ width: 28, height: 28, ml: 0.5 }}
-          />
-          <Avatar
-            variant="rounded"
-            src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
-              currentPlayer?.summoner2Id
-            )}.png`}
-            alt="Trinket"
-            sx={{ width: 28, height: 28, ml: 0.5 }}
-          />
-          <Box sx={{ display: "flex", gap: 0.5 }}>
-            <Avatar
-              variant="rounded"
-              src={`/assets/img/perk-images/Styles/${primaryTreeName}/${keystoneName}/${keystoneName}.png`}
-              alt="Keystone"
               sx={{ width: 28, height: 28 }}
             />
 
-            <Avatar
-              variant="rounded"
-              src={`/assets/img/perk-images/Styles/${getTreeIconName(
-                secondaryTreeId
-              )}.png`}
-              alt="Secondary Tree"
-              sx={{ width: 28, height: 28 }}
-            />
+            <Stack spacing={0.5} sx={{ textAlign: "right" }}>
+              <Chip
+                label={didWin ? "Victory" : "Defeat"}
+                sx={{
+                  bgcolor: didWin ? "#f3c80a" : "#ff6b6b",
+                  color: "#1f1f1f",
+                  fontWeight: "bold",
+                  fontSize: "0.75rem",
+                }}
+                size="small"
+              />
+              <Typography variant="caption" sx={{ color: "#cfcfcf" }}>
+                {gameDuration}m
+              </Typography>
+              <Typography variant="caption" sx={{ color: "#999" }}>
+                {gameDate}
+              </Typography>
+            </Stack>
+
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                ml: "auto",
+              }}
+            >
+              <Stack spacing={0.5}>
+                {blueTeam.map((player, index) => (
+                  <Box
+                    key={index}
+                    sx={{ display: "flex", gap: 0.5, alignItems: "center" }}
+                  >
+                    <Avatar
+                      src={`/assets/16.1.1/img/champion/${getChampionIconName(
+                        player.championName
+                      )}.png`}
+                      alt={player.championName}
+                      sx={{ width: 20, height: 20 }}
+                    />
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontSize: 10,
+                        maxWidth: 50,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        color: "#cfcfcf",
+                      }}
+                    >
+                      {player.riotIdGameName}
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
+
+              <Stack spacing={0.5}>
+                {redTeam.map((player, index) => (
+                  <Box
+                    key={index}
+                    sx={{ display: "flex", gap: 0.5, alignItems: "center" }}
+                  >
+                    <Avatar
+                      src={`/assets/16.1.1/img/champion/${getChampionIconName(
+                        player.championName
+                      )}.png`}
+                      alt={player.championName}
+                      sx={{ width: 20, height: 20 }}
+                    />
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontSize: 10,
+                        maxWidth: 50,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        color: "#cfcfcf",
+                      }}
+                    >
+                      {player.riotIdGameName}
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
+            </Box>
           </Box>
-        </div>
-        {currentPlayer?.kills}/{currentPlayer?.deaths}/{currentPlayer?.assists}
-        {Math.round(
-          (currentPlayer?.kills + currentPlayer?.assists) /
-            currentPlayer?.deaths
-        ) / 10}{" "}
-        KDA
-        <div>{currentPlayer.totalMinionsKilled}</div>
-        <div>Game Duration: {gameDuration}m</div>
-        <div>
-          {Math.round(
-            (currentPlayer?.totalMinionsKilled / (info.gameDuration / 60)) * 10
-          ) / 10}{" "}
-          CS/Min
-        </div>
-        <div>{gameDate}</div>
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          {blueTeam.map((player, index) => (
-            <Box key={index} sx={{ textAlign: "center" }}>
-              <Avatar
-                src={`/assets/16.1.1/img/champion/${getChampionIconName(
-                  player.championName
-                )}.png`}
-                alt={player.championName}
-                sx={{ width: 24, height: 24 }}
-              />
-              <Typography variant="caption" sx={{ fontSize: 10 }}>
-                {player.riotIdGameName}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          {redTeam.map((player, index) => (
-            <Box key={index} sx={{ textAlign: "center" }}>
-              <Avatar
-                src={`/assets/16.1.1/img/champion/${getChampionIconName(
-                  player.championName
-                )}.png`}
-                alt={player.championName}
-                sx={{ width: 24, height: 24 }}
-              />
-              <Typography variant="caption" sx={{ fontSize: 10 }}>
-                {player.riotIdGameName}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-      </div>
+        </CardContent>
+      </Card>
     );
   }
   if (info.gameMode === "CHERRY") {

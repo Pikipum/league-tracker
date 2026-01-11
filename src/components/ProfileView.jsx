@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import MatchHistory from "./MatchHistory";
+import Box from "@mui/material/Box";
 
 const tagSplitter = (identifier) => {
   const [summonerName = "", tag = ""] = identifier.split("#", 2);
@@ -38,11 +39,11 @@ const ProfileView = () => {
 
   if (!isLoading) {
     return (
-      <div>
-        Player name: {profileData.gameName} 
+      <Box sx={{ bgcolor: "#1f1f1f", minHeight: "100vh", py: 3 }}>
+        Player name: {profileData.gameName}
         Player tagline: {profileData.tagLine}
         <MatchHistory puuid={profileData.puuid} />
-      </div>
+      </Box>
     );
   }
 };
