@@ -1,7 +1,3 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import ListItem from "@mui/material/ListItem";
-import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -103,8 +99,8 @@ const MatchCard = ({ matchData, puuid }) => {
   const gameDuration = Math.floor((info?.gameDuration || 0) / 60);
   const didWin = currentPlayer?.win;
 
-  console.log(blueTeam);
-  console.log(info);
+  //console.log(blueTeam);
+  //console.log(info);
 
   const primaryStyle = currentPlayer?.perks?.styles?.[0];
   const secondaryStyle = currentPlayer?.perks?.styles?.[1];

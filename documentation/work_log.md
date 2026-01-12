@@ -8,4 +8,5 @@
 | 20.12 | 3 | implemented match cards |
 | 09.01 | 5 | working on the match cards |
 | 11.01 | 4 | stylized match cards |
+| 12.01 | 2 | made profile names clickable links |
 | sum  | in progress   | | 

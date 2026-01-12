@@ -3,6 +3,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import MatchHistory from "./MatchHistory";
 import Box from "@mui/material/Box";
+import SideBarProfile from "./SideBarProfile";
+import SearchBarProfile from "./SearchBarProfile";
 
 const tagSplitter = (identifier) => {
   const [summonerName = "", tag = ""] = identifier.split("#", 2);
@@ -29,6 +31,8 @@ const ProfileView = () => {
           )}/${encodeURIComponent(tag)}?api_key=${api_key}`
         );
         setProfileData(response.data);
+      } catch (e) {
+        console.log(e);
       } finally {
         setIsLoading(false);
       }
@@ -39,10 +43,28 @@ const ProfileView = () => {
 
   if (!isLoading) {
     return (
-      <Box sx={{ bgcolor: "#1f1f1f", minHeight: "100vh", py: 3 }}>
-        Player name: {profileData.gameName}
-        Player tagline: {profileData.tagLine}
-        <MatchHistory puuid={profileData.puuid} />
+      <Box
+        sx={{
+          bgcolor: "#1f1f1f",
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          px: 2,
+          py: 3,
+        }}
+      >
+        <Box sx={{ width: "100%", alignItems: "center" }}>
+          <SearchBarProfile />
+        </Box>
+        <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+          <Box sx={{ width: 240, flexShrink: 0 }}>
+            <SideBarProfile profileData={profileData} />
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <MatchHistory puuid={profileData.puuid} />
+          </Box>
+        </Box>
       </Box>
     );
   }

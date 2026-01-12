@@ -1,0 +1,37 @@
+import { Button, TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+const SearchBarProfile = () => {
+  const navigate = useNavigate();
+  const [summoner, setSummoner] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!summoner.trim()) return;
+    navigate(`/${encodeURIComponent(summoner.trim())}`);
+  };
+
+  return (
+    <form className="search-bar-form" onSubmit={(event) => handleSubmit(event)}>
+      <TextField
+        id="outlined-basic"
+        variant="outlined"
+        placeholder="Search..."
+        className="search-bar-input"
+        value={summoner}
+        onChange={(event) => setSummoner(event.target.value)}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        type="submit"
+        className="search-bar-button"
+      >
+        Search
+      </Button>
+    </form>
+  );
+};
+
+export default SearchBarProfile;
