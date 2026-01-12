@@ -7,4 +7,5 @@
 | 20.12 | 4 | implementing api calls |
 | 20.12 | 3 | implemented match cards |
 | 09.01 | 5 | working on the match cards |
+| 11.01 | 4 | stylized match cards |
 | sum  | in progress   | | 

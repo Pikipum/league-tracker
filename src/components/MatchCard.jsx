@@ -10,6 +10,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import { formatDistanceToNow } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const getChampionIconName = (championName) => {
   const nameMap = {
@@ -91,6 +92,7 @@ const getKeystoneName = (keystoneId) => {
 };
 
 const MatchCard = ({ matchData, puuid }) => {
+  const navigate = useNavigate();
   const { info } = matchData || {};
   const participants = info?.participants || [];
 
@@ -127,6 +129,10 @@ const MatchCard = ({ matchData, puuid }) => {
     currentPlayer?.item4,
     currentPlayer?.item5,
   ].filter((id) => id !== 0);
+
+  const clickProfileName = (name) => {
+    navigate(`/${encodeURIComponent(name)}`);
+  };
 
   if (info.gameMode === "CLASSIC") {
     return (
@@ -289,8 +295,14 @@ const MatchCard = ({ matchData, puuid }) => {
                       sx={{ width: 20, height: 20 }}
                     />
                     <Typography
+                      onClick={() =>
+                        clickProfileName(
+                          `${player.riotIdGameName}#${player.riotIdTagline}`
+                        )
+                      }
                       variant="caption"
                       sx={{
+                        ":hover": { color: "white" },
                         fontSize: 10,
                         maxWidth: 50,
                         overflow: "hidden",
@@ -319,8 +331,14 @@ const MatchCard = ({ matchData, puuid }) => {
                       sx={{ width: 20, height: 20 }}
                     />
                     <Typography
+                      onClick={() =>
+                        clickProfileName(
+                          `${player.riotIdGameName}#${player.riotIdTagline}`
+                        )
+                      }
                       variant="caption"
                       sx={{
+                        ":hover": { color: "white" },
                         fontSize: 10,
                         maxWidth: 50,
                         overflow: "hidden",
