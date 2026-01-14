@@ -54,18 +54,40 @@ const SideBarProfile = ({ profileData }) => {
           borderRadius: 1,
         }}
       >
-        <ListItem>Icon: {summonerIconLevel.profileIconId}</ListItem>
-        <ListItem>
-          Player name: {profileData.gameName} — {profileData.tagLine}
-        </ListItem>
-        <ListItem>Summoner Level: {summonerIconLevel.summonerLevel}</ListItem>
-        <ListItem>
-          Rank: {summonerData.tier} {summonerData.rank}
-        </ListItem>
-        <ListItem>LP: {summonerData.leaguePoints}</ListItem>
-        <ListItem>
-          Wins: {summonerData.wins} Losses: {summonerData.losses}
-        </ListItem>
+        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+          <Box
+            component="img"
+            src={`/assets/16.1.1/img/profileicon/${summonerIconLevel.profileIconId}.png`}
+            alt={summonerIconLevel.profileIconId}
+            sx={{ width: 64, height: 64, borderRadius: 1 }}
+          />
+          <Box sx={{ color: "white" }}>
+            {profileData.gameName} #{profileData.tagLine}
+          </Box>
+        </Box>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          <Box>
+            <Box
+              component="img"
+              src={`/assets/ranked-emblems/${summonerData.tier}.png`}
+              alt={summonerIconLevel.profileIconId}
+              sx={{ width: 64, height: 64, borderRadius: 1 }}
+            />
+            <Box sx={{ color: "white" }}>
+              {summonerData.tier} {summonerData.rank} LP:{" "}
+              {summonerData.leaguePoints}
+            </Box>
+          </Box>
+          <Box sx={{ color: "white" }}>
+            W: {summonerData.wins} L: {summonerData.losses}{" "}
+            {(summonerData.wins / (summonerData.wins + summonerData.losses)) *
+              100}
+            %
+          </Box>
+        </Box>
+        <Box sx={{ color: "white" }}>
+          Level: {summonerIconLevel.summonerLevel}
+        </Box>
       </Box>
     );
   }

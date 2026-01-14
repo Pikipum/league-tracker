@@ -10,4 +10,5 @@
 | 11.01 | 4 | stylized match cards |
 | 12.01 | 2 | made profile names clickable links |
 | 12.01 | 4 | added sider bar and top search bar |
+| 14.01 | 4 | added info and icons for sidebar, added login button |
 | sum  | in progress   | | 

@@ -1,0 +1,26 @@
+.login-button-wrapper {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+}
+
+.login-button.MuiButton-contained {
+  background-color: #eaf916;
+  color: #1f1f1f;
+  padding: 0.5rem 1.5rem;
+  font-weight: 700;
+  border-radius: 8px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+}
+
+.login-button.MuiButton-contained:hover {
+  background-color: #f3c80a;
+}
+
+@media (max-width: 600px) {
+  .login-button-wrapper {
+    top: 1rem;
+    right: 1rem;
+  }
+}

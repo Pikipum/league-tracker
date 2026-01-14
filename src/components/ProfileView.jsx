@@ -5,6 +5,8 @@ import MatchHistory from "./MatchHistory";
 import Box from "@mui/material/Box";
 import SideBarProfile from "./SideBarProfile";
 import SearchBarProfile from "./SearchBarProfile";
+import ChampionStats from "./ChampionStats";
+import LogInButton from "./LogInButton";
 
 const tagSplitter = (identifier) => {
   const [summonerName = "", tag = ""] = identifier.split("#", 2);
@@ -18,6 +20,7 @@ const ProfileView = () => {
   const url = process.env.REACT_APP_RIOT_URL;
   const api_key = process.env.REACT_APP_RIOT_API_KEY;
   const { summonerName, tag } = tagSplitter(name);
+  const [responseStatus, setResponseStatus] = useState();
   // REACT_APP_RIOT_URL=https://europe.api.riotgames.com/riot
   useEffect(() => {
     if (!summonerName || !tag || !url || !api_key) return;
@@ -31,6 +34,7 @@ const ProfileView = () => {
           )}/${encodeURIComponent(tag)}?api_key=${api_key}`
         );
         setProfileData(response.data);
+        setResponseStatus(response.status);
       } catch (e) {
         console.log(e);
       } finally {
@@ -41,32 +45,43 @@ const ProfileView = () => {
     fetchProfile();
   }, [summonerName, tag, url, api_key]);
 
-  if (!isLoading) {
-    return (
-      <Box
-        sx={{
-          bgcolor: "#1f1f1f",
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          px: 2,
-          py: 3,
-        }}
-      >
-        <Box sx={{ width: "100%", alignItems: "center" }}>
-          <SearchBarProfile />
-        </Box>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
-          <Box sx={{ width: 240, flexShrink: 0 }}>
-            <SideBarProfile profileData={profileData} />
+  if (responseStatus === 429) {
+    return "Rate limit reached, try again later";
+  }
+  if (responseStatus === 200) {
+    if (!isLoading) {
+      return (
+        <Box
+          sx={{
+            bgcolor: "#1f1f1f",
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            px: 2,
+            py: 3,
+          }}
+        >
+          <LogInButton />
+          <Box sx={{ width: "100%", alignItems: "center" }}>
+            <SearchBarProfile />
           </Box>
-          <Box sx={{ flex: 1 }}>
-            <MatchHistory puuid={profileData.puuid} />
+          <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+            <Box>
+              <Box sx={{ width: 300, flexShrink: 0 }}>
+                <SideBarProfile profileData={profileData} />
+              </Box>
+              <Box>
+                <ChampionStats />
+              </Box>
+            </Box>
+            <Box sx={{ flex: 1 }}>
+              <MatchHistory puuid={profileData.puuid} />
+            </Box>
           </Box>
         </Box>
-      </Box>
-    );
+      );
+    }
   }
 };
 
