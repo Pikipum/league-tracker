@@ -11,4 +11,8 @@
 | 12.01 | 2 | made profile names clickable links |
 | 12.01 | 4 | added sider bar and top search bar |
 | 14.01 | 4 | added info and icons for sidebar, added login button |
+| 15.01 | 3 | added login prompt |
+| 15.01 | 4 | initialized database and backend |
+| 19.01 | 4 | connected database to backend, changed routing from api to backend |
+| 19.01 | 2 | added login and logout functionality |
 | sum  | in progress   | | 

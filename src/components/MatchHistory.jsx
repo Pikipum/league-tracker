@@ -25,8 +25,11 @@ const MatchHistory = ({ puuid }) => {
             new Promise((resolve) => {
               setTimeout(async () => {
                 try {
+                  //                 const matchData = await axios.get(
+                  //                    `${url}/lol/match/v5/matches/${matchId}?api_key=${api_key}`
+                  //                  );
                   const matchData = await axios.get(
-                    `${url}/lol/match/v5/matches/${matchId}?api_key=${api_key}`
+                    `http://localhost:4000/matches/${matchId}`
                   );
                   resolve(matchData.data);
                 } catch (error) {

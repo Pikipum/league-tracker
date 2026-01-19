@@ -8,6 +8,8 @@ import {
   TextField,
 } from "@mui/material";
 import "./LogInButton.css";
+import logIn from "./logIn";
+import logOut from "./logOut";
 
 const dialogPaperSx = {
   backgroundColor: "#2a2a2a",
@@ -31,6 +33,11 @@ const LogInButton = () => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [hasToken, setHasToken] = useState(
+    Boolean(localStorage.getItem("token"))
+  );
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -44,14 +51,95 @@ const LogInButton = () => {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!validate()) return;
-    // replace console.log
-    console.log("login", form);
-    setOpen(false);
+  const handleLogOut = () => {
+    logOut();
+    setHasToken(false);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setApiError("");
+    setLoading(true);
+    try {
+      await logIn(form);
+      setHasToken(true);
+      setOpen(false);
+    } catch (err) {
+      setApiError(
+        err.response?.data?.error || "Login failed. Check credentials."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (!hasToken) {
+    return (
+      <div>
+        <div className="login-button-wrapper">
+          <Button
+            type="button"
+            variant="contained"
+            color="primary"
+            className="login-button"
+            onClick={() => setOpen(true)}
+          >
+            Log In
+          </Button>
+        </div>
+        <Dialog
+          open={open}
+          onClose={() => setOpen(false)}
+          PaperProps={{ sx: dialogPaperSx }}
+        >
+          <DialogTitle sx={{ color: "#f3c80a" }}>Log in</DialogTitle>
+          <form onSubmit={handleSubmit}>
+            <DialogContent sx={{ display: "grid", gap: 2, minWidth: 320 }}>
+              <TextField
+                label="Username"
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                error={Boolean(errors.username)}
+                helperText={errors.username}
+                autoFocus
+                fullWidth
+                sx={fieldSx}
+              />
+              <TextField
+                label="Password"
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                error={Boolean(errors.password)}
+                helperText={errors.password}
+                fullWidth
+                sx={fieldSx}
+              />
+            </DialogContent>
+            <DialogActions sx={{ px: 3, pb: 3 }}>
+              <Button onClick={() => setOpen(false)} sx={{ color: "#f5f5f5" }}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  backgroundColor: "#f3c80a",
+                  color: "#1f1f1f",
+                  "&:hover": { backgroundColor: "#e0b808" },
+                  fontWeight: 700,
+                }}
+              >
+                Log In
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+      </div>
+    );
+  }
   return (
     <div>
       <div className="login-button-wrapper">
@@ -60,62 +148,11 @@ const LogInButton = () => {
           variant="contained"
           color="primary"
           className="login-button"
-          onClick={() => setOpen(true)}
+          onClick={() => handleLogOut()}
         >
-          Log In
+          Log Out
         </Button>
       </div>
-
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        PaperProps={{ sx: dialogPaperSx }}
-      >
-        <DialogTitle sx={{ color: "#f3c80a" }}>Log in</DialogTitle>
-        <form onSubmit={handleSubmit}>
-          <DialogContent sx={{ display: "grid", gap: 2, minWidth: 320 }}>
-            <TextField
-              label="Username"
-              name="username"
-              value={form.username}
-              onChange={handleChange}
-              error={Boolean(errors.username)}
-              helperText={errors.username}
-              autoFocus
-              fullWidth
-              sx={fieldSx}
-            />
-            <TextField
-              label="Password"
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              error={Boolean(errors.password)}
-              helperText={errors.password}
-              fullWidth
-              sx={fieldSx}
-            />
-          </DialogContent>
-          <DialogActions sx={{ px: 3, pb: 3 }}>
-            <Button onClick={() => setOpen(false)} sx={{ color: "#f5f5f5" }}>
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                backgroundColor: "#f3c80a",
-                color: "#1f1f1f",
-                "&:hover": { backgroundColor: "#e0b808" },
-                fontWeight: 700,
-              }}
-            >
-              Log In
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
     </div>
   );
 };

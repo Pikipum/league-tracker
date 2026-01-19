@@ -1,0 +1,28 @@
+CREATE DATABASE league;
+
+\c league
+
+CREATE TABLE matches (
+  match_id text PRIMARY KEY,
+  payload jsonb NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX matches_created_at_idx ON matches(created_at);
+
+CREATE TABLE users (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email text UNIQUE NOT NULL,
+  username text UNIQUE NOT NULL,
+  password_hash text NOT NULL,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE sessions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  token text UNIQUE NOT NULL,
+  expires_at timestamptz NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
