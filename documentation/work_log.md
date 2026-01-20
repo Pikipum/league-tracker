@@ -15,4 +15,6 @@
 | 15.01 | 4 | initialized database and backend |
 | 19.01 | 4 | connected database to backend, changed routing from api to backend |
 | 19.01 | 2 | added login and logout functionality |
+| 19.01 | 2 | added champion stats panel |
+| 20.01 | 3 | working on champion stats panel |
 | sum  | in progress   | | 

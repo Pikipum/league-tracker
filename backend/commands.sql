@@ -26,3 +26,11 @@ CREATE TABLE sessions (
   expires_at timestamptz NOT NULL,
   created_at timestamptz DEFAULT now()
 );
+
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+INSERT INTO users (email, username, password_hash)
+VALUES ('test@example.com', 'user', crypt('password', gen_salt('bf')));
+
+CREATE INDEX matches_metadata_participants_gin_idx
+ON matches USING gin ((payload->'metadata'->'participants'));

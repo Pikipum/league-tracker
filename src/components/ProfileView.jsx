@@ -7,6 +7,7 @@ import SideBarProfile from "./SideBarProfile";
 import SearchBarProfile from "./SearchBarProfile";
 import ChampionStats from "./ChampionStats";
 import LogInButton from "./LogInButton";
+import LoadingCircle from "./LoadingCircle";
 
 const tagSplitter = (identifier) => {
   const [summonerName = "", tag = ""] = identifier.split("#", 2);
@@ -30,8 +31,8 @@ const ProfileView = () => {
       try {
         const response = await axios.get(
           `${url}/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(
-            summonerName
-          )}/${encodeURIComponent(tag)}?api_key=${api_key}`
+            summonerName,
+          )}/${encodeURIComponent(tag)}?api_key=${api_key}`,
         );
         setProfileData(response.data);
         setResponseStatus(response.status);
@@ -45,44 +46,57 @@ const ProfileView = () => {
     fetchProfile();
   }, [summonerName, tag, url, api_key]);
 
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          bgcolor: "#1f1f1f",
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <LoadingCircle />;
+      </Box>
+    );
+  }
+
   if (responseStatus === 429) {
     return "Rate limit reached, try again later";
   }
-  if (responseStatus === 200) {
-    if (!isLoading) {
-      return (
-        <Box
-          sx={{
-            bgcolor: "#1f1f1f",
-            minHeight: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            px: 2,
-            py: 3,
-          }}
-        >
-          <LogInButton />
-          <Box sx={{ width: "100%", alignItems: "center" }}>
-            <SearchBarProfile />
+
+  return (
+    <Box
+      sx={{
+        bgcolor: "#1f1f1f",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        px: 2,
+        py: 3,
+      }}
+    >
+      <LogInButton />
+      <Box sx={{ width: "100%", alignItems: "center" }}>
+        <SearchBarProfile />
+      </Box>
+      <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+        <Box>
+          <Box sx={{ width: 300, flexShrink: 0 }}>
+            <SideBarProfile profileData={profileData} />
           </Box>
-          <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
-            <Box>
-              <Box sx={{ width: 300, flexShrink: 0 }}>
-                <SideBarProfile profileData={profileData} />
-              </Box>
-              <Box>
-                <ChampionStats />
-              </Box>
-            </Box>
-            <Box sx={{ flex: 1 }}>
-              <MatchHistory puuid={profileData.puuid} />
-            </Box>
+          <Box>
+            <ChampionStats puuid={profileData.puuid} />
           </Box>
         </Box>
-      );
-    }
-  }
+        <Box sx={{ flex: 1 }}>
+          <MatchHistory puuid={profileData.puuid} />
+        </Box>
+      </Box>
+    </Box>
+  );
 };
 
 export default ProfileView;
