@@ -298,7 +298,7 @@ const MatchCard = ({ matchData, puuid }) => {
                       }
                       variant="caption"
                       sx={{
-                        ":hover": { color: "white" },
+                        ":hover": { color: "white", cursor: 'pointer' },
                         fontSize: 10,
                         maxWidth: 50,
                         overflow: "hidden",
@@ -334,7 +334,7 @@ const MatchCard = ({ matchData, puuid }) => {
                       }
                       variant="caption"
                       sx={{
-                        ":hover": { color: "white" },
+                        ":hover": { color: "white", cursor: 'pointer' },
                         fontSize: 10,
                         maxWidth: 50,
                         overflow: "hidden",

@@ -8,6 +8,7 @@ import SearchBarProfile from "./SearchBarProfile";
 import ChampionStats from "./ChampionStats";
 import LogInButton from "./LogInButton";
 import LoadingCircle from "./LoadingCircle";
+import QueueSelect from "./QueueSelect";
 
 const tagSplitter = (identifier) => {
   const [summonerName = "", tag = ""] = identifier.split("#", 2);
@@ -92,6 +93,7 @@ const ProfileView = () => {
           </Box>
         </Box>
         <Box sx={{ flex: 1 }}>
+          <QueueSelect />
           <MatchHistory puuid={profileData.puuid} />
         </Box>
       </Box>

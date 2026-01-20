@@ -17,4 +17,6 @@
 | 19.01 | 2 | added login and logout functionality |
 | 19.01 | 2 | added champion stats panel |
 | 20.01 | 3 | working on champion stats panel |
+| 20.01 | 5 | added loading circles and infinite scrolling |
+| 20.01 | 2 | sidebar profile styling and added queue type selector |
 | sum  | in progress   | | 
