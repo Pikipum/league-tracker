@@ -9,6 +9,7 @@ import ChampionStats from "./ChampionStats";
 import LogInButton from "./LogInButton";
 import LoadingCircle from "./LoadingCircle";
 import QueueSelect from "./QueueSelect";
+import React from "react";
 
 const tagSplitter = (identifier) => {
   const [summonerName = "", tag = ""] = identifier.split("#", 2);
@@ -23,6 +24,7 @@ const ProfileView = () => {
   const api_key = process.env.REACT_APP_RIOT_API_KEY;
   const { summonerName, tag } = tagSplitter(name);
   const [responseStatus, setResponseStatus] = useState();
+  const [queueType, setQueueType] = React.useState(["Ranked Solo"]);
   // REACT_APP_RIOT_URL=https://europe.api.riotgames.com/riot
   useEffect(() => {
     if (!summonerName || !tag || !url || !api_key) return;
@@ -93,8 +95,8 @@ const ProfileView = () => {
           </Box>
         </Box>
         <Box sx={{ flex: 1 }}>
-          <QueueSelect />
-          <MatchHistory puuid={profileData.puuid} />
+          <QueueSelect queueType={queueType} setQueueType={setQueueType} />
+          <MatchHistory puuid={profileData.puuid} queueType={queueType} />
         </Box>
       </Box>
     </Box>

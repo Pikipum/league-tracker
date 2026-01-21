@@ -6,12 +6,28 @@ const router = Router();
 
 router.get("/by-player/:puuid", async (req, res) => {
   const { puuid } = req.params;
+  const champion = req.query.champion?.trim();
+  if (!puuid) return res.status(400).json({ error: "puuid required" });
+
+  const params = [puuid];
+  let sql = `
+    SELECT match_id, payload
+    FROM matches
+    WHERE EXISTS (
+      SELECT 1
+      FROM jsonb_array_elements(payload->'info'->'participants') AS p
+      WHERE p->>'puuid' = $1`;
+
+  if (champion) {
+    params.push(champion);
+    sql += ` AND LOWER(p->>'championName') = LOWER($${params.length})`;
+  }
+
+  sql += `) ORDER BY created_at DESC`;
+
   try {
-    const result = await pool.query(
-      "SELECT match_id, payload FROM matches WHERE payload->'metadata'->'participants' ? $1 ORDER BY created_at DESC",
-      [puuid]
-    );
-    return res.json(result.rows);
+    const { rows } = await pool.query(sql, params);
+    res.json(rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "failed to search matches" });

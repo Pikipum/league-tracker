@@ -7,7 +7,14 @@ import LoadingCircle from "./LoadingCircle";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Box from "@mui/material/Box";
 
-const MatchHistory = ({ puuid }) => {
+const getQueueId = (queueName) => {
+  const queueIdsMap = {
+    "Ranked Solo": 420,
+  };
+  return queueIdsMap[queueName];
+};
+
+const MatchHistory = ({ puuid, queueType }) => {
   const [matchHistory, setMatchHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const url = process.env.REACT_APP_RIOT_URL;
@@ -23,7 +30,7 @@ const MatchHistory = ({ puuid }) => {
       setIsLoading(true);
       try {
         const idsResponse = await axios.get(
-          `${url}/lol/match/v5/matches/by-puuid/${puuid}/ids?start=${matchIdStart}&count=10&api_key=${api_key}`,
+          `${url}/lol/match/v5/matches/by-puuid/${puuid}/ids?queue=${getQueueId(queueType)}&start=${matchIdStart}&count=10&api_key=${api_key}`,
         );
 
         const matchPromises = idsResponse.data.map(
