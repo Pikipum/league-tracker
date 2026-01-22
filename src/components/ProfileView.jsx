@@ -4,12 +4,12 @@ import { useParams } from "react-router-dom";
 import MatchHistory from "./MatchHistory";
 import Box from "@mui/material/Box";
 import SideBarProfile from "./SideBarProfile";
-import SearchBarProfile from "./SearchBarProfile";
 import ChampionStats from "./ChampionStats";
 import LogInButton from "./LogInButton";
 import LoadingCircle from "./LoadingCircle";
 import QueueSelect from "./QueueSelect";
 import React from "react";
+import SearchBar from "./SearchBar";
 
 const tagSplitter = (identifier) => {
   const [summonerName = "", tag = ""] = identifier.split("#", 2);
@@ -25,6 +25,7 @@ const ProfileView = () => {
   const { summonerName, tag } = tagSplitter(name);
   const [responseStatus, setResponseStatus] = useState();
   const [queueType, setQueueType] = React.useState(["Ranked Solo"]);
+  const [region, setRegion] = useState("EUW");
   // REACT_APP_RIOT_URL=https://europe.api.riotgames.com/riot
   useEffect(() => {
     if (!summonerName || !tag || !url || !api_key) return;
@@ -83,12 +84,12 @@ const ProfileView = () => {
     >
       <LogInButton />
       <Box sx={{ width: "100%", alignItems: "center" }}>
-        <SearchBarProfile />
+        <SearchBar region={region} setRegion={setRegion} />
       </Box>
       <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
         <Box>
           <Box sx={{ width: 300, flexShrink: 0 }}>
-            <SideBarProfile profileData={profileData} />
+            <SideBarProfile region={region} profileData={profileData} />
           </Box>
           <Box>
             <ChampionStats puuid={profileData.puuid} />

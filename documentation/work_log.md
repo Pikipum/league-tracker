@@ -22,4 +22,5 @@
 | 21.01 | 2 | queue type selector styling and logic |
 | 21.01 | 5 | expand button for match cards |
 | 22.01 | 2 | styling expanded match info |
-| sum  | 64 (21.01)   | | 
+| 22.01 | 5 | continued styling expanded match info, added routing for regions |
+| sum  | 64 | | 

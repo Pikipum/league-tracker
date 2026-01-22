@@ -76,3 +76,25 @@ export const getKeystoneName = (keystoneId) => {
   };
   return keystoneMap[keystoneId];
 };
+
+export const getRegionList = () => {
+    return ["EUW", "EUNE", "NA"]
+}
+
+export const getRegion = (region) => {
+  const regionMap = {
+    EUW: "euw1",
+    EUNE: "eun1",
+    NA: "na1",
+  };
+  return regionMap[region];
+};
+
+export const getRoutingContinent = (region) => {
+  const continentMap = {
+    euw1: "europe",
+    eun1: "europe",
+    na1: "americas",
+  };
+  return continentMap[region];
+};

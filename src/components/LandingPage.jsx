@@ -4,8 +4,10 @@ import SearchBar from "./SearchBar";
 const LandingPage = () => {
   return (
     <div>
+      <div className="search-bar-container">
+        <SearchBar />
+      </div>
       <LogInButton />
-      <SearchBar />
     </div>
   );
 };

@@ -2,23 +2,26 @@ import { Box, Typography, LinearProgress } from "@mui/material";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import LoadingCircle from "./LoadingCircle";
+import { getRegion } from "../util/helperFunctions";
 
-const SideBarProfile = ({ profileData }) => {
+const SideBarProfile = ({ region, profileData }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const url = process.env.REACT_APP_RIOT_EUW_URL;
+  const url = process.env.REACT_APP_RIOT_ACCOUNT_URL;
   const api_key = process.env.REACT_APP_RIOT_API_KEY;
   const [summonerData, setSummonerData] = useState();
   const [summonerIconLevel, setSummonerIconLevel] = useState();
+
+  const convertedRegion = getRegion(region);
 
   useEffect(() => {
     const fetchProfile = async () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `${url}/lol/league/v4/entries/by-puuid/${profileData.puuid}?api_key=${api_key}`
+          `https://${convertedRegion}.${url}/lol/league/v4/entries/by-puuid/${profileData.puuid}?api_key=${api_key}`,
         );
         const response_summoner = await axios.get(
-          `${url}/lol/summoner/v4/summoners/by-puuid/${profileData.puuid}?api_key=${api_key}`
+          `https://${convertedRegion}.${url}/lol/summoner/v4/summoners/by-puuid/${profileData.puuid}?api_key=${api_key}`,
         );
         setSummonerData(response.data[0]);
         setSummonerIconLevel(response_summoner.data);
@@ -36,7 +39,10 @@ const SideBarProfile = ({ profileData }) => {
   if (isLoading) return <LoadingCircle />;
 
   const winrate = summonerData
-    ? ((summonerData.wins / (summonerData.wins + summonerData.losses)) * 100).toFixed(1)
+    ? (
+        (summonerData.wins / (summonerData.wins + summonerData.losses)) *
+        100
+      ).toFixed(1)
     : 0;
 
   return (
@@ -57,7 +63,12 @@ const SideBarProfile = ({ profileData }) => {
           component="img"
           src={`/assets/16.1.1/img/profileicon/${summonerIconLevel?.profileIconId}.png`}
           alt="Profile Icon"
-          sx={{ width: 64, height: 64, borderRadius: 1, border: "2px solid #f3c80a" }}
+          sx={{
+            width: 64,
+            height: 64,
+            borderRadius: 1,
+            border: "2px solid #f3c80a",
+          }}
         />
         <Box>
           <Typography sx={{ color: "white", fontWeight: "bold", fontSize: 18 }}>
@@ -88,8 +99,16 @@ const SideBarProfile = ({ profileData }) => {
               sx={{ width: 48, height: 48 }}
             />
             <Box sx={{ flex: 1 }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography sx={{ color: "#f3c80a", fontWeight: "bold", fontSize: 16 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  sx={{ color: "#f3c80a", fontWeight: "bold", fontSize: 16 }}
+                >
                   {summonerData.tier} {summonerData.rank}
                 </Typography>
                 <Typography sx={{ color: "#888", fontSize: 14 }}>
@@ -110,7 +129,9 @@ const SideBarProfile = ({ profileData }) => {
                   },
                 }}
               />
-              <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
+              >
                 <Typography sx={{ color: "#888", fontSize: 12 }}>
                   {winrate}% WR
                 </Typography>
