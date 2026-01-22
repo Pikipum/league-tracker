@@ -20,6 +20,12 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { LinearProgress } from "@mui/material";
+import { getChampionIconName } from "../util/helperFunctions";
+import { getSummonerSpellName } from "../util/helperFunctions";
+import { getRuneTreeName } from "../util/helperFunctions";
+import { getTreeIconName } from "../util/helperFunctions";
+import { getKeystoneName } from "../util/helperFunctions";
+import ExpandedTeamInfo from "./ExpandedTeamInfo";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -44,85 +50,6 @@ const ExpandMore = styled((props) => {
     },
   ],
 }));
-
-const getChampionIconName = (championName) => {
-  const nameMap = {
-    Wukong: "MonkeyKing",
-    "Nunu & Willump": "Nunu",
-    LeBlanc: "Leblanc",
-  };
-
-  return nameMap[championName] || championName;
-};
-const getSummonerSpellName = (summonerId) => {
-  const nameMap = {
-    1: "SummonerBoost",
-    3: "SummonerExhaust",
-    4: "SummonerFlash",
-    6: "SummonerHaste",
-    7: "SummonerHeal",
-    11: "SummonerSmite",
-    12: "SummonerTeleport",
-    13: "SummonerMana",
-    14: "SummonerDot",
-    21: "SummonerBarrier",
-    30: "SummonerPoroRecall",
-    31: "SummonerPoroThrow",
-    32: "SummonerSnowball",
-    39: "SummonerSnowURFSnowball_Mark",
-    54: "Summoner_UltBookPlaceholder",
-    55: "Summoner_UltBookSmitePlaceholder",
-    2201: "SummonerCherryHold",
-    2202: "SummonerCherryFlash",
-  };
-
-  return nameMap[summonerId] || `SummonerSpell${summonerId}`;
-};
-
-const getRuneTreeName = (treeId) => {
-  const treeMap = {
-    8000: "Precision",
-    8100: "Domination",
-    8200: "Sorcery",
-    8300: "Inspiration",
-    8400: "Resolve",
-  };
-  return treeMap[treeId];
-};
-
-const getTreeIconName = (treeId, treeName) => {
-  const iconMap = {
-    8000: "7201_Precision",
-    8100: "7200_Domination",
-    8200: "7202_Sorcery",
-    8300: "7203_Whimsy",
-    8400: "7204_Resolve",
-  };
-  return iconMap[treeId];
-};
-
-const getKeystoneName = (keystoneId) => {
-  const keystoneMap = {
-    8005: "PressTheAttack",
-    8008: "LethalTempo",
-    8021: "FleetFootwork",
-    8010: "Conqueror",
-    8112: "Electrocute",
-    8124: "Predator",
-    8128: "DarkHarvest",
-    9923: "HailOfBlades",
-    8214: "SummonAery",
-    8229: "ArcaneComet",
-    8230: "PhaseRush",
-    8351: "GlacialAugment",
-    8360: "UnsealedSpellbook",
-    8369: "FirstStrike",
-    8437: "GraspOfTheUndying",
-    8439: "Aftershock",
-    8465: "Guardian",
-  };
-  return keystoneMap[keystoneId];
-};
 
 const MatchCard = ({ matchData, puuid }) => {
   const navigate = useNavigate();
@@ -409,205 +336,24 @@ const MatchCard = ({ matchData, puuid }) => {
           <CardContent>
             <Stack spacing={0.5}>
               {blueTeam.map((player, index) => (
-                <Box
-                  key={index}
-                  sx={{ display: "flex", gap: 0.5, alignItems: "center" }}
-                >
-                  <Avatar
-                    src={`/assets/16.1.1/img/champion/${getChampionIconName(
-                      player.championName,
-                    )}.png`}
-                    alt={player.championName}
-                    sx={{ width: 20, height: 20 }}
-                  />
-                  <Typography
-                    onClick={() =>
-                      clickProfileName(
-                        `${player.riotIdGameName}#${player.riotIdTagline}`,
-                      )
-                    }
-                    variant="caption"
-                    sx={{
-                      ":hover": { color: "white", cursor: "pointer" },
-                      fontSize: 12,
-                      maxWidth: 100,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      color: "#cfcfcf",
-                    }}
-                  >
-                    {player.riotIdGameName}
-                  </Typography>
-                </Box>
+                <ExpandedTeamInfo
+                  player={player}
+                  index={index}
+                  info={info}
+                  maxDamage={maxDamage}
+                  clickProfileName={clickProfileName}
+                />
               ))}
             </Stack>
-
             <Stack spacing={0.5}>
               {redTeam.map((player, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    width: "100%",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Avatar
-                    src={`/assets/16.1.1/img/champion/${getChampionIconName(
-                      player.championName,
-                    )}.png`}
-                    alt={player.championName}
-                    sx={{ width: 20, height: 20 }}
-                  />
-                  <Typography
-                    onClick={() =>
-                      clickProfileName(
-                        `${player.riotIdGameName}#${player.riotIdTagline}`,
-                      )
-                    }
-                    variant="caption"
-                    sx={{
-                      ":hover": { color: "white", cursor: "pointer" },
-                      fontSize: 12,
-                      maxWidth: 100,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      color: "#cfcfcf",
-                    }}
-                  >
-                    {player.riotIdGameName}
-                  </Typography>
-                  <Box>
-                    <Typography variant="h6" sx={{ color: "#f5f5f5" }}>
-                      {player?.kills}/{player?.deaths}/{player?.assists}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: "#cfcfcf" }}>
-                      {Math.round(
-                        ((player?.kills + player?.assists) /
-                          Math.max(player?.deaths, 1)) *
-                          10,
-                      ) / 10}{" "}
-                      KDA
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Typography sx={{ color: "#999" }}>
-                      {player.totalMinionsKilled} CS
-                    </Typography>
-                    <Typography sx={{ color: "#999" }}>
-                      ({""}
-                      {Math.round(
-                        (player?.totalMinionsKilled /
-                          (info.gameDuration / 60)) *
-                          10,
-                      ) / 10}
-                      /min)
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(6, 28px)",
-                      gap: 0.5,
-                    }}
-                  >
-                    {[
-                      player.item0,
-                      player.item1,
-                      player.item2,
-                      player.item3,
-                      player.item4,
-                      player.item5,
-                      player.item6,
-                    ]
-                      .slice(0, 6)
-                      .map((itemId, index) => (
-                        <Avatar
-                          key={index}
-                          variant="rounded"
-                          src={`/assets/16.1.1/img/item/${itemId}.png`}
-                          alt={`Item ${itemId}`}
-                          sx={{ width: 28, height: 28 }}
-                        />
-                      ))}
-                    {Array.from({ length: 6 - items.length }).map(
-                      (_, index) => (
-                        <Box
-                          key={`empty-${index}`}
-                          sx={{
-                            width: 28,
-                            height: 28,
-                            bgcolor: "#1a1a1a",
-                            borderRadius: 0.5,
-                          }}
-                        />
-                      ),
-                    )}
-                  </Box>
-                  <Stack spacing={0.5}>
-                    <Box sx={{ display: "flex", gap: 0.5 }}>
-                      <Avatar
-                        variant="rounded"
-                        src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
-                          player?.summoner1Id,
-                        )}.png`}
-                        sx={{ width: 22, height: 22 }}
-                      />
-                      <Avatar
-                        variant="rounded"
-                        src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
-                          player?.summoner2Id,
-                        )}.png`}
-                        sx={{ width: 22, height: 22 }}
-                      />
-                    </Box>
-                    <Box sx={{ display: "flex", gap: 0.5 }}>
-                      <Avatar
-                        variant="rounded"
-                        src={`/assets/img/perk-images/Styles/${primaryTreeName}/${keystoneName}/${keystoneName}.png`}
-                        sx={{ width: 22, height: 22 }}
-                      />
-                      <Avatar
-                        variant="rounded"
-                        src={`/assets/img/perk-images/Styles/${getTreeIconName(
-                          secondaryTreeId,
-                        )}.png`}
-                        sx={{ width: 22, height: 22 }}
-                      />
-                    </Box>
-                  </Stack>
-                  <Box>
-                    <Typography sx={{ color: "#cfcfcf" }}>
-                      {Math.round(
-                        (player.totalDamageDealtToChampions || 0) / 100,
-                      ) / 10}
-                      k
-                    </Typography>
-                    <LinearProgress
-                      variant="determinate"
-                      value={Math.min(
-                        100,
-                        ((player.totalDamageDealtToChampions || 0) /
-                          maxDamage) *
-                          100,
-                      )}
-                      sx={{
-                        height: 6,
-                        borderRadius: 3,
-                        bgcolor: "#444",
-                        mt: 1,
-                        "& .MuiLinearProgress-bar": {
-                          bgcolor: "#f3c80a",
-                          borderRadius: 3,
-                        },
-                      }}
-                    />
-                  </Box>
-                </Box>
+                <ExpandedTeamInfo
+                  player={player}
+                  index={index}
+                  info={info}
+                  maxDamage={maxDamage}
+                  clickProfileName={clickProfileName}
+                />
               ))}
             </Stack>
           </CardContent>

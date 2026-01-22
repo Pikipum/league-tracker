@@ -21,4 +21,5 @@
 | 20.01 | 2 | sidebar profile styling and added queue type selector |
 | 21.01 | 2 | queue type selector styling and logic |
 | 21.01 | 5 | expand button for match cards |
-| sum  | in progress   | | 
+| 22.01 | 2 | styling expanded match info |
+| sum  | 64 (21.01)   | | 
