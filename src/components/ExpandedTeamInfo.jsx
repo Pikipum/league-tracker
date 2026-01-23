@@ -44,7 +44,7 @@ const ExpandedTeamInfo = ({
         gridTemplateColumns: "2fr 1fr 1fr 50px 1fr",
         alignItems: "center",
         width: "100%",
-        gap: 1,
+        gap: 1
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>

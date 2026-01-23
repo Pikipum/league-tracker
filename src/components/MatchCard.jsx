@@ -334,7 +334,12 @@ const MatchCard = ({ matchData, puuid }) => {
         </CardContent>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Stack spacing={0.5}>
+            <Stack
+              spacing={0.5}
+              sx={{
+                bgcolor: "#1a1a1a"
+              }}
+            >
               {blueTeam.map((player, index) => (
                 <ExpandedTeamInfo
                   player={player}

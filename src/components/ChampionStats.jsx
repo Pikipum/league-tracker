@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Typography } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
+import { getChampionIconName } from "../util/helperFunctions";
 
 const ChampionStats = ({ puuid }) => {
   const [championStats, setChampionStats] = useState([]);
@@ -77,7 +78,7 @@ const ChampionStats = ({ puuid }) => {
         gap: 1,
         p: 1,
         m: 1,
-        bgcolor: "#2a2a2a",
+        bgcolor: "#1a1a1a",
         color: "white",
         borderColor: "#f3c80a",
         maxWidth: 400,
@@ -96,35 +97,45 @@ const ChampionStats = ({ puuid }) => {
         <Box
           key={champ.name}
           sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            rowGap: 0.5,
-            columnGap: 1,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
             p: 1,
-            bgcolor: "#3a3a3a",
+            bgcolor: "#2a2a2a",
             borderRadius: 1,
           }}
         >
-          <Typography
-            variant="subtitle2"
-            sx={{ gridColumn: "1 / -1", color: "#f3c80a" }}
-          >
-            {champ.name}
-          </Typography>
-          <span>Games</span>
-          <span>{champ.games}</span>
-          <span>W / L</span>
-          <span>
-            {champ.wins} / {champ.losses}
-          </span>
-          <span>Winrate</span>
-          <span>{champ.winrate}%</span>
-          <span>KDA</span>
-          <span>{champ.kda}</span>
-          <span>Avg K / D / A</span>
-          <span>
-            {champ.avgKills} / {champ.avgDeaths} / {champ.avgAssists}
-          </span>
+          <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
+            <Box
+              component="img"
+              src={`/assets/16.1.1/img/champion/${getChampionIconName(
+                champ.name,
+              )}.png`}
+              alt={champ.name}
+              sx={{
+                width: 48,
+                height: 48,
+                borderRadius: 1,
+              }}
+            />
+            <Box>
+              <Typography sx={{ fontSize: 16, color: "#f5f5f5" }}>
+                {champ.name}
+              </Typography>
+              <Typography sx={{ color: "#888", fontSize: 12 }}>
+                {champ.kda} KDA
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box sx={{ textAlign: "right" }}>
+            <Typography sx={{ fontSize: 13, color: "#f5f5f5" }}>
+              {champ.winrate}% WR
+            </Typography>
+            <Typography sx={{ color: "#888", fontSize: 12 }}>
+              {champ.wins}W / {champ.losses}L
+            </Typography>
+          </Box>
         </Box>
       ))}
     </Box>

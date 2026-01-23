@@ -23,4 +23,13 @@
 | 21.01 | 5 | expand button for match cards |
 | 22.01 | 2 | styling expanded match info |
 | 22.01 | 5 | continued styling expanded match info, added routing for regions |
-| sum  | 64 | | 
+| 23.01 | 2 | styling top champions panel | 
+| sum  | 70 (23.01) | | 
+
+| todo |
+| statistics panel |
+| favorites |
+| route all calls from backend |
+| add match scraping feature |
+| leaderboard |
+| match cards for arena games |
