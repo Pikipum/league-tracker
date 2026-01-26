@@ -9,9 +9,28 @@ import Box from "@mui/material/Box";
 
 const getQueueId = (queueName) => {
   const queueIdsMap = {
-    "Ranked Solo": 420,
+    "Ranked Solo": "queue=420&",
+    All: "",
   };
   return queueIdsMap[queueName];
+};
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const fetchWithRetry = async (url, maxRetries = 10) => {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await axios.get(url);
+      return response;
+    } catch (error) {
+      if (attempt === maxRetries - 1) {
+        throw error;
+      }
+      console.warn(`Request failed, retrying in 1s (attempt ${attempt + 1}/${maxRetries})`);
+      await sleep(1000);
+    }
+  }
+  return null;
 };
 
 const MatchHistory = ({ puuid, queueType }) => {
@@ -22,7 +41,6 @@ const MatchHistory = ({ puuid, queueType }) => {
   const [matchIdStart, setMatchIdStart] = useState(0);
   const [initialLoad, setInitialLoad] = useState(true);
   // puuid = gvfJ4Sy5gm1L1rzvYw8w0fFjOJZpSAIiGv6FVw-Bo1Sc9MfatXnj6ugbk3-oFdukLewGmRbkrec4ZQ
-
   useEffect(() => {
     if (!puuid || !url || !api_key) return;
 
@@ -30,27 +48,16 @@ const MatchHistory = ({ puuid, queueType }) => {
       setIsLoading(true);
       try {
         const idsResponse = await axios.get(
-          `${url}/lol/match/v5/matches/by-puuid/${puuid}/ids?queue=${getQueueId(queueType)}&start=${matchIdStart}&count=10&api_key=${api_key}`,
+          `${url}/lol/match/v5/matches/by-puuid/${puuid}/ids?${getQueueId(queueType)}start=${matchIdStart}&count=10&api_key=${api_key}`,
         );
 
-        const matchPromises = idsResponse.data.map(
-          (matchId, index) =>
-            new Promise((resolve) => {
-              setTimeout(async () => {
-                try {
-                  //                 const matchData = await axios.get(
-                  //                    `${url}/lol/match/v5/matches/${matchId}?api_key=${api_key}`
-                  //                  );
-                  const matchData = await axios.get(
-                    `http://localhost:4000/matches/${matchId}`,
-                  );
-                  resolve(matchData.data);
-                } catch (error) {
-                  console.error(`Failed to fetch match ${matchId}:`, error);
-                  resolve(null);
-                }
-              }, index * 100);
-            }),
+        const matchPromises = idsResponse.data.map((matchId) =>
+          fetchWithRetry(`http://localhost:4000/matches/${matchId}`)
+            .then((res) => res?.data ?? null)
+            .catch((error) => {
+              console.error(`Failed to fetch match ${matchId}:`, error);
+              return null;
+            })
         );
 
         const matches = await Promise.all(matchPromises);
@@ -69,7 +76,7 @@ const MatchHistory = ({ puuid, queueType }) => {
     };
 
     fetchMatchHistory();
-  }, [puuid, url, api_key, matchIdStart]);
+  }, [puuid, url, api_key, matchIdStart, queueType]);
 
   if (isLoading && initialLoad) {
     setInitialLoad(false);

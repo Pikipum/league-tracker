@@ -104,7 +104,7 @@ const MatchCard = ({ matchData, puuid }) => {
     setExpanded(!expanded);
   };
 
-  if (info.gameMode === "CLASSIC") {
+  if (info.gameMode) {
     return (
       <Card
         sx={{

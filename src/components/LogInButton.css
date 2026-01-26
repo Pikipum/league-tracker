@@ -1,9 +1,4 @@
-.login-button-wrapper {
-  position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
-  z-index: 10;
-}
+
 
 .login-button.MuiButton-contained {
   background-color: #eaf916;
