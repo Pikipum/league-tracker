@@ -9,10 +9,17 @@ import Box from "@mui/material/Box";
 
 const getQueueId = (queueName) => {
   const queueIdsMap = {
+    "All Matches": "",
     "Ranked Solo": "queue=420&",
-    All: "",
+    "Ranked Flex": "queue=440&",
+    "ARAM": "queue=450&",
+    "Arena": "queue=1700&",
+    "Quickplay": "queue=490&",
+    "Swiftplay": "queue=480&",
+    "Normal Draft": "queue=400&",
+    "Clash": "queue=700&",
   };
-  return queueIdsMap[queueName];
+  return queueIdsMap[queueName] ?? "";
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -33,13 +40,24 @@ const fetchWithRetry = async (url, maxRetries = 10) => {
   return null;
 };
 
-const MatchHistory = ({ puuid, queueType }) => {
-  const [matchHistory, setMatchHistory] = useState([]);
+const MatchHistory = ({ matchHistory, setMatchHistory, puuid, queueType }) => {
   const [isLoading, setIsLoading] = useState(true);
   const url = process.env.REACT_APP_RIOT_URL;
   const api_key = process.env.REACT_APP_RIOT_API_KEY;
   const [matchIdStart, setMatchIdStart] = useState(0);
   const [initialLoad, setInitialLoad] = useState(true);
+  const [currentQueue, setCurrentQueue] = useState(queueType);
+
+  // Reset match history when queue type changes
+  useEffect(() => {
+    if (queueType !== currentQueue) {
+      setMatchHistory([]);
+      setMatchIdStart(0);
+      setCurrentQueue(queueType);
+      return; // Skip fetching, the matchIdStart change will trigger the fetch
+    }
+  }, [queueType, currentQueue]);
+
   // puuid = gvfJ4Sy5gm1L1rzvYw8w0fFjOJZpSAIiGv6FVw-Bo1Sc9MfatXnj6ugbk3-oFdukLewGmRbkrec4ZQ
   useEffect(() => {
     if (!puuid || !url || !api_key) return;
@@ -48,7 +66,7 @@ const MatchHistory = ({ puuid, queueType }) => {
       setIsLoading(true);
       try {
         const idsResponse = await axios.get(
-          `${url}/lol/match/v5/matches/by-puuid/${puuid}/ids?${getQueueId(queueType)}start=${matchIdStart}&count=10&api_key=${api_key}`,
+          `${url}/lol/match/v5/matches/by-puuid/${puuid}/ids?${getQueueId(currentQueue)}start=${matchIdStart}&count=10&api_key=${api_key}`,
         );
 
         const matchPromises = idsResponse.data.map((matchId) =>
@@ -76,7 +94,7 @@ const MatchHistory = ({ puuid, queueType }) => {
     };
 
     fetchMatchHistory();
-  }, [puuid, url, api_key, matchIdStart, queueType]);
+  }, [puuid, url, api_key, matchIdStart, currentQueue]);
 
   if (isLoading && initialLoad) {
     setInitialLoad(false);

@@ -9,17 +9,9 @@ import { formatDistanceToNow } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { LinearProgress } from "@mui/material";
 import { getChampionIconName } from "../util/helperFunctions";
 import { getSummonerSpellName } from "../util/helperFunctions";
 import { getRuneTreeName } from "../util/helperFunctions";
@@ -337,7 +329,7 @@ const MatchCard = ({ matchData, puuid }) => {
             <Stack
               spacing={0.5}
               sx={{
-                bgcolor: "#1a1a1a"
+                bgcolor: "#1a1a1a",
               }}
             >
               {blueTeam.map((player, index) => (

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { getRegion, getRegionList } from "../util/helperFunctions";
 
 const SearchBar = ({ region, setRegion }) => {
@@ -16,9 +17,14 @@ const SearchBar = ({ region, setRegion }) => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = (event) => {
-    setRegion(event.target.textContent);
+
+  const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSelect = (r) => {
+    handleClose();
+    setTimeout(() => setRegion(r), 0);
   };
 
   const handleSubmit = (event) => {
@@ -38,34 +44,61 @@ const SearchBar = ({ region, setRegion }) => {
         onChange={(event) => setSummoner(event.target.value)}
       />
       <Button
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
+        endIcon={<KeyboardArrowDownIcon />}
+        sx={{
+          color: "#e0e0e0",
+          textTransform: "none",
+          fontSize: "1rem",
+          "&:hover": {
+            color: "#f3c80a",
+            bgcolor: "transparent",
+          },
+        }}
       >
         {region}
       </Button>
       <Menu
-        id="basic-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        slotProps={{
-          list: {
-            "aria-labelledby": "basic-button",
+        MenuListProps={{ sx: { py: 0.5 } }}
+        PaperProps={{
+          sx: {
+            bgcolor: "#1e1e1e",
+            border: "1px solid #3a3a3a",
+            color: "#e0e0e0",
           },
         }}
       >
         {regions.map((r) => (
-          <MenuItem onClick={handleClose}>{r}</MenuItem>
+          <MenuItem
+            key={r}
+            onClick={() => handleSelect(r)}
+            selected={r === region}
+            sx={{
+              fontSize: "0.9rem",
+              "&:hover": { bgcolor: "#2a2a2a", color: "#f3c80a" },
+              "&.Mui-selected": { bgcolor: "#2a2a2a", color: "#f3c80a" },
+              "&.Mui-selected:hover": { bgcolor: "#333" },
+            }}
+          >
+            {r}
+          </MenuItem>
         ))}
       </Menu>
       <Button
         variant="contained"
-        color="primary"
         type="submit"
         className="search-bar-button"
+        sx={{
+          bgcolor: "#f3c80a",
+          color: "#1e1e1e",
+          fontWeight: "bold",
+          "&:hover": {
+            bgcolor: "#d4af09",
+          },
+        }}
       >
         Search
       </Button>

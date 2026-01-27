@@ -7,10 +7,9 @@ import SideBarProfile from "./SideBarProfile";
 import ChampionStats from "./ChampionStats";
 import LogInButton from "./LogInButton";
 import LoadingCircle from "./LoadingCircle";
-import QueueSelect from "./QueueSelect";
-import React from "react";
 import SearchBar from "./SearchBar";
 import StatsScraperButton from "./StatsScraperButton";
+import MatchHistoryTopCard from "./MatchHistoryTopBar";
 
 const tagSplitter = (identifier) => {
   const [summonerName = "", tag = ""] = identifier.split("#", 2);
@@ -25,8 +24,9 @@ const ProfileView = () => {
   const api_key = process.env.REACT_APP_RIOT_API_KEY;
   const { summonerName, tag } = tagSplitter(name);
   const [responseStatus, setResponseStatus] = useState();
-  const [queueType, setQueueType] = useState(["Ranked Solo"]);
+  const [queueType, setQueueType] = useState("Ranked Solo");
   const [region, setRegion] = useState("EUW");
+  const [matchHistory, setMatchHistory] = useState([]);
   // REACT_APP_RIOT_URL=https://europe.api.riotgames.com/riot
   useEffect(() => {
     if (!summonerName || !tag || !url || !api_key) return;
@@ -83,13 +83,13 @@ const ProfileView = () => {
         py: 3,
       }}
     >
-      <Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+          <SearchBar region={region} setRegion={setRegion} />
+        </Box>
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
           <StatsScraperButton puuid={profileData.puuid} />
           <LogInButton />
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-          <SearchBar region={region} setRegion={setRegion} />
         </Box>
       </Box>
       <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
@@ -102,8 +102,18 @@ const ProfileView = () => {
           </Box>
         </Box>
         <Box sx={{ flex: 1 }}>
-          <QueueSelect queueType={queueType} setQueueType={setQueueType} />
-          <MatchHistory puuid={profileData.puuid} queueType={queueType} />
+          <MatchHistoryTopCard
+            puuid={profileData.puuid}
+            matchHistory={matchHistory}
+            queueType={queueType}
+            setQueueType={setQueueType}
+          />
+          <MatchHistory
+            matchHistory={matchHistory}
+            setMatchHistory={setMatchHistory}
+            puuid={profileData.puuid}
+            queueType={queueType}
+          />
         </Box>
       </Box>
     </Box>

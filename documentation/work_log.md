@@ -25,7 +25,8 @@
 | 22.01 | 5 | continued styling expanded match info, added routing for regions |
 | 23.01 | 2 | styling top champions panel | 
 | 26.01 | 8 | added data scraper for full match history scraping |
-| sum  | 71 (23.01) | | 
+| 27.01 | 8 | added top info bar for match history |
+| sum  | 87 (27.01) | | 
 
 | todo |
 | statistics panel |

@@ -1,92 +1,85 @@
-import * as React from "react";
-import { useTheme } from "@mui/material/styles";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 260,
-      backgroundColor: "#2a2a2a",
-      color: "#f5f5f5",
-      border: "1px solid #f3c80a",
-    },
-  },
-};
-
-const queues = ["All", "Ranked Solo", "Normal"];
-
-function getStyles(queue, queueType, theme) {
-  return {
-    color: "#f5f5f5",
-    backgroundColor: "#2a2a2a",
-    fontWeight: queueType.includes(queue)
-      ? theme.typography.fontWeightMedium
-      : theme.typography.fontWeightRegular,
-  };
-}
+const queues = [
+  "All Matches",
+  "Ranked Solo",
+  "Ranked Flex",
+  "ARAM",
+  "Arena",
+  "Quickplay",
+  "Swiftplay",
+  "Normal Draft",
+  "Clash",
+];
 
 const QueueSelect = ({ queueType, setQueueType }) => {
-  const theme = useTheme();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setQueueType(typeof value === "string" ? value.split(",") : value);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSelect = (queue) => {
+    handleClose();
+    setTimeout(() => setQueueType(queue), 0);
   };
 
   return (
-    <FormControl
-      sx={{
-        m: 1,
-        width: 320,
-        "& .MuiInputLabel-root": { color: "#f5f5f5" },
-        "& .MuiInputLabel-root.Mui-focused": { color: "#f3c80a" },
-        "& .MuiOutlinedInput-root": {
-          color: "#f5f5f5",
-          backgroundColor: "#2a2a2a",
-          "& fieldset": { borderColor: "#666" },
-          "&:hover fieldset": { borderColor: "#f3c80a" },
-          "&.Mui-focused fieldset": { borderColor: "#f3c80a", boxShadow: "0 0 0 2px rgba(243, 200, 10, 0.25)" },
-        },
-        "& .MuiSelect-icon": { color: "#f5f5f5" },
-      }}
-    >
-      <InputLabel id="queue-type">Select queue type</InputLabel>
-      <Select
-        labelId="queue-type"
-        id="queue-type"
-        value={queueType}
-        onChange={handleChange}
-        input={<OutlinedInput label="Queue" />}
-        MenuProps={MenuProps}
-        renderValue={(selected) => selected.join(", ")}
+    <>
+      <Button
+        onClick={handleClick}
+        endIcon={<KeyboardArrowDownIcon />}
+        sx={{
+          color: "#e0e0e0",
+          textTransform: "none",
+          fontSize: "1rem",
+          "&:hover": {
+            color: "#f3c80a",
+            bgcolor: "transparent",
+          },
+        }}
+      >
+        {queueType}
+      </Button>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{ sx: { py: 0.5 } }}
+        PaperProps={{
+          sx: {
+            bgcolor: "#1e1e1e",
+            border: "1px solid #3a3a3a",
+            color: "#e0e0e0",
+          },
+        }}
       >
         {queues.map((queue) => (
           <MenuItem
             key={queue}
-            value={queue}
+            onClick={() => handleSelect(queue)}
+            selected={queue === queueType}
             sx={{
-              color: "#f5f5f5",
-              backgroundColor: "#2a2a2a",
-              "&.Mui-selected": { backgroundColor: "#3a3a3a", fontWeight: theme.typography.fontWeightMedium },
-              "&.Mui-selected:hover": { backgroundColor: "#444" },
-              "&:hover": { backgroundColor: "#333" },
+              fontSize: "0.9rem",
+              "&:hover": { bgcolor: "#2a2a2a", color: "#f3c80a" },
+              "&.Mui-selected": { bgcolor: "#2a2a2a", color: "#f3c80a" },
+              "&.Mui-selected:hover": { bgcolor: "#333" },
             }}
-            style={getStyles(queue, queueType, theme)}
           >
             {queue}
           </MenuItem>
         ))}
-      </Select>
-    </FormControl>
+      </Menu>
+    </>
   );
 };
 
