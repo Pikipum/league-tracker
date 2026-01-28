@@ -10,6 +10,7 @@ import LoadingCircle from "./LoadingCircle";
 import SearchBar from "./SearchBar";
 import StatsScraperButton from "./StatsScraperButton";
 import MatchHistoryTopCard from "./MatchHistoryTopBar";
+import NavigationBar from "./NavigationBar";
 
 const tagSplitter = (identifier) => {
   const [summonerName = "", tag = ""] = identifier.split("#", 2);
@@ -86,6 +87,7 @@ const ProfileView = () => {
       <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
         <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
           <SearchBar region={region} setRegion={setRegion} />
+          <NavigationBar />
         </Box>
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
           <StatsScraperButton puuid={profileData.puuid} />

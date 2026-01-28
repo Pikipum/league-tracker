@@ -69,11 +69,12 @@ const LogInButton = () => {
       setApiError(
         err.response?.data?.error || "Login failed. Check credentials."
       );
+      console.log(apiError)
     } finally {
       setLoading(false);
     }
   };
-  if (!hasToken) {
+  if (!hasToken && !loading) {
     return (
       <div>
         <div className="login-button-wrapper">

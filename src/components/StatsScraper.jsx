@@ -20,6 +20,7 @@ const StatsScraper = () => {
   const [totalMatchIds, setTotalMatchIds] = useState(0);
   const [status, setStatus] = useState("");
   const abortRef = useRef(false);
+  const [start, setStart] = useState(0);
 
   statusRef.current = setStatus;
 
@@ -76,7 +77,7 @@ const StatsScraper = () => {
 
   const scrapeAllMatchIds = async () => {
     const allMatchIds = [];
-    let start = 0;
+    //let start = 0;
     const count = 100;
     let requestCount = 0;
     const requestTimes = [];
@@ -135,7 +136,8 @@ const StatsScraper = () => {
 
         allMatchIds.push(...matchIds);
         setMatchIdsScraped(allMatchIds.length);
-        start += count;
+        //start += count;
+        setStart(start + count)
 
         setStatus(
           `Scraping match IDs... (${allMatchIds.length} IDs, batch ${requestCount})`,

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import MatchCard from "./MatchCard";
 import LoadingCircle from "./LoadingCircle";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -12,12 +11,12 @@ const getQueueId = (queueName) => {
     "All Matches": "",
     "Ranked Solo": "queue=420&",
     "Ranked Flex": "queue=440&",
-    "ARAM": "queue=450&",
-    "Arena": "queue=1700&",
-    "Quickplay": "queue=490&",
-    "Swiftplay": "queue=480&",
+    ARAM: "queue=450&",
+    Arena: "queue=1700&",
+    Quickplay: "queue=490&",
+    Swiftplay: "queue=480&",
     "Normal Draft": "queue=400&",
-    "Clash": "queue=700&",
+    Clash: "queue=700&",
   };
   return queueIdsMap[queueName] ?? "";
 };
@@ -33,7 +32,9 @@ const fetchWithRetry = async (url, maxRetries = 10) => {
       if (attempt === maxRetries - 1) {
         throw error;
       }
-      console.warn(`Request failed, retrying in 1s (attempt ${attempt + 1}/${maxRetries})`);
+      console.warn(
+        `Request failed, retrying in 1s (attempt ${attempt + 1}/${maxRetries})`,
+      );
       await sleep(1000);
     }
   }
@@ -48,15 +49,15 @@ const MatchHistory = ({ matchHistory, setMatchHistory, puuid, queueType }) => {
   const [initialLoad, setInitialLoad] = useState(true);
   const [currentQueue, setCurrentQueue] = useState(queueType);
 
-  // Reset match history when queue type changes
   useEffect(() => {
     if (queueType !== currentQueue) {
       setMatchHistory([]);
       setMatchIdStart(0);
       setCurrentQueue(queueType);
-      return; // Skip fetching, the matchIdStart change will trigger the fetch
+      setInitialLoad(true);
+      return;
     }
-  }, [queueType, currentQueue]);
+  }, [queueType, currentQueue, setMatchHistory]);
 
   // puuid = gvfJ4Sy5gm1L1rzvYw8w0fFjOJZpSAIiGv6FVw-Bo1Sc9MfatXnj6ugbk3-oFdukLewGmRbkrec4ZQ
   useEffect(() => {
@@ -75,7 +76,7 @@ const MatchHistory = ({ matchHistory, setMatchHistory, puuid, queueType }) => {
             .catch((error) => {
               console.error(`Failed to fetch match ${matchId}:`, error);
               return null;
-            })
+            }),
         );
 
         const matches = await Promise.all(matchPromises);
@@ -84,20 +85,24 @@ const MatchHistory = ({ matchHistory, setMatchHistory, puuid, queueType }) => {
           const fresh = matches.filter(
             (m) => m && !seen.has(m.metadata?.matchId),
           );
-          return [...prev, ...fresh];
+          const combined = [...prev, ...fresh];
+          combined.sort(
+            (a, b) => (b?.info?.gameEndTimestamp || 0) - (a?.info?.gameEndTimestamp || 0),
+          );
+          return combined;
         });
       } catch (error) {
         console.error("Failed to fetch match history:", error);
       } finally {
         setIsLoading(false);
+        setInitialLoad(false);
       }
     };
 
     fetchMatchHistory();
-  }, [puuid, url, api_key, matchIdStart, currentQueue]);
+  }, [puuid, url, api_key, matchIdStart, currentQueue, setMatchHistory]);
 
   if (isLoading && initialLoad) {
-    setInitialLoad(false);
     return <LoadingCircle />;
   }
 
@@ -114,9 +119,11 @@ const MatchHistory = ({ matchHistory, setMatchHistory, puuid, queueType }) => {
     >
       <List>
         {matchHistory.map((matchData) => (
-          <ListItem key={matchData.metadata.matchId}>
-            <MatchCard matchData={matchData} puuid={puuid} />
-          </ListItem>
+          <MatchCard
+            key={matchData.metadata.matchId}
+            matchData={matchData}
+            puuid={puuid}
+          />
         ))}
       </List>
     </InfiniteScroll>

@@ -24,9 +24,11 @@
 | 22.01 | 2 | styling expanded match info |
 | 22.01 | 5 | continued styling expanded match info, added routing for regions |
 | 23.01 | 2 | styling top champions panel | 
+| 24.01 | 5 | researching cloud providers and ddns |
 | 26.01 | 8 | added data scraper for full match history scraping |
 | 27.01 | 8 | added top info bar for match history |
-| sum  | 87 (27.01) | | 
+| 28.01 | 8 | added tier list calculation for backend and frontend component |
+| sum  | 100 (28.01) | | 
 
 | todo |
 | statistics panel |

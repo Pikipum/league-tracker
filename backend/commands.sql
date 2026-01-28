@@ -34,3 +34,6 @@ VALUES ('test@example.com', 'user', crypt('password', gen_salt('bf')));
 
 CREATE INDEX matches_metadata_participants_gin_idx
 ON matches USING gin ((payload->'metadata'->'participants'));
+
+CREATE INDEX matches_participants_gin_idx
+ON matches USING gin ((payload->'info'->'participants') jsonb_path_ops);

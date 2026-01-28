@@ -33,7 +33,7 @@ const SideBarProfile = ({ region, profileData }) => {
     };
 
     fetchProfile();
-  }, [profileData.puuid, url, api_key]);
+  }, [profileData.puuid, url, api_key, convertedRegion]);
 
   if (!profileData) return null;
   if (isLoading) return <LoadingCircle />;

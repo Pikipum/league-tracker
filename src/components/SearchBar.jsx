@@ -5,7 +5,7 @@ import { useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { getRegion, getRegionList } from "../util/helperFunctions";
+import { getRegionList } from "../util/helperFunctions";
 
 const SearchBar = ({ region, setRegion }) => {
   const navigate = useNavigate();
