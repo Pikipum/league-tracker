@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import FavoriteProfiles from "./FavoriteProfiles";
-import LogInButton from "./LogInButton";
 import SearchBar from "./SearchBar";
 import NavigationBar from "./NavigationBar";
 
