@@ -1,24 +1,27 @@
-import { Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const StatsScraperButton = ({ puuid }) => {
   const navigate = useNavigate();
   const handleClick = () => {
+    if (!puuid) return;
     navigate(`/stats/${encodeURIComponent(puuid.trim())}`);
   };
 
   return (
-    <div>
-      <Button
-        type="button"
-        variant="contained"
-        color="primary"
-        className="login-button"
-        onClick={() => handleClick()}
-      >
-        Statistics Scraper
-      </Button>
-    </div>
+    <Typography
+      noWrap
+      onClick={handleClick}
+      sx={{
+        color: "#cfcfcf",
+        fontSize: 14,
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+        "&:hover": { color: "#fff", bgcolor: "transparent" },
+      }}
+    >
+      Statistics Scraper
+    </Typography>
   );
 };
 

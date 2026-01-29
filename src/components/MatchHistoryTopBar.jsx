@@ -15,7 +15,8 @@ const MatchHistoryTopCard = ({ puuid, matchHistory, queueType, setQueueType }) =
         maxWidth: 1200,
         width: "70%",
         mx: "auto",
-        borderRadius: 1
+        borderRadius: 1,
+        flexWrap: "nowrap"
       }}
     >
       <QueueSelect queueType={queueType} setQueueType={setQueueType} />

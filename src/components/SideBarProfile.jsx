@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import LoadingCircle from "./LoadingCircle";
 import { getRegion } from "../util/helperFunctions";
+import FavoriteButton from "./FavoriteButton";
 
 const SideBarProfile = ({ region, profileData }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -71,9 +72,22 @@ const SideBarProfile = ({ region, profileData }) => {
           }}
         />
         <Box>
-          <Typography sx={{ color: "white", fontWeight: "bold", fontSize: 18 }}>
-            {profileData.gameName}
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography
+              noWrap
+              sx={{ color: "white", fontWeight: "bold", fontSize: 18, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+            >
+              {profileData.gameName}
+            </Typography>
+            <FavoriteButton profileData={profileData} region={region} />
+          </Box>
           <Typography sx={{ color: "#888", fontSize: 14 }}>
             #{profileData.tagLine}
           </Typography>

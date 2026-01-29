@@ -28,13 +28,13 @@
 | 26.01 | 8 | added data scraper for full match history scraping |
 | 27.01 | 8 | added top info bar for match history |
 | 28.01 | 8 | added tier list calculation for backend and frontend component |
-| sum  | 100 (28.01) | | 
+| 29.01 | 6 | added ability to add favorites to profile (+database) |
+| 29.01 | 4 | added favorites button to profile and favorites view to landing page |
+| sum  | 110 (29.01) | | 
 
 | todo |
 | statistics panel |
-| favorites |
 | route all calls from backend |
-| add match scraping feature |
 | leaderboard |
 | match cards for arena games |
 | live game |

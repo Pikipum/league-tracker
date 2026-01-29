@@ -1,66 +1,98 @@
-import { Typography } from "@mui/material";
-import { Box } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import StatsScraperButton from "./StatsScraperButton";
+import LogInButton from "./LogInButton";
 
-const NavigationBar = () => {
+const navItems = [
+  { label: "Home", to: "/" },
+  { label: "Champions", to: "/champions" },
+  { label: "Tier List", to: "/tierlist" },
+];
+
+const NavigationBar = ({ puuid, sticky = false, showAuthButton = false }) => {
   const navigate = useNavigate();
+  const containerSx = sticky
+    ? {
+        position: "sticky",
+        top: 0,
+        zIndex: 20,
+        bgcolor: "#1a1a1a",
+        borderBottom: "1px solid #222",
+        py: 1,
+        borderRadius: 2,
+      }
+    : {
+        bgcolor: "#1a1a1a",
+        borderBottom: "1px solid #222",
+        py: 1,
+        mt: 2,
+        borderRadius: 2,
+      };
 
-  const navToTierList = () => {
-    navigate(`http://localhost:4001/tierlist`);
+  const innerSx = {
+    maxWidth: 1000,
+    mx: "auto",
+    px: 2,
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
   };
-  return (
-    <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-      <Box
-        sx={{
-          gap: 2,
-          p: 1,
-          m: 0,
-          bgcolor: "#1a1a1a",
-          borderRadius: 1,
-          maxWidth: 100,
-        }}
-      >
-        <Typography
-          onClick={null}
-          sx={{ ":hover": { color: "white", cursor: "pointer" } }}
-        >
-          Champions
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          gap: 2,
-          p: 1,
-          m: 0,
-          bgcolor: "#1a1a1a",
-          borderRadius: 1,
-          maxWidth: 100,
-        }}
-      >
-        <Typography
-          onClick={navToTierList}
-          sx={{ ":hover": { color: "white", cursor: "pointer" } }}
-        >
-          Tier List
-        </Typography>
-      </Box>
 
-      <Box
-        sx={{
-          gap: 2,
-          p: 1,
-          m: 0,
-          bgcolor: "#1a1a1a",
-          borderRadius: 1,
-          maxWidth: 100,
-        }}
-      >
-        <Typography
-          onClick={null}
-          sx={{ ":hover": { color: "white", cursor: "pointer" } }}
+  return (
+    <Box sx={containerSx}>
+      <Box sx={innerSx}>
+        <Stack
+          direction="row"
+          spacing={2}
+          alignItems="center"
+          sx={{ flex: 0, flexWrap: "nowrap" }}
         >
-          My stats
-        </Typography>
+          {navItems.map((item) => (
+            <Box
+              key={item.label}
+              sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+            >
+              <Typography
+                onClick={() => navigate(item.to)}
+                sx={{
+                  color: "#cfcfcf",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  px: 1,
+                  py: 0.5,
+                  borderRadius: 1,
+                  letterSpacing: 0,
+                  whiteSpace: "nowrap",
+                  "&:hover": { color: "#fff" },
+                }}
+              >
+                {item.label}
+              </Typography>
+            </Box>
+          ))}
+
+          {puuid ? <StatsScraperButton puuid={puuid} /> : null}
+        </Stack>
+
+        <Box sx={{ flex: 1 }} />
+
+        {showAuthButton && sticky ? (
+          <Box
+            sx={{
+              position: "absolute",
+              right: 16,
+              top: "50%",
+              transform: "translateY(-50%)",
+            }}
+          >
+            <LogInButton />
+          </Box>
+        ) : showAuthButton ? (
+          <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
+            <LogInButton />
+          </Box>
+        ) : null}
       </Box>
     </Box>
   );

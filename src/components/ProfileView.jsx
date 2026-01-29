@@ -8,7 +8,6 @@ import ChampionStats from "./ChampionStats";
 import LogInButton from "./LogInButton";
 import LoadingCircle from "./LoadingCircle";
 import SearchBar from "./SearchBar";
-import StatsScraperButton from "./StatsScraperButton";
 import MatchHistoryTopCard from "./MatchHistoryTopBar";
 import NavigationBar from "./NavigationBar";
 
@@ -85,12 +84,13 @@ const ProfileView = () => {
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-        <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-          <SearchBar region={region} setRegion={setRegion} />
-          <NavigationBar />
+        <Box sx={{ display: "flex", flexDirection: "column",  gap: 0 }}>
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+            <SearchBar region={region} setRegion={setRegion} />
+          </Box>
+          <NavigationBar puuid={profileData.puuid} even />
         </Box>
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <StatsScraperButton puuid={profileData.puuid} />
           <LogInButton />
         </Box>
       </Box>

@@ -37,3 +37,14 @@ ON matches USING gin ((payload->'metadata'->'participants'));
 
 CREATE INDEX matches_participants_gin_idx
 ON matches USING gin ((payload->'info'->'participants') jsonb_path_ops);
+
+CREATE TABLE favorites (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  puuid text NOT NULL,
+  game_name text NOT NULL,
+  tag_line text NOT NULL,
+  region text,
+  created_at timestamptz DEFAULT now(),
+  UNIQUE (user_id, puuid)
+);

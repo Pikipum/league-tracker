@@ -103,19 +103,10 @@ const RecentlyPlayedTopBar = ({ puuid, matchHistory }) => {
         </Box>
       </Box>
 
-      <Box>
-        <Typography sx={{ color: "#e0e0e0", fontWeight: "bold", fontSize: 14 }}>
-          {stats.kda} KDA
-        </Typography>
-        <Typography sx={{ color: "#888", fontSize: 12 }}>
-          {stats.avgKills} / {stats.avgDeaths} / {stats.avgAssists}
-        </Typography>
-      </Box>
-
       {stats.topChamps.map((champ) => (
         <Box
           key={champ.name}
-          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          sx={{ display: "flex", alignItems: "center", gap: 1}}
         >
           <Box
             component="img"

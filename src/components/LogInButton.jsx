@@ -10,6 +10,7 @@ import {
 import "./LogInButton.css";
 import logIn from "./logIn";
 import logOut from "./logOut";
+import createAccount from "./createAccount";
 
 const dialogPaperSx = {
   backgroundColor: "#2a2a2a",
@@ -30,13 +31,13 @@ const fieldSx = {
 };
 
 const LogInButton = () => {
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [mode, setMode] = useState(null);
+  const [form, setForm] = useState({ username: "", password: "", email: "" });
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
   const [hasToken, setHasToken] = useState(
-    Boolean(localStorage.getItem("token"))
+    Boolean(localStorage.getItem("token")),
   );
 
   const handleChange = (e) => {
@@ -56,20 +57,55 @@ const LogInButton = () => {
     setHasToken(false);
   };
 
+  const validateEmail = (email) => {
+    if (!email || !email.trim()) return false;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const handleCreate = async (e) => {
+    e?.preventDefault();
+    const next = {};
+    if (!form.username.trim()) next.username = "Username is required";
+    if (!form.password.trim()) next.password = "Password is required";
+    if (!validateEmail(form.email)) next.email = "Valid email is required";
+    setErrors(next);
+    if (Object.keys(next).length) return;
+
+    setApiError("");
+    setLoading(true);
+    try {
+      await createAccount({
+        username: form.username,
+        password: form.password,
+        email: form.email,
+      });
+      setHasToken(true);
+      setMode(null);
+    } catch (err) {
+      setApiError(
+        err.response?.data?.error ||
+          "Account creation failed. Check credentials.",
+      );
+      console.log(apiError);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setApiError("");
     setLoading(true);
     try {
-      await logIn(form);
+      await logIn({ username: form.username, password: form.password });
       setHasToken(true);
-      setOpen(false);
+      setMode(null);
     } catch (err) {
       setApiError(
-        err.response?.data?.error || "Login failed. Check credentials."
+        err.response?.data?.error || "Login failed. Check credentials.",
       );
-      console.log(apiError)
+      console.log(apiError);
     } finally {
       setLoading(false);
     }
@@ -83,14 +119,15 @@ const LogInButton = () => {
             variant="contained"
             color="primary"
             className="login-button"
-            onClick={() => setOpen(true)}
+            onClick={() => setMode("login")}
           >
             Log In
           </Button>
         </div>
+
         <Dialog
-          open={open}
-          onClose={() => setOpen(false)}
+          open={mode === "login"}
+          onClose={() => setMode(null)}
           PaperProps={{ sx: dialogPaperSx }}
         >
           <DialogTitle sx={{ color: "#f3c80a" }}>Log in</DialogTitle>
@@ -120,8 +157,14 @@ const LogInButton = () => {
               />
             </DialogContent>
             <DialogActions sx={{ px: 3, pb: 3 }}>
-              <Button onClick={() => setOpen(false)} sx={{ color: "#f5f5f5" }}>
+              <Button onClick={() => setMode(null)} sx={{ color: "#f5f5f5" }}>
                 Cancel
+              </Button>
+              <Button
+                onClick={() => setMode("create")}
+                sx={{ color: "#f5f5f5" }}
+              >
+                Create account
               </Button>
               <Button
                 type="submit"
@@ -134,6 +177,67 @@ const LogInButton = () => {
                 }}
               >
                 Log In
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+
+        <Dialog
+          open={mode === "create"}
+          onClose={() => setMode(null)}
+          PaperProps={{ sx: dialogPaperSx }}
+        >
+          <DialogTitle sx={{ color: "#f3c80a" }}>Create account</DialogTitle>
+          <form onSubmit={handleCreate}>
+            <DialogContent sx={{ display: "grid", gap: 2, minWidth: 320 }}>
+              <TextField
+                label="Username"
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                error={Boolean(errors.username)}
+                helperText={errors.username}
+                autoFocus
+                fullWidth
+                sx={fieldSx}
+              />
+              <TextField
+                label="Email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                error={Boolean(errors.email)}
+                helperText={errors.email}
+                fullWidth
+                sx={fieldSx}
+              />
+              <TextField
+                label="Password"
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                error={Boolean(errors.password)}
+                helperText={errors.password}
+                fullWidth
+                sx={fieldSx}
+              />
+            </DialogContent>
+            <DialogActions sx={{ px: 3, pb: 3 }}>
+              <Button onClick={() => setMode(null)} sx={{ color: "#f5f5f5" }}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  backgroundColor: "#f3c80a",
+                  color: "#1f1f1f",
+                  "&:hover": { backgroundColor: "#e0b808" },
+                  fontWeight: 700,
+                }}
+              >
+                Create
               </Button>
             </DialogActions>
           </form>
