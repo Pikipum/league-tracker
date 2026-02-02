@@ -30,7 +30,7 @@ const SearchBar = ({ region, setRegion }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!summoner.trim()) return;
-    navigate(`/${encodeURIComponent(summoner.trim())}`);
+    navigate(`/${region}/${encodeURIComponent(summoner.trim())}`);
   };
 
   return (

@@ -105,7 +105,7 @@ const MatchCard = ({ matchData, puuid }) => {
         borderLeft: 4,
         borderColor: didWin ? "#f3c80a" : "#ff6b6b",
         boxShadow: 2,
-        maxWidth: 1200,
+        maxWidth: 800,
         width: "70%",
         mx: "auto",
       }}
@@ -138,20 +138,22 @@ const MatchCard = ({ matchData, puuid }) => {
                   sx={{ width: 22, height: 22 }}
                 />
               </Box>
-              <Box sx={{ display: "flex", gap: 0.5 }}>
-                <Avatar
-                  variant="rounded"
-                  src={`/assets/img/perk-images/Styles/${primaryTreeName}/${keystoneName}/${keystoneName}.png`}
-                  sx={{ width: 22, height: 22 }}
-                />
-                <Avatar
-                  variant="rounded"
-                  src={`/assets/img/perk-images/Styles/${getTreeIconName(
-                    secondaryTreeId,
-                  )}.png`}
-                  sx={{ width: 22, height: 22 }}
-                />
-              </Box>
+              {info.gameMode !== "CHERRY" && (
+                <Box sx={{ display: "flex", gap: 0.5 }}>
+                  <Avatar
+                    variant="rounded"
+                    src={`/assets/img/perk-images/Styles/${primaryTreeName}/${keystoneName}/${keystoneName}.png`}
+                    sx={{ width: 22, height: 22 }}
+                  />
+                  <Avatar
+                    variant="rounded"
+                    src={`/assets/img/perk-images/Styles/${getTreeIconName(
+                      secondaryTreeId,
+                    )}.png`}
+                    sx={{ width: 22, height: 22 }}
+                  />
+                </Box>
+              )}
             </Stack>
           </Box>
 

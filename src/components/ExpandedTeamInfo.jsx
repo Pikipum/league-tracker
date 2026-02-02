@@ -72,20 +72,22 @@ const ExpandedTeamInfo = ({
               sx={{ width: 15, height: 15 }}
             />
           </Box>
-          <Box sx={{ display: "flex", gap: 0.25 }}>
-            <Avatar
-              variant="rounded"
-              src={`/assets/img/perk-images/Styles/${primaryTreeName}/${keystoneName}/${keystoneName}.png`}
-              sx={{ width: 15, height: 15 }}
-            />
-            <Avatar
-              variant="rounded"
-              src={`/assets/img/perk-images/Styles/${getTreeIconName(
-                secondaryTreeId,
-              )}.png`}
-              sx={{ width: 15, height: 15 }}
-            />
-          </Box>
+          {info.gameMode !== "CHERRY" && (
+            <Box sx={{ display: "flex", gap: 0.25 }}>
+              <Avatar
+                variant="rounded"
+                src={`/assets/img/perk-images/Styles/${primaryTreeName}/${keystoneName}/${keystoneName}.png`}
+                sx={{ width: 15, height: 15 }}
+              />
+              <Avatar
+                variant="rounded"
+                src={`/assets/img/perk-images/Styles/${getTreeIconName(
+                  secondaryTreeId,
+                )}.png`}
+                sx={{ width: 15, height: 15 }}
+              />
+            </Box>
+          )}
         </Stack>
         <Typography
           onClick={() =>

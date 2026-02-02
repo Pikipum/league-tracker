@@ -12,6 +12,10 @@
 
 # production
 /build
+Dockerfile
+/backend/Dockerfile
+compose_test.yml
+compose_pi.yml
 
 
 # misc

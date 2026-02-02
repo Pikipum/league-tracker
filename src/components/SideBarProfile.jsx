@@ -7,8 +7,7 @@ import FavoriteButton from "./FavoriteButton";
 
 const SideBarProfile = ({ region, profileData }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const url = process.env.REACT_APP_RIOT_ACCOUNT_URL;
-  const api_key = process.env.REACT_APP_RIOT_API_KEY;
+  const api_url = process.env.REACT_APP_API_URL;
   const [summonerData, setSummonerData] = useState();
   const [summonerIconLevel, setSummonerIconLevel] = useState();
 
@@ -19,10 +18,10 @@ const SideBarProfile = ({ region, profileData }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://${convertedRegion}.${url}/lol/league/v4/entries/by-puuid/${profileData.puuid}?api_key=${api_key}`,
+          `${api_url}/profile/league/${convertedRegion}/${profileData.puuid}`,
         );
         const response_summoner = await axios.get(
-          `https://${convertedRegion}.${url}/lol/summoner/v4/summoners/by-puuid/${profileData.puuid}?api_key=${api_key}`,
+          `${api_url}/profile/summoner/${convertedRegion}/${profileData.puuid}`,
         );
         setSummonerData(response.data[0]);
         setSummonerIconLevel(response_summoner.data);
@@ -34,7 +33,7 @@ const SideBarProfile = ({ region, profileData }) => {
     };
 
     fetchProfile();
-  }, [profileData.puuid, url, api_key, convertedRegion]);
+  }, [profileData.puuid, api_url, convertedRegion]);
 
   if (!profileData) return null;
   if (isLoading) return <LoadingCircle />;
@@ -71,18 +70,17 @@ const SideBarProfile = ({ region, profileData }) => {
             border: "2px solid #f3c80a",
           }}
         />
-        <Box>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
           <Box
             sx={{
               display: "flex",
               gap: 1,
               alignItems: "center",
-              justifyContent: "space-between",
             }}
           >
             <Typography
               noWrap
-              sx={{ color: "white", fontWeight: "bold", fontSize: 18, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+              sx={{ color: "white", fontWeight: "bold", fontSize: 18, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
             >
               {profileData.gameName}
             </Typography>
@@ -123,7 +121,7 @@ const SideBarProfile = ({ region, profileData }) => {
                 <Typography
                   sx={{ color: "#f3c80a", fontWeight: "bold", fontSize: 16 }}
                 >
-                  {summonerData.tier} {summonerData.rank}
+                  {summonerData.tier}{["MASTER", "GRANDMASTER", "CHALLENGER"].includes(summonerData.tier) ? "" : ` ${summonerData.rank}`}
                 </Typography>
                 <Typography sx={{ color: "#888", fontSize: 14 }}>
                   {summonerData.leaguePoints} LP

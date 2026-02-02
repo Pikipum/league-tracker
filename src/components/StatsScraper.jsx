@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Typography, LinearProgress } from "@mui/material";
+import { Box, Typography, LinearProgress, Button } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
-import { Button } from "@mui/material";
+import SearchBar from "./SearchBar";
+import NavigationBar from "./NavigationBar";
+import LogInButton from "./LogInButton";
 import axios from "axios";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -12,15 +14,14 @@ const StatsScraper = () => {
   const { puuid } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isScraping, setIsScraping] = useState(false);
-  const url = process.env.REACT_APP_RIOT_URL;
-  const api_key = process.env.REACT_APP_RIOT_API_KEY;
+  const [region, setRegion] = useState("EUW");
+  const api_url = process.env.REACT_APP_API_URL;
   const [profileData, setProfileData] = useState();
   const [matchIdsScraped, setMatchIdsScraped] = useState(0);
   const [matchesScraped, setMatchesScraped] = useState(0);
   const [totalMatchIds, setTotalMatchIds] = useState(0);
   const [status, setStatus] = useState("");
   const abortRef = useRef(false);
-  const [start, setStart] = useState(0);
 
   statusRef.current = setStatus;
 
@@ -40,7 +41,7 @@ const StatsScraper = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `${url}/riot/account/v1/accounts/by-puuid/${puuid}?api_key=${api_key}`,
+          `${api_url}/profile/account/by-puuid/${puuid}`,
         );
         setProfileData(response.data);
       } catch (e) {
@@ -51,7 +52,7 @@ const StatsScraper = () => {
     };
 
     fetchProfile();
-  }, [puuid, url, api_key]);
+  }, [puuid, api_url]);
 
   const fetchWithRateLimit = async (fetchFn, maxRetries = 10) => {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
@@ -77,7 +78,7 @@ const StatsScraper = () => {
 
   const scrapeAllMatchIds = async () => {
     const allMatchIds = [];
-    //let start = 0;
+    let start = 0;
     const count = 100;
     let requestCount = 0;
     const requestTimes = [];
@@ -111,10 +112,11 @@ const StatsScraper = () => {
       await sleep(50);
 
       try {
+        const currentStart = start;
         const response = await fetchWithRateLimit(() =>
-          axios.get(
-            `${url}/lol/match/v5/matches/by-puuid/${puuid}/ids?queue=420&start=${start}&count=${count}&api_key=${api_key}`,
-          ),
+          axios.get(`${api_url}/matches/ids/${puuid}`, {
+            params: { queue: 420, start: currentStart, count },
+          }),
         );
 
         if (!response) {
@@ -123,7 +125,7 @@ const StatsScraper = () => {
           continue;
         }
 
-        consecutiveErrors = 0; // Reset on success
+        consecutiveErrors = 0;
         requestTimes.push(Date.now());
         requestCount++;
 
@@ -136,8 +138,7 @@ const StatsScraper = () => {
 
         allMatchIds.push(...matchIds);
         setMatchIdsScraped(allMatchIds.length);
-        //start += count;
-        setStart(start + count)
+        start += count;
 
         setStatus(
           `Scraping match IDs... (${allMatchIds.length} IDs, batch ${requestCount})`,
@@ -181,7 +182,7 @@ const StatsScraper = () => {
 
       try {
         await fetchWithRateLimit(() =>
-          axios.get(`http://localhost:4000/matches/${matchId}`),
+          axios.get(`${api_url}/matches/${matchId}`),
         );
 
         requestTimes.push(Date.now());
@@ -257,24 +258,57 @@ const StatsScraper = () => {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 3,
+        gap: 2,
         px: 2,
         py: 3,
       }}
     >
-      <Button
-        type="button"
-        variant="contained"
-        color={isScraping ? "error" : "primary"}
-        onClick={handleClick}
-        sx={{ minWidth: 300 }}
+      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+          <Box
+            sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+          >
+            <SearchBar region={region} setRegion={setRegion} />
+          </Box>
+          <NavigationBar 
+            puuid={puuid}
+            gameName={profileData?.gameName}
+            tagLine={profileData?.tagLine}
+            region={region}
+          />
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+          <LogInButton />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          flex: 1,
+          gap: 3,
+        }}
       >
-        {isScraping
-          ? "Stop Scraping"
-          : `Scrape data for ${profileData?.gameName} #${profileData?.tagLine}`}
-      </Button>
+        <Button
+          type="button"
+          variant="contained"
+          onClick={handleClick}
+          sx={{
+            minWidth: 300,
+            bgcolor: isScraping ? "#ff6b6b" : "#f3c80a",
+            color: "#1f1f1f",
+            fontWeight: "bold",
+            "&:hover": {
+              bgcolor: isScraping ? "#ff5252" : "#d4af0a",
+            },
+          }}
+        >
+          {isScraping
+            ? "Stop Scraping"
+            : `Scrape data for ${profileData?.gameName} #${profileData?.tagLine}`}
+        </Button>
 
       {isScraping && (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
@@ -322,6 +356,7 @@ const StatsScraper = () => {
             {status}
           </Typography>
         )}
+      </Box>
       </Box>
     </Box>
   );

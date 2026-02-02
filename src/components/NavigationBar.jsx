@@ -3,14 +3,20 @@ import { useNavigate } from "react-router-dom";
 import StatsScraperButton from "./StatsScraperButton";
 import LogInButton from "./LogInButton";
 
-const navItems = [
-  { label: "Home", to: "/" },
-  { label: "Champions", to: "/champions" },
-  { label: "Tier List", to: "/tierlist" },
-];
-
-const NavigationBar = ({ puuid, sticky = false, showAuthButton = false }) => {
+const NavigationBar = ({ puuid, gameName, tagLine, region, sticky = false, showAuthButton = false }) => {
   const navigate = useNavigate();
+  
+  const profilePath = gameName && tagLine && region
+    ? `/${region}/${encodeURIComponent(`${gameName}#${tagLine}`)}` 
+    : null;
+
+  const navItems = [
+    { label: "Home", to: "/" },
+    { label: "Profile", to: profilePath },
+    { label: "Champions", to: puuid && region ? `/champions/${region}/${puuid}` : null },
+    { label: "Tier List", to: "/tierlist" },
+  ];
+
   const containerSx = sticky
     ? {
         position: "sticky",
@@ -47,7 +53,7 @@ const NavigationBar = ({ puuid, sticky = false, showAuthButton = false }) => {
           alignItems="center"
           sx={{ flex: 0, flexWrap: "nowrap" }}
         >
-          {navItems.map((item) => (
+          {navItems.filter(item => item.to !== null).map((item) => (
             <Box
               key={item.label}
               sx={{ display: "flex", alignItems: "center", gap: 1.5 }}

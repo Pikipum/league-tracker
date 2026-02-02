@@ -1,24 +1,26 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
 import MatchCard from "./MatchCard";
 import LoadingCircle from "./LoadingCircle";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Box from "@mui/material/Box";
+import { getRegion } from "../util/helperFunctions";
 
 const getQueueId = (queueName) => {
   const queueIdsMap = {
-    "All Matches": "",
-    "Ranked Solo": "queue=420&",
-    "Ranked Flex": "queue=440&",
-    ARAM: "queue=450&",
-    Arena: "queue=1700&",
-    Quickplay: "queue=490&",
-    Swiftplay: "queue=480&",
-    "Normal Draft": "queue=400&",
-    Clash: "queue=700&",
+    "All Matches": null,
+    "Ranked Solo": 420,
+    "Ranked Flex": 440,
+    ARAM: 450,
+    Arena: 1700,
+    Quickplay: 490,
+    Swiftplay: 480,
+    "Normal Draft": 400,
+    Clash: 700,
   };
-  return queueIdsMap[queueName] ?? "";
+  return queueIdsMap[queueName] ?? null;
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -41,43 +43,62 @@ const fetchWithRetry = async (url, maxRetries = 10) => {
   return null;
 };
 
-const MatchHistory = ({ matchHistory, setMatchHistory, puuid, queueType }) => {
+const MatchHistory = ({
+  matchHistory,
+  setMatchHistory,
+  puuid,
+  queueType,
+  region,
+}) => {
   const [isLoading, setIsLoading] = useState(true);
-  const url = process.env.REACT_APP_RIOT_URL;
-  const api_key = process.env.REACT_APP_RIOT_API_KEY;
+  const [error, setError] = useState(null);
+  const api_url = process.env.REACT_APP_API_URL;
   const [matchIdStart, setMatchIdStart] = useState(0);
   const [initialLoad, setInitialLoad] = useState(true);
   const [currentQueue, setCurrentQueue] = useState(queueType);
+  const [currentRegion, setCurrentRegion] = useState(region);
 
   useEffect(() => {
-    if (queueType !== currentQueue) {
+    if (queueType !== currentQueue || region !== currentRegion) {
       setMatchHistory([]);
       setMatchIdStart(0);
       setCurrentQueue(queueType);
+      setCurrentRegion(region);
       setInitialLoad(true);
+      setError(null);
       return;
     }
-  }, [queueType, currentQueue, setMatchHistory]);
+  }, [queueType, currentQueue, region, currentRegion, setMatchHistory]);
 
   // puuid = gvfJ4Sy5gm1L1rzvYw8w0fFjOJZpSAIiGv6FVw-Bo1Sc9MfatXnj6ugbk3-oFdukLewGmRbkrec4ZQ
   useEffect(() => {
-    if (!puuid || !url || !api_key) return;
+    if (!puuid || !currentRegion) return;
 
     const fetchMatchHistory = async () => {
       setIsLoading(true);
+      const platformRegion = getRegion(currentRegion);
       try {
-        const idsResponse = await axios.get(
-          `${url}/lol/match/v5/matches/by-puuid/${puuid}/ids?${getQueueId(currentQueue)}start=${matchIdStart}&count=10&api_key=${api_key}`,
-        );
+        const queueId = getQueueId(currentQueue);
+        const idsResponse = await axios.get(`${api_url}/matches/ids/${puuid}`, {
+          params: {
+            queue: queueId,
+            start: matchIdStart,
+            count: 10,
+            region: platformRegion,
+          },
+        });
 
-        const matchPromises = idsResponse.data.map((matchId) =>
-          fetchWithRetry(`http://localhost:4000/matches/${matchId}`)
-            .then((res) => res?.data ?? null)
-            .catch((error) => {
-              console.error(`Failed to fetch match ${matchId}:`, error);
-              return null;
-            }),
-        );
+        const matchPromises = idsResponse.data.map(async (matchId) => {
+          try {
+            const res = await fetchWithRetry(
+              `${api_url}/matches/${matchId}?region=${platformRegion}`,
+            );
+            return res?.data ?? null;
+          } catch (error) {
+            console.error(`Failed to fetch match ${matchId}:`, error);
+            return null;
+          }
+        });
 
         const matches = await Promise.all(matchPromises);
         setMatchHistory((prev) => {
@@ -87,12 +108,15 @@ const MatchHistory = ({ matchHistory, setMatchHistory, puuid, queueType }) => {
           );
           const combined = [...prev, ...fresh];
           combined.sort(
-            (a, b) => (b?.info?.gameEndTimestamp || 0) - (a?.info?.gameEndTimestamp || 0),
+            (a, b) =>
+              (b?.info?.gameEndTimestamp || 0) -
+              (a?.info?.gameEndTimestamp || 0),
           );
           return combined;
         });
       } catch (error) {
         console.error("Failed to fetch match history:", error);
+        setError("Failed to load matches. Please try again later.");
       } finally {
         setIsLoading(false);
         setInitialLoad(false);
@@ -100,10 +124,44 @@ const MatchHistory = ({ matchHistory, setMatchHistory, puuid, queueType }) => {
     };
 
     fetchMatchHistory();
-  }, [puuid, url, api_key, matchIdStart, currentQueue, setMatchHistory]);
+  }, [puuid, api_url, matchIdStart, currentQueue, currentRegion, setMatchHistory]);
 
   if (isLoading && initialLoad) {
     return <LoadingCircle />;
+  }
+
+  if (error && matchHistory.length === 0) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          py: 4,
+        }}
+      >
+        <Typography sx={{ color: "#f44336", fontSize: 16 }}>{error}</Typography>
+      </Box>
+    );
+  }
+
+  if (!isLoading && matchHistory.length === 0) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          py: 4,
+        }}
+      >
+        <Typography sx={{ color: "#888", fontSize: 16 }}>
+          No matches found for this queue type.
+        </Typography>
+      </Box>
+    );
   }
 
   return (

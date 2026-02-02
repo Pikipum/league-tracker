@@ -3,7 +3,12 @@ import { Box } from "@mui/material";
 import QueueSelect from "./QueueSelect";
 import RecentlyPlayedTopBar from "./RecentlyPlayedTopBar";
 
-const MatchHistoryTopCard = ({ puuid, matchHistory, queueType, setQueueType }) => {
+const MatchHistoryTopCard = ({
+  puuid,
+  matchHistory,
+  queueType,
+  setQueueType,
+}) => {
   return (
     <Box
       sx={{
@@ -12,16 +17,15 @@ const MatchHistoryTopCard = ({ puuid, matchHistory, queueType, setQueueType }) =
         justifyContent: "space-between",
         bgcolor: "#2a2a2a",
         boxShadow: 2,
-        maxWidth: 1200,
+        maxWidth: 800,
         width: "70%",
         mx: "auto",
         borderRadius: 1,
-        flexWrap: "nowrap"
+        flexWrap: "nowrap",
       }}
     >
       <QueueSelect queueType={queueType} setQueueType={setQueueType} />
       <RecentlyPlayedTopBar puuid={puuid} matchHistory={matchHistory} />
-      <Typography>Search for champion</Typography>
     </Box>
   );
 };

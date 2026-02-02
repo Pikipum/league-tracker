@@ -125,7 +125,7 @@ const FavoriteProfiles = () => {
                 key={f.puuid}
                 onClick={() =>
                   navigate(
-                    `/${encodeURIComponent(`${f.game_name}#${f.tag_line}`)}`,
+                    `/${f.region}/${encodeURIComponent(`${f.game_name}#${f.tag_line}`)}`,
                   )
                 }
                 sx={{

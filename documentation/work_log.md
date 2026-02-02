@@ -30,11 +30,14 @@
 | 28.01 | 8 | added tier list calculation for backend and frontend component |
 | 29.01 | 6 | added ability to add favorites to profile (+database) |
 | 29.01 | 4 | added favorites button to profile and favorites view to landing page |
-| sum  | 110 (29.01) | | 
+| 30.01 | 10 | researching hosting website on raspberry pi |
+| 31.01 | 8 | working on filtering for tier list, added support for player specific tier list |
+| 01.01 | 6 | error handling for profile, match history |
+| 02.02 | 4 | routing all api calls through the backend, made new backend calls |
+| 02.02 | 3 | bugfixing and adding handling for error states |
+| sum  | 141 (02.02) | | 
 
 | todo |
-| statistics panel |
-| route all calls from backend |
 | leaderboard |
 | match cards for arena games |
 | live game |
