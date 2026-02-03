@@ -35,6 +35,9 @@
 | 01.01 | 6 | error handling for profile, match history |
 | 02.02 | 4 | routing all api calls through the backend, made new backend calls |
 | 02.02 | 3 | bugfixing and adding handling for error states |
+| 03.02 | 1 | fixing errors with deployment (package.json etc) |
+| 03.02 | 2 | adding rate limits, setting up cors, authentication for backend |
+| 03.02 | 4 | bugfixing, setting up hosting, deployment pipeline |
 | sum  | 141 (02.02) | | 
 
 | todo |

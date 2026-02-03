@@ -62,6 +62,21 @@ router.post("/createaccount", async (req, res) => {
   if (!username || !password)
     return res.status(400).json({ error: "missing credentials" });
 
+  if (!username || !password)
+    return res.status(400).json({ error: "missing credentials" });
+  if (username.length < 3 || username.length > 30)
+    return res.status(400).json({ error: "username must be 3-30 characters" });
+  if (password.length < 8)
+    return res
+      .status(400)
+      .json({ error: "password must be at least 8 characters" });
+  if (!/^[a-zA-Z0-9_]+$/.test(username))
+    return res
+      .status(400)
+      .json({
+        error: "username can only contain letters, numbers, and underscores",
+      });
+
   const email = providedEmail || `${username}@no-email.local`;
 
   try {

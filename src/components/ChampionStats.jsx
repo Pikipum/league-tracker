@@ -8,7 +8,7 @@ const ChampionStats = ({ puuid }) => {
   const [championStats, setChampionStats] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const apiBase = process.env.REACT_APP_API_URL || "http://localhost:4000";
+  const apiBase = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchStats = async () => {

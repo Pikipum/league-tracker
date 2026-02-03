@@ -6,15 +6,27 @@ import auth from "./routes/auth.js";
 import tierlist from "./routes/tierlist.js";
 import favorites from "./routes/favorites.js";
 import profile from "./routes/profile.js";
+import rateLimit from "express-rate-limit";
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  }),
+);
 app.use(express.json());
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // 10 attempts per window
+  message: { error: "Too many attempts, please try again later" },
+});
 
 app.get("/health", (req, res) => res.json({ ok: true }));
 app.use("/matches", matches);
 app.use("/tierlist", tierlist);
-app.use("/auth", auth);
+app.use("/auth", authLimiter, auth);
 app.use("/favorites", favorites);
 app.use("/profile", profile);
 

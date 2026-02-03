@@ -78,8 +78,6 @@ const RecentlyPlayedTopBar = ({ puuid, matchHistory }) => {
     );
   }
 
-  //const winrateColor = stats.winrate >= 50 ? "#3498db" : "#e74c3c";
-
   return (
     <Box
       sx={{
