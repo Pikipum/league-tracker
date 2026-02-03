@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import QueueSelect from "./QueueSelect";
 import RecentlyPlayedTopBar from "./RecentlyPlayedTopBar";
