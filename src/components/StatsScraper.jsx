@@ -6,15 +6,16 @@ import SearchBar from "./SearchBar";
 import NavigationBar from "./NavigationBar";
 import LogInButton from "./LogInButton";
 import axios from "axios";
+import { getRegion } from "../util/helperFunctions";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const StatsScraper = () => {
   const statusRef = useRef(null);
-  const { puuid } = useParams();
+  const { puuid, region: urlRegion } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isScraping, setIsScraping] = useState(false);
-  const [region, setRegion] = useState("EUW");
+  const [region, setRegion] = useState(urlRegion || "EUW");
   const api_url = process.env.REACT_APP_API_URL;
   const [profileData, setProfileData] = useState();
   const [matchIdsScraped, setMatchIdsScraped] = useState(0);
@@ -22,6 +23,7 @@ const StatsScraper = () => {
   const [totalMatchIds, setTotalMatchIds] = useState(0);
   const [status, setStatus] = useState("");
   const abortRef = useRef(false);
+  const platformRegion = getRegion(region);
 
   statusRef.current = setStatus;
 
@@ -84,7 +86,6 @@ const StatsScraper = () => {
     const requestTimes = [];
     let consecutiveErrors = 0;
     const maxConsecutiveErrors = 5;
-
     setStatus("Scraping match IDs...");
 
     while (true) {
@@ -113,9 +114,10 @@ const StatsScraper = () => {
 
       try {
         const currentStart = start;
+
         const response = await fetchWithRateLimit(() =>
           axios.get(`${api_url}/matches/ids/${puuid}`, {
-            params: { queue: 420, start: currentStart, count },
+            params: { queue: 420, start: currentStart, count, region: platformRegion },
           }),
         );
 
@@ -182,7 +184,7 @@ const StatsScraper = () => {
 
       try {
         await fetchWithRateLimit(() =>
-          axios.get(`${api_url}/matches/${matchId}`),
+          axios.get(`${api_url}/matches/${matchId}`, { params: { region: platformRegion }}),
         );
 
         requestTimes.push(Date.now());
@@ -270,7 +272,7 @@ const StatsScraper = () => {
           >
             <SearchBar region={region} setRegion={setRegion} />
           </Box>
-          <NavigationBar 
+          <NavigationBar
             puuid={puuid}
             gameName={profileData?.gameName}
             tagLine={profileData?.tagLine}
@@ -310,53 +312,53 @@ const StatsScraper = () => {
             : `Scrape data for ${profileData?.gameName} #${profileData?.tagLine}`}
         </Button>
 
-      {isScraping && (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <LoadingCircle />
-        </Box>
-      )}
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 1,
-          minWidth: 400,
-        }}
-      >
-        <Typography variant="h6" sx={{ color: "#fff" }}>
-          Match IDs scraped: {matchIdsScraped}
-        </Typography>
-
-        <Typography variant="h6" sx={{ color: "#fff" }}>
-          Matches scraped: {matchesScraped}
-          {totalMatchIds > 0 && ` / ${totalMatchIds}`}
-        </Typography>
-
-        {totalMatchIds > 0 && (
-          <Box sx={{ width: "100%", mt: 1 }}>
-            <LinearProgress
-              variant="determinate"
-              value={matchProgress}
-              sx={{
-                height: 10,
-                borderRadius: 5,
-                bgcolor: "#333",
-                "& .MuiLinearProgress-bar": {
-                  bgcolor: "#c8aa6e",
-                },
-              }}
-            />
+        {isScraping && (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+            <LoadingCircle />
           </Box>
         )}
 
-        {status && (
-          <Typography variant="body1" sx={{ color: "#aaa", mt: 1 }}>
-            {status}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1,
+            minWidth: 400,
+          }}
+        >
+          <Typography variant="h6" sx={{ color: "#fff" }}>
+            Match IDs scraped: {matchIdsScraped}
           </Typography>
-        )}
-      </Box>
+
+          <Typography variant="h6" sx={{ color: "#fff" }}>
+            Matches scraped: {matchesScraped}
+            {totalMatchIds > 0 && ` / ${totalMatchIds}`}
+          </Typography>
+
+          {totalMatchIds > 0 && (
+            <Box sx={{ width: "100%", mt: 1 }}>
+              <LinearProgress
+                variant="determinate"
+                value={matchProgress}
+                sx={{
+                  height: 10,
+                  borderRadius: 5,
+                  bgcolor: "#333",
+                  "& .MuiLinearProgress-bar": {
+                    bgcolor: "#c8aa6e",
+                  },
+                }}
+              />
+            </Box>
+          )}
+
+          {status && (
+            <Typography variant="body1" sx={{ color: "#aaa", mt: 1 }}>
+              {status}
+            </Typography>
+          )}
+        </Box>
       </Box>
     </Box>
   );

@@ -38,7 +38,7 @@
 | 03.02 | 1 | fixing errors with deployment (package.json etc) |
 | 03.02 | 2 | adding rate limits, setting up cors, authentication for backend |
 | 03.02 | 4 | bugfixing, setting up hosting, deployment pipeline |
-| sum  | 141 (02.02) | | 
+| sum  | 148 (03.02) | | 
 
 | todo |
 | leaderboard |

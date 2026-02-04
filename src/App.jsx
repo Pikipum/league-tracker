@@ -12,7 +12,7 @@ const App = () => {
       <Route exact path="/" element={<LandingPage />} />
       <Route exact path="/:region/:name" element={<ProfileView />} />
       <Route exact path="/:name" element={<ProfileView />} />
-      <Route exact path="/stats/:puuid" element={<StatsScraper />} />
+      <Route exact path="/stats/:region/:puuid" element={<StatsScraper />} />
       <Route exact path="/champions/:region/:puuid" element={<ChampionsPage />} />
       <Route exact path="/tierlist" element={<TierList />} />
     </Routes>

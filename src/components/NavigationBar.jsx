@@ -78,7 +78,7 @@ const NavigationBar = ({ puuid, gameName, tagLine, region, sticky = false, showA
             </Box>
           ))}
 
-          {puuid ? <StatsScraperButton puuid={puuid} /> : null}
+          {puuid ? <StatsScraperButton puuid={puuid} region={region} /> : null}
         </Stack>
 
         <Box sx={{ flex: 1 }} />

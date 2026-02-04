@@ -1,11 +1,11 @@
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const StatsScraperButton = ({ puuid }) => {
+const StatsScraperButton = ({ puuid, region }) => {
   const navigate = useNavigate();
   const handleClick = () => {
     if (!puuid) return;
-    navigate(`/stats/${encodeURIComponent(puuid.trim())}`);
+    navigate(`/stats/${region || "EUW"}/${encodeURIComponent(puuid.trim())}`);
   };
 
   return (
