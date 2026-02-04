@@ -53,6 +53,7 @@ const ExpandedTeamInfo = ({
             player.championName,
           )}.png`}
           alt={player.championName}
+          slotProps={{ img: { loading: "lazy" } }}
           sx={{ width: 32, height: 32 }}
         />
         <Stack spacing={0.25} sx={{ flexShrink: 0 }}>
@@ -62,6 +63,7 @@ const ExpandedTeamInfo = ({
               src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
                 player?.summoner1Id,
               )}.png`}
+              slotProps={{ img: { loading: "lazy" } }}
               sx={{ width: 15, height: 15 }}
             />
             <Avatar
@@ -69,6 +71,7 @@ const ExpandedTeamInfo = ({
               src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
                 player?.summoner2Id,
               )}.png`}
+              slotProps={{ img: { loading: "lazy" } }}
               sx={{ width: 15, height: 15 }}
             />
           </Box>
@@ -77,6 +80,7 @@ const ExpandedTeamInfo = ({
               <Avatar
                 variant="rounded"
                 src={`/assets/img/perk-images/Styles/${primaryTreeName}/${keystoneName}/${keystoneName}.png`}
+                slotProps={{ img: { loading: "lazy" } }}
                 sx={{ width: 15, height: 15 }}
               />
               <Avatar
@@ -84,6 +88,7 @@ const ExpandedTeamInfo = ({
                 src={`/assets/img/perk-images/Styles/${getTreeIconName(
                   secondaryTreeId,
                 )}.png`}
+                slotProps={{ img: { loading: "lazy" } }}
                 sx={{ width: 15, height: 15 }}
               />
             </Box>
@@ -165,6 +170,7 @@ const ExpandedTeamInfo = ({
             variant="rounded"
             src={`/assets/16.1.1/img/item/${itemId}.png`}
             alt={`Item ${itemId}`}
+            slotProps={{ img: { loading: "lazy" } }}
             sx={{ width: 24, height: 24 }}
           />
         ))}

@@ -110,6 +110,7 @@ const RecentlyPlayedTopBar = ({ puuid, matchHistory }) => {
             component="img"
             src={`/assets/16.1.1/img/champion/${getChampionIconName(champ.name)}.png`}
             alt={champ.name}
+            loading="lazy"
             sx={{ width: 36, height: 36, borderRadius: "50%" }}
           />
           <Box>

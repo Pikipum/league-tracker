@@ -112,6 +112,7 @@ const ChampionStats = ({ puuid }) => {
                 champ.name,
               )}.png`}
               alt={champ.name}
+              loading="lazy"
               sx={{
                 width: 48,
                 height: 48,

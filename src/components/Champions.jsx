@@ -50,6 +50,7 @@ const RoleFilter = ({ selectedRole, onRoleChange }) => {
             component="img"
             src={role.icon}
             alt={role.label}
+            loading="lazy"
             sx={{ width: 20, height: 20 }}
           />
         </ToggleButton>
@@ -157,6 +158,7 @@ const Champions = ({ puuid }) => {
                   champ.champion_name
                 )}.png`}
                 alt={champ.champion_name}
+                loading="lazy"
                 sx={{
                   width: 48,
                   height: 48,

@@ -54,6 +54,7 @@ const RoleFilter = ({ selectedRole, onRoleChange }) => {
               component="img"
               src={role.icon}
               alt={role.label}
+              loading="lazy"
               sx={{ width: 24, height: 24 }}
             />
             <Typography sx={{ fontSize: 10, textTransform: "none" }}>{role.label}</Typography>
@@ -172,6 +173,7 @@ const TierList = () => {
                   champ.champion_name,
                 )}.png`}
                 alt={champ.champion_name}
+                loading="lazy"
                 sx={{
                   width: 48,
                   height: 48,

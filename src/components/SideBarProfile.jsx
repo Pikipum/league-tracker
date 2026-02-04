@@ -63,6 +63,7 @@ const SideBarProfile = ({ region, profileData }) => {
           component="img"
           src={`/assets/16.1.1/img/profileicon/${summonerIconLevel?.profileIconId}.png`}
           alt="Profile Icon"
+          loading="lazy"
           sx={{
             width: 64,
             height: 64,
@@ -108,6 +109,7 @@ const SideBarProfile = ({ region, profileData }) => {
               component="img"
               src={`/assets/ranked-emblems/${summonerData.tier}.png`}
               alt={summonerData.tier}
+              loading="lazy"
               sx={{ width: 48, height: 48 }}
             />
             <Box sx={{ flex: 1 }}>

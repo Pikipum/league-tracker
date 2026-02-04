@@ -119,6 +119,7 @@ const MatchCard = ({ matchData, puuid }) => {
                 currentPlayer?.championName,
               )}.png`}
               alt={currentPlayer?.championName}
+              loading="lazy"
               sx={{ width: 48, height: 48, borderRadius: 1 }}
             />
             <Stack spacing={0.5}>
@@ -128,6 +129,7 @@ const MatchCard = ({ matchData, puuid }) => {
                   src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
                     currentPlayer?.summoner1Id,
                   )}.png`}
+                  slotProps={{ img: { loading: "lazy" } }}
                   sx={{ width: 22, height: 22 }}
                 />
                 <Avatar
@@ -135,6 +137,7 @@ const MatchCard = ({ matchData, puuid }) => {
                   src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
                     currentPlayer?.summoner2Id,
                   )}.png`}
+                  slotProps={{ img: { loading: "lazy" } }}
                   sx={{ width: 22, height: 22 }}
                 />
               </Box>
@@ -143,6 +146,7 @@ const MatchCard = ({ matchData, puuid }) => {
                   <Avatar
                     variant="rounded"
                     src={`/assets/img/perk-images/Styles/${primaryTreeName}/${keystoneName}/${keystoneName}.png`}
+                    slotProps={{ img: { loading: "lazy" } }}
                     sx={{ width: 22, height: 22 }}
                   />
                   <Avatar
@@ -150,6 +154,7 @@ const MatchCard = ({ matchData, puuid }) => {
                     src={`/assets/img/perk-images/Styles/${getTreeIconName(
                       secondaryTreeId,
                     )}.png`}
+                    slotProps={{ img: { loading: "lazy" } }}
                     sx={{ width: 22, height: 22 }}
                   />
                 </Box>
@@ -194,6 +199,7 @@ const MatchCard = ({ matchData, puuid }) => {
                 variant="rounded"
                 src={`/assets/16.1.1/img/item/${itemId}.png`}
                 alt={`Item ${itemId}`}
+                slotProps={{ img: { loading: "lazy" } }}
                 sx={{ width: 28, height: 28 }}
               />
             ))}
@@ -214,6 +220,7 @@ const MatchCard = ({ matchData, puuid }) => {
             variant="rounded"
             src={`/assets/16.1.1/img/item/${currentPlayer?.item6}.png`}
             alt="Trinket"
+            slotProps={{ img: { loading: "lazy" } }}
             sx={{ width: 28, height: 28 }}
           />
 
@@ -262,6 +269,7 @@ const MatchCard = ({ matchData, puuid }) => {
                       player.championName,
                     )}.png`}
                     alt={player.championName}
+                    slotProps={{ img: { loading: "lazy" } }}
                     sx={{ width: 20, height: 20 }}
                   />
                   <Typography
@@ -298,6 +306,7 @@ const MatchCard = ({ matchData, puuid }) => {
                       player.championName,
                     )}.png`}
                     alt={player.championName}
+                    slotProps={{ img: { loading: "lazy" } }}
                     sx={{ width: 20, height: 20 }}
                   />
                   <Typography
