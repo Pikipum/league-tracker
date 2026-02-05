@@ -44,5 +44,4 @@
 
 | todo |
 | leaderboard |
-| match cards for arena games |
 | live game |

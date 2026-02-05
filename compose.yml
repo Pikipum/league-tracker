@@ -1,15 +1,7 @@
 services:
-
   db:
     image: postgres
-    # set shared memory limit when using docker compose
     shm_size: 128mb
-    # or set shared memory limit when deploy via swarm stack
-    #volumes:
-    #  - type: tmpfs
-    #    target: /dev/shm
-    #    tmpfs:
-    #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
       POSTGRES_PASSWORD: example
     ports:
@@ -17,5 +9,31 @@ services:
     volumes:
       - db_data:/var/lib/postgresql
 
+  backend:
+    build: ./backend
+    image: league-tracker/backend:latest
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env_docker
+    depends_on:
+      - db
+
+
+  frontend:
+    build:
+      context: .
+      args:
+        REACT_APP_API_URL: "${REACT_APP_API_URL}"             # should be public API URL (browser)
+    image: league-tracker/frontend:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env_docker
+    environment:
+      PORT: "3000"
+      BROWSER: "none"
+    depends_on:
+      - backend
 volumes:
   db_data:
