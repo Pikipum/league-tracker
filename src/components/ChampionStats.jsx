@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Typography } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
+import GameCountSelect from "./GameCountSelect";
 import { getChampionIconName } from "../util/helperFunctions";
 
 const ChampionStats = ({ puuid }) => {
   const [championStats, setChampionStats] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [gameCount, setGameCount] = useState(20);
   const apiBase = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -16,7 +18,8 @@ const ChampionStats = ({ puuid }) => {
       setIsLoading(true);
       setError("");
       try {
-        const resp = await axios.get(`${apiBase}/matches/by-player/${puuid}`);
+        const params = gameCount !== null ? { limit: gameCount } : {};
+        const resp = await axios.get(`${apiBase}/matches/by-player/${puuid}`, { params });
         const matches = resp.data || [];
 
         const champMap = {};
@@ -68,7 +71,7 @@ const ChampionStats = ({ puuid }) => {
     };
 
     fetchStats();
-  }, [puuid, apiBase]);
+  }, [puuid, apiBase, gameCount]);
 
   return (
     <Box
@@ -85,7 +88,10 @@ const ChampionStats = ({ puuid }) => {
         borderRadius: 1,
       }}
     >
-      <Typography variant="subtitle1">Top Champions</Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Typography variant="subtitle1">Top Champions</Typography>
+        <GameCountSelect gameCount={gameCount} setGameCount={setGameCount} />
+      </Box>
       {isLoading && <LoadingCircle />}
       {error && <Typography color="error">{error}</Typography>}
       {!isLoading && !error && championStats.length === 0 && (

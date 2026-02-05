@@ -7,23 +7,37 @@ const router = Router();
 router.get("/by-player/:puuid", async (req, res) => {
   const { puuid } = req.params;
   const champion = req.query.champion?.trim();
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : null;
   if (!puuid) return res.status(400).json({ error: "puuid required" });
 
-  const params = [puuid];
-  let sql = `
-    SELECT match_id, payload
-    FROM matches
-    WHERE EXISTS (
-      SELECT 1
-      FROM jsonb_array_elements(payload->'info'->'participants') AS p
-      WHERE p->>'puuid' = $1`;
+  const params = [];
+  let sql;
 
   if (champion) {
-    params.push(champion);
-    sql += ` AND LOWER(p->>'championName') = LOWER($${params.length})`;
+    params.push(puuid, champion);
+    sql = `
+      SELECT match_id, payload
+      FROM matches
+      WHERE payload->'metadata'->'participants' @> to_jsonb($1::text)
+        AND EXISTS (
+          SELECT 1
+          FROM jsonb_array_elements(payload->'info'->'participants') AS p
+          WHERE p->>'puuid' = $1 AND LOWER(p->>'championName') = LOWER($2)
+        )
+      ORDER BY created_at DESC`;
+  } else {
+    params.push(puuid);
+    sql = `
+      SELECT match_id, payload
+      FROM matches
+      WHERE payload->'metadata'->'participants' @> to_jsonb($1::text)
+      ORDER BY created_at DESC`;
   }
 
-  sql += `) ORDER BY created_at DESC`;
+  if (limit && limit > 0) {
+    params.push(limit);
+    sql += ` LIMIT $${params.length}`;
+  }
 
   try {
     const { rows } = await pool.query(sql, params);

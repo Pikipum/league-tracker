@@ -24,13 +24,13 @@
 | 22.01 | 2 | styling expanded match info |
 | 22.01 | 5 | continued styling expanded match info, added routing for regions |
 | 23.01 | 2 | styling top champions panel | 
-| 24.01 | 5 | researching cloud providers and ddns |
+| 24.01 | 5 | implementing cloud provider CI/CD and ddns |
 | 26.01 | 8 | added data scraper for full match history scraping |
 | 27.01 | 8 | added top info bar for match history |
 | 28.01 | 8 | added tier list calculation for backend and frontend component |
 | 29.01 | 6 | added ability to add favorites to profile (+database) |
 | 29.01 | 4 | added favorites button to profile and favorites view to landing page |
-| 30.01 | 10 | researching hosting website on raspberry pi |
+| 30.01 | 10 | making docker configurations for hosting website on raspberry pi or VPS |
 | 31.01 | 8 | working on filtering for tier list, added support for player specific tier list |
 | 01.01 | 6 | error handling for profile, match history |
 | 02.02 | 4 | routing all api calls through the backend, made new backend calls |
@@ -38,7 +38,9 @@
 | 03.02 | 1 | fixing errors with deployment (package.json etc) |
 | 03.02 | 2 | adding rate limits, setting up cors, authentication for backend |
 | 03.02 | 4 | bugfixing, setting up hosting, deployment pipeline |
-| sum  | 148 (03.02) | | 
+| 04.02 | 4 | region handling for stat scraper, lazy loading for images |
+| 05.02 | 4 | added count selector for recent top champions and optimizing some sql queries |
+| sum  | 152 (04.02) | | 
 
 | todo |
 | leaderboard |

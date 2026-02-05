@@ -3,6 +3,7 @@ export const getChampionIconName = (championName) => {
     Wukong: "MonkeyKing",
     "Nunu & Willump": "Nunu",
     LeBlanc: "Leblanc",
+    FiddleSticks: "Fiddlesticks"
   };
 
   return nameMap[championName] || championName;
@@ -71,7 +72,7 @@ export const getKeystoneName = (keystoneId) => {
     8360: "UnsealedSpellbook",
     8369: "FirstStrike",
     8437: "GraspOfTheUndying",
-    8439: "Aftershock",
+    8439: "VeteranAftershock",
     8465: "Guardian",
   };
   return keystoneMap[keystoneId];
