@@ -40,7 +40,9 @@
 | 03.02 | 4 | bugfixing, setting up hosting, deployment pipeline |
 | 04.02 | 4 | region handling for stat scraper, lazy loading for images |
 | 05.02 | 4 | added count selector for recent top champions and optimizing some sql queries |
-| sum  | 152 (04.02) | | 
+| 05.02 | 3 | Dockerfiles and compose.yml |
+| 06.02 | 4 | added nginx configuration, updating Dockerfiles and compose.yml, troubleshooting |
+| sum  | 163 (06.02) | | 
 
 | todo |
 | leaderboard |

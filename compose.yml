@@ -19,20 +19,19 @@ services:
     depends_on:
       - db
 
-
   frontend:
+    command: sh -c "apk add --no-cache netcat-openbsd && \
+      while ! nc -z backend 4000; do sleep 1; done; \
+      nginx -g 'daemon off;'"
     build:
       context: .
       args:
         REACT_APP_API_URL: "${REACT_APP_API_URL}"             # should be public API URL (browser)
     image: league-tracker/frontend:latest
     ports:
-      - "3000:3000"
+      - "80:80"
     env_file:
       - .env_docker
-    environment:
-      PORT: "3000"
-      BROWSER: "none"
     depends_on:
       - backend
 volumes:
