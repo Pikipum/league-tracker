@@ -83,9 +83,10 @@ const RecentlyPlayedTopBar = ({ puuid, matchHistory }) => {
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 3,
+        gap: { xs: 1.5, sm: 3 },
         py: 1,
         px: 2,
+        flexWrap: "wrap",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

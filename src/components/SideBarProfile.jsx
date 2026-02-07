@@ -55,7 +55,7 @@ const SideBarProfile = ({ region, profileData }) => {
         m: 1,
         bgcolor: "#1a1a1a",
         borderRadius: 2,
-        maxWidth: 320,
+        maxWidth: { xs: "100%", md: 320 },
       }}
     >
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>

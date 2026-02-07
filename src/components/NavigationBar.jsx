@@ -22,10 +22,11 @@ const NavigationBar = ({ puuid, gameName, tagLine, region, sticky = false, showA
         position: "sticky",
         top: 0,
         zIndex: 20,
-        bgcolor: "#1a1a1a",
-        borderBottom: "1px solid #222",
         py: 1,
-        borderRadius: 2,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
       }
     : {
         bgcolor: "#1a1a1a",
@@ -33,15 +34,23 @@ const NavigationBar = ({ puuid, gameName, tagLine, region, sticky = false, showA
         py: 1,
         mt: 2,
         borderRadius: 2,
+        width: "fit-content",
+        maxWidth: "min(40rem, 90vw)",
       };
 
   const innerSx = {
-    maxWidth: 1000,
-    mx: "auto",
     px: 2,
     display: "flex",
     alignItems: "center",
-    width: "100%",
+    ...(sticky
+      ? {
+          bgcolor: "#1a1a1a",
+          borderBottom: "1px solid #222",
+          borderRadius: 2,
+          width: "fit-content",
+          maxWidth: "min(40rem, 90vw)",
+        }
+      : { width: "100%" }),
   };
 
   return (
@@ -49,9 +58,9 @@ const NavigationBar = ({ puuid, gameName, tagLine, region, sticky = false, showA
       <Box sx={innerSx}>
         <Stack
           direction="row"
-          spacing={2}
+          spacing={1}
           alignItems="center"
-          sx={{ flex: 0, flexWrap: "nowrap" }}
+          sx={{ flexShrink: 0, flexWrap: "nowrap", gap: 0.5, overflowX: "auto" }}
         >
           {navItems.filter(item => item.to !== null).map((item) => (
             <Box
@@ -80,26 +89,13 @@ const NavigationBar = ({ puuid, gameName, tagLine, region, sticky = false, showA
 
           {puuid ? <StatsScraperButton puuid={puuid} region={region} /> : null}
         </Stack>
-
-        <Box sx={{ flex: 1 }} />
-
-        {showAuthButton && sticky ? (
-          <Box
-            sx={{
-              position: "absolute",
-              right: 16,
-              top: "50%",
-              transform: "translateY(-50%)",
-            }}
-          >
-            <LogInButton />
-          </Box>
-        ) : showAuthButton ? (
-          <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
-            <LogInButton />
-          </Box>
-        ) : null}
       </Box>
+
+      {showAuthButton ? (
+        <Box sx={{ display: "flex", alignItems: "center", ml: "auto" }}>
+          <LogInButton />
+        </Box>
+      ) : null}
     </Box>
   );
 };

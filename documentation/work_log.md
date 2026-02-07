@@ -42,6 +42,7 @@
 | 05.02 | 4 | added count selector for recent top champions and optimizing some sql queries |
 | 05.02 | 3 | Dockerfiles and compose.yml |
 | 06.02 | 4 | added nginx configuration, updating Dockerfiles and compose.yml, troubleshooting |
+| 06.02 | 4 | improving layout (esp. for smaller screens) |
 | sum  | 163 (06.02) | | 
 
 | todo |

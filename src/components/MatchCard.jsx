@@ -106,12 +106,12 @@ const MatchCard = ({ matchData, puuid }) => {
         borderColor: didWin ? "#f3c80a" : "#ff6b6b",
         boxShadow: 2,
         maxWidth: 800,
-        width: "70%",
+        width: { xs: "100%", md: "70%" },
         mx: "auto",
       }}
     >
-      <CardContent sx={{ "&:last-child": { pb: 2 } }}>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+      <CardContent sx={{ "&:last-child": { pb: 2 }, px: { xs: 1, sm: 2 } }}>
+        <Box sx={{ display: "flex", gap: { xs: 1, sm: 2 }, alignItems: "center", flexWrap: "wrap" }}>
           <Box sx={{ display: "flex", gap: 1 }}>
             <Box
               component="img"
@@ -162,7 +162,7 @@ const MatchCard = ({ matchData, puuid }) => {
             </Stack>
           </Box>
 
-          <Stack spacing={0.5} sx={{ minWidth: 120 }}>
+          <Stack spacing={0.5} sx={{ minWidth: { xs: 80, sm: 120 } }}>
             <Typography variant="h6" sx={{ color: "#f5f5f5" }}>
               {currentPlayer?.kills}/{currentPlayer?.deaths}/
               {currentPlayer?.assists}
@@ -253,7 +253,7 @@ const MatchCard = ({ matchData, puuid }) => {
           </ExpandMore>
           <Box
             sx={{
-              display: "flex",
+              display: { xs: "none", sm: "flex" },
               gap: 2,
               ml: "auto",
             }}

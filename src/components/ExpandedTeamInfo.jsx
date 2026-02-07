@@ -41,7 +41,7 @@ const ExpandedTeamInfo = ({
       key={index}
       sx={{
         display: "grid",
-        gridTemplateColumns: "2fr 1fr 1fr 50px 1fr",
+        gridTemplateColumns: { xs: "2fr 1fr 1fr", sm: "2fr 1fr 1fr 50px 1fr" },
         alignItems: "center",
         width: "100%",
         gap: 1
@@ -135,7 +135,7 @@ const ExpandedTeamInfo = ({
           /min)
         </Typography>
       </Box>
-      <Box>
+      <Box sx={{ display: { xs: "none", sm: "block" } }}>
         <Typography sx={{ fontSize: 13, color: "#cfcfcf" }}>
           {Math.round((player.totalDamageDealtToChampions || 0) / 100) / 10}k
         </Typography>
@@ -159,7 +159,7 @@ const ExpandedTeamInfo = ({
       </Box>
       <Box
         sx={{
-          display: "grid",
+          display: { xs: "none", sm: "grid" },
           gridTemplateColumns: "repeat(6, 24px)",
           gap: 0.5,
         }}

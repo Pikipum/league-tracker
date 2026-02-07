@@ -135,10 +135,10 @@ const ProfileView = () => {
           py: 3,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
             <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
             >
               <SearchBar region={region} setRegion={setRegion} />
             </Box>
@@ -205,10 +205,10 @@ const ProfileView = () => {
           py: 3,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
             <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
             >
               <SearchBar region={region} setRegion={setRegion} />
             </Box>
@@ -282,10 +282,10 @@ const ProfileView = () => {
           py: 3,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
             <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
             >
               <SearchBar region={region} setRegion={setRegion} />
             </Box>
@@ -326,10 +326,10 @@ const ProfileView = () => {
           py: 3,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
             <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
             >
               <SearchBar region={region} setRegion={setRegion} />
             </Box>
@@ -373,10 +373,10 @@ const ProfileView = () => {
           py: 3,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
             <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
             >
               <SearchBar region={region} setRegion={setRegion} />
             </Box>
@@ -416,10 +416,10 @@ const ProfileView = () => {
         py: 3,
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
           <Box
-            sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+            sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
           >
             <SearchBar region={region} setRegion={setRegion} />
           </Box>
@@ -434,16 +434,16 @@ const ProfileView = () => {
           <LogInButton />
         </Box>
       </Box>
-      <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
-        <Box>
-          <Box sx={{ width: 300, flexShrink: 0 }}>
+      <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", flexDirection: { xs: "column", md: "row" } }}>
+        <Box sx={{ width: { xs: "100%", md: "auto" } }}>
+          <Box sx={{ width: { xs: "100%", md: 300 }, flexShrink: 0 }}>
             <SideBarProfile region={region} profileData={profileData} />
           </Box>
           <Box>
             <ChampionStats puuid={profileData.puuid} />
           </Box>
         </Box>
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ flex: 1, width: { xs: "100%", md: "auto" }, minWidth: 0 }}>
           <MatchHistoryTopCard
             puuid={profileData.puuid}
             matchHistory={matchHistory}

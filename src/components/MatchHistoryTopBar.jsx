@@ -12,15 +12,15 @@ const MatchHistoryTopCard = ({
     <Box
       sx={{
         display: "flex",
-        flexDirection: "row",
+        flexDirection: { xs: "column", sm: "row" },
         justifyContent: "space-between",
         bgcolor: "#2a2a2a",
         boxShadow: 2,
         maxWidth: 800,
-        width: "70%",
+        width: { xs: "100%", md: "70%" },
         mx: "auto",
         borderRadius: 1,
-        flexWrap: "nowrap",
+        flexWrap: "wrap",
       }}
     >
       <QueueSelect queueType={queueType} setQueueType={setQueueType} />

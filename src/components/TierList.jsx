@@ -107,10 +107,10 @@ const TierList = () => {
         py: 3,
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
           <Box
-            sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+            sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
           >
             <SearchBar region={region} setRegion={setRegion} />
           </Box>
@@ -140,7 +140,8 @@ const TierList = () => {
             color: "white",
             borderColor: "#f3c80a",
             maxWidth: 400,
-            minWidth: 350,
+            minWidth: { xs: 0, sm: 350 },
+            width: "100%",
             borderRadius: 1,
           }}
         >
