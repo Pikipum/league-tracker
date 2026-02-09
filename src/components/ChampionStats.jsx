@@ -84,8 +84,7 @@ const ChampionStats = ({ puuid }) => {
         bgcolor: "#1a1a1a",
         color: "white",
         borderColor: "#f3c80a",
-        maxWidth: 400,
-        borderRadius: 1,
+        borderRadius: 2,
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

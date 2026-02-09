@@ -44,6 +44,8 @@
 | 06.02 | 4 | added nginx configuration, updating Dockerfiles and compose.yml, troubleshooting |
 | 06.02 | 4 | improving layout (esp. for smaller screens) |
 | 09.02 | 1 | added preliminary README.md |
+| 09.02 | 7 | improving small screen layout, hide menu items and search behind icons |
+| 09.02 | 2 | refactoring, consolidated many components |
 | sum  | 167 (06.02) | | 
 
 | todo |

@@ -25,7 +25,6 @@ const ExpandedTeamInfo = ({
 
   const keystoneName = getKeystoneName(keystoneId);
   const primaryTreeName = getRuneTreeName(primaryTreeId);
-  //const secondaryTreeName = getRuneTreeName(secondaryTreeId);
 
   const items = [
     player?.item0,

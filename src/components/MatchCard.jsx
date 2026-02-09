@@ -82,7 +82,6 @@ const MatchCard = ({ matchData, puuid }) => {
 
   const keystoneName = getKeystoneName(keystoneId);
   const primaryTreeName = getRuneTreeName(primaryTreeId);
-  //const secondaryTreeName = getRuneTreeName(secondaryTreeId);
 
   const gameDate = formatDistanceToNow(info.gameEndTimestamp, {
     addSuffix: true,
@@ -232,13 +231,14 @@ const MatchCard = ({ matchData, puuid }) => {
                 color: "#1f1f1f",
                 fontWeight: "bold",
                 fontSize: "0.75rem",
+                display: { xs: "none", sm: "flex" }
               }}
               size="small"
             />
-            <Typography variant="caption" sx={{ color: "#cfcfcf" }}>
+            <Typography variant="caption" sx={{ color: "#cfcfcf", display: { xs: "none", sm: "flex" } }}>
               {gameDuration}m
             </Typography>
-            <Typography variant="caption" sx={{ color: "#999" }}>
+            <Typography variant="caption" sx={{ color: "#999", display: { xs: "none", sm: "flex" } }}>
               {gameDate}
             </Typography>
           </Stack>

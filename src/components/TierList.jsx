@@ -3,9 +3,7 @@ import axios from "axios";
 import { Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
 import { getChampionIconName } from "../util/helperFunctions";
-import SearchBar from "./SearchBar";
-import NavigationBar from "./NavigationBar";
-import LogInButton from "./LogInButton";
+import PageLayout from "./PageLayout";
 
 const roles = [
   { value: "ALL", label: "All", icon: "/assets/img/lanes/fill.png" },
@@ -96,30 +94,7 @@ const TierList = () => {
   }, [api_url, selectedRole]);
 
   return (
-    <Box
-      sx={{
-        bgcolor: "#1f1f1f",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        px: 2,
-        py: 3,
-      }}
-    >
-      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
-          <Box
-            sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
-          >
-            <SearchBar region={region} setRegion={setRegion} />
-          </Box>
-          <NavigationBar />
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <LogInButton />
-        </Box>
-      </Box>
+    <PageLayout region={region} setRegion={setRegion}>
       <Box
         sx={{
           display: "flex",
@@ -206,7 +181,7 @@ const TierList = () => {
         ))}
         </Box>
       </Box>
-    </Box>
+    </PageLayout>
   );
 };
 

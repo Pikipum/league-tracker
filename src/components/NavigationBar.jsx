@@ -1,19 +1,39 @@
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack, Drawer, List, ListItemButton, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 import StatsScraperButton from "./StatsScraperButton";
 import LogInButton from "./LogInButton";
 
-const NavigationBar = ({ puuid, gameName, tagLine, region, sticky = false, showAuthButton = false }) => {
+const NavigationBar = ({
+  puuid,
+  gameName,
+  tagLine,
+  region,
+  sticky = false,
+  showAuthButton = false,
+  searchOpen,
+  onSearchToggle,
+  sx: sxProp,
+}) => {
   const navigate = useNavigate();
-  
-  const profilePath = gameName && tagLine && region
-    ? `/${region}/${encodeURIComponent(`${gameName}#${tagLine}`)}` 
-    : null;
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const profilePath =
+    gameName && tagLine && region
+      ? `/${region}/${encodeURIComponent(`${gameName}#${tagLine}`)}`
+      : null;
 
   const navItems = [
     { label: "Home", to: "/" },
     { label: "Profile", to: profilePath },
-    { label: "Champions", to: puuid && region ? `/champions/${region}/${puuid}` : null },
+    {
+      label: "Champions",
+      to: puuid && region ? `/champions/${region}/${puuid}` : null,
+    },
     { label: "Tier List", to: "/tierlist" },
   ];
 
@@ -34,7 +54,7 @@ const NavigationBar = ({ puuid, gameName, tagLine, region, sticky = false, showA
         py: 1,
         mt: 2,
         borderRadius: 2,
-        width: "fit-content",
+        width: "100%",
         maxWidth: "min(40rem, 90vw)",
       };
 
@@ -53,46 +73,98 @@ const NavigationBar = ({ puuid, gameName, tagLine, region, sticky = false, showA
       : { width: "100%" }),
   };
 
+  const filteredNavItems = navItems.filter((item) => item.to !== null);
+
   return (
-    <Box sx={containerSx}>
-      <Box sx={innerSx}>
+    <Box sx={{ ...containerSx, ...sxProp }}>
+      <Box sx={{ display: { xs: "flex", sm: "none" }, alignItems: "center", gap: 0.5, width: "100%" }}>
+        <IconButton
+          onClick={() => setDrawerOpen(true)}
+          sx={{ color: "#cfcfcf" }}
+          aria-label="Open navigation menu"
+        >
+          <MenuIcon />
+        </IconButton>
+        {onSearchToggle && (
+          <IconButton
+            onClick={onSearchToggle}
+            sx={{ color: "#cfcfcf" }}
+            aria-label="Toggle search"
+          >
+            {searchOpen ? <CloseIcon /> : <SearchIcon />}
+          </IconButton>
+        )}
+        <Box sx={{ ml: "auto" }}>
+          <LogInButton />
+        </Box>
+      </Box>
+
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        PaperProps={{ sx: { bgcolor: "#1a1a1a", color: "#cfcfcf", width: 220 } }}
+      >
+        <List>
+          {filteredNavItems.map((item) => (
+            <ListItemButton
+              key={item.label}
+              onClick={() => { navigate(item.to); setDrawerOpen(false); }}
+              sx={{ "&:hover": { bgcolor: "#2a2a2a", color: "#fff" } }}
+            >
+              <ListItemText primary={item.label} />
+            </ListItemButton>
+          ))}
+        </List>
+        {puuid ? (
+          <Box sx={{ px: 2, py: 1 }}>
+            <StatsScraperButton puuid={puuid} region={region} />
+          </Box>
+        ) : null}
+      </Drawer>
+
+      <Box sx={{ ...innerSx, display: { xs: "none", sm: "flex" } }}>
         <Stack
           direction="row"
           spacing={1}
           alignItems="center"
-          sx={{ flexShrink: 0, flexWrap: "nowrap", gap: 0.5, overflowX: "auto" }}
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 0.5,
+          }}
         >
-          {navItems.filter(item => item.to !== null).map((item) => (
-            <Box
-              key={item.label}
-              sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
-            >
-              <Typography
-                onClick={() => navigate(item.to)}
-                sx={{
-                  color: "#cfcfcf",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  cursor: "pointer",
-                  px: 1,
-                  py: 0.5,
-                  borderRadius: 1,
-                  letterSpacing: 0,
-                  whiteSpace: "nowrap",
-                  "&:hover": { color: "#fff" },
-                }}
+          {filteredNavItems.map((item) => (
+              <Box
+                key={item.label}
+                sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
               >
-                {item.label}
-              </Typography>
-            </Box>
-          ))}
+                <Typography
+                  onClick={() => navigate(item.to)}
+                  sx={{
+                    color: "#cfcfcf",
+                    fontSize: 14,
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    px: 1,
+                    py: 0.5,
+                    borderRadius: 1,
+                    letterSpacing: 0,
+                    whiteSpace: "nowrap",
+                    "&:hover": { color: "#fff" },
+                  }}
+                >
+                  {item.label}
+                </Typography>
+              </Box>
+            ))}
 
           {puuid ? <StatsScraperButton puuid={puuid} region={region} /> : null}
         </Stack>
       </Box>
 
       {showAuthButton ? (
-        <Box sx={{ display: "flex", alignItems: "center", ml: "auto" }}>
+        <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center", ml: "auto" }}>
           <LogInButton />
         </Box>
       ) : null}

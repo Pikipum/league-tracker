@@ -49,10 +49,10 @@
 
 @media (max-width: 600px) {
   .search-bar-form {
-    flex-direction: column;
+    flex-wrap: nowrap;
   }
 
   .search-bar-button.MuiButton-containedPrimary {
-    width: 100%;
+    padding: 0 1rem;
   }
 }

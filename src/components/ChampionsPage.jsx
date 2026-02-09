@@ -2,9 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import Champions from "./Champions";
-import SearchBar from "./SearchBar";
-import NavigationBar from "./NavigationBar";
-import LogInButton from "./LogInButton";
+import PageLayout from "./PageLayout";
 import axios from "axios";
 
 const ChampionsPage = () => {
@@ -29,35 +27,16 @@ const ChampionsPage = () => {
   }, [puuid, api_url]);
 
   return (
-    <Box
-      sx={{
-        bgcolor: "#1f1f1f",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        px: 2,
-        py: 3,
+    <PageLayout
+      region={region}
+      setRegion={setRegion}
+      navBarProps={{
+        puuid,
+        gameName: profileData?.gameName,
+        tagLine: profileData?.tagLine,
+        region,
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
-          <Box
-            sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
-          >
-            <SearchBar region={region} setRegion={setRegion} />
-          </Box>
-          <NavigationBar 
-            puuid={puuid}
-            gameName={profileData?.gameName}
-            tagLine={profileData?.tagLine}
-            region={region}
-          />
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <LogInButton />
-        </Box>
-      </Box>
       <Box
         sx={{
           display: "flex",
@@ -68,7 +47,7 @@ const ChampionsPage = () => {
       >
         <Champions puuid={puuid} />
       </Box>
-    </Box>
+    </PageLayout>
   );
 };
 

@@ -7,58 +7,10 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import SideBarProfile from "./SideBarProfile";
 import ChampionStats from "./ChampionStats";
-import LogInButton from "./LogInButton";
 import LoadingCircle from "./LoadingCircle";
-import SearchBar from "./SearchBar";
 import MatchHistoryTopCard from "./MatchHistoryTopBar";
-import NavigationBar from "./NavigationBar";
-
-const tagSplitter = (identifier) => {
-  if (!identifier)
-    return {
-      summonerName: "",
-      tag: "",
-      isValid: false,
-      error: "No search query provided.",
-    };
-
-  const trimmed = identifier.trim();
-  if (!trimmed.includes("#")) {
-    return {
-      summonerName: "",
-      tag: "",
-      isValid: false,
-      error: "Invalid format. Please use: SummonerName#TAG",
-    };
-  }
-
-  const [summonerName = "", tag = ""] = trimmed.split("#", 2);
-
-  if (!summonerName.trim()) {
-    return {
-      summonerName: "",
-      tag: "",
-      isValid: false,
-      error: "Summoner name is missing. Please use: SummonerName#TAG",
-    };
-  }
-
-  if (!tag.trim()) {
-    return {
-      summonerName: "",
-      tag: "",
-      isValid: false,
-      error: "Tag is missing. Please use: SummonerName#TAG",
-    };
-  }
-
-  return {
-    summonerName: summonerName.trim(),
-    tag: tag.trim(),
-    isValid: true,
-    error: null,
-  };
-};
+import PageLayout from "./PageLayout";
+import { tagSplitter } from "../util/tagSplitter";
 
 const ProfileView = () => {
   const [profileData, setProfileData] = useState();
@@ -124,30 +76,7 @@ const ProfileView = () => {
 
   if (!isValid) {
     return (
-      <Box
-        sx={{
-          bgcolor: "#1f1f1f",
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          px: 2,
-          py: 3,
-        }}
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
-            <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
-            >
-              <SearchBar region={region} setRegion={setRegion} />
-            </Box>
-            <NavigationBar />
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <LogInButton />
-          </Box>
-        </Box>
+      <PageLayout region={region} setRegion={setRegion}>
         <Box
           sx={{
             display: "flex",
@@ -168,7 +97,7 @@ const ProfileView = () => {
             Example: G2 Caps#1323 with EUW region.
           </Typography>
         </Box>
-      </Box>
+      </PageLayout>
     );
   }
 
@@ -194,30 +123,7 @@ const ProfileView = () => {
 
   if (backendHealthy === false) {
     return (
-      <Box
-        sx={{
-          bgcolor: "#1f1f1f",
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          px: 2,
-          py: 3,
-        }}
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
-            <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
-            >
-              <SearchBar region={region} setRegion={setRegion} />
-            </Box>
-            <NavigationBar />
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <LogInButton />
-          </Box>
-        </Box>
+      <PageLayout region={region} setRegion={setRegion}>
         <Box
           sx={{
             display: "flex",
@@ -249,7 +155,7 @@ const ProfileView = () => {
             Retry
           </Button>
         </Box>
-      </Box>
+      </PageLayout>
     );
   }
 
@@ -271,30 +177,7 @@ const ProfileView = () => {
 
   if (responseStatus === 429) {
     return (
-      <Box
-        sx={{
-          bgcolor: "#1f1f1f",
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          px: 2,
-          py: 3,
-        }}
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
-            <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
-            >
-              <SearchBar region={region} setRegion={setRegion} />
-            </Box>
-            <NavigationBar />
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <LogInButton />
-          </Box>
-        </Box>
+      <PageLayout region={region} setRegion={setRegion}>
         <Box
           sx={{
             display: "flex",
@@ -309,36 +192,13 @@ const ProfileView = () => {
             Rate limit reached, try again later
           </Typography>
         </Box>
-      </Box>
+      </PageLayout>
     );
   }
 
   if (profileError) {
     return (
-      <Box
-        sx={{
-          bgcolor: "#1f1f1f",
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          px: 2,
-          py: 3,
-        }}
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
-            <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
-            >
-              <SearchBar region={region} setRegion={setRegion} />
-            </Box>
-            <NavigationBar />
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <LogInButton />
-          </Box>
-        </Box>
+      <PageLayout region={region} setRegion={setRegion}>
         <Box
           sx={{
             display: "flex",
@@ -356,36 +216,13 @@ const ProfileView = () => {
           </Typography>
           <Typography sx={{ color: "#888" }}>{profileError}</Typography>
         </Box>
-      </Box>
+      </PageLayout>
     );
   }
 
   if (!profileData) {
     return (
-      <Box
-        sx={{
-          bgcolor: "#1f1f1f",
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          px: 2,
-          py: 3,
-        }}
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
-            <Box
-              sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
-            >
-              <SearchBar region={region} setRegion={setRegion} />
-            </Box>
-            <NavigationBar />
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <LogInButton />
-          </Box>
-        </Box>
+      <PageLayout region={region} setRegion={setRegion}>
         <Box
           sx={{
             display: "flex",
@@ -400,40 +237,21 @@ const ProfileView = () => {
             No profile data available.
           </Typography>
         </Box>
-      </Box>
+      </PageLayout>
     );
   }
 
   return (
-    <Box
-      sx={{
-        bgcolor: "#1f1f1f",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        px: 2,
-        py: 3,
+    <PageLayout
+      region={region}
+      setRegion={setRegion}
+      navBarProps={{
+        puuid: profileData.puuid,
+        gameName: profileData.gameName,
+        tagLine: profileData.tagLine,
+        region,
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, flexWrap: "wrap" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0, flex: 1, minWidth: 0 }}>
-          <Box
-            sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}
-          >
-            <SearchBar region={region} setRegion={setRegion} />
-          </Box>
-          <NavigationBar
-            puuid={profileData.puuid}
-            gameName={profileData.gameName}
-            tagLine={profileData.tagLine}
-            region={region}
-          />
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <LogInButton />
-        </Box>
-      </Box>
       <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", flexDirection: { xs: "column", md: "row" } }}>
         <Box sx={{ width: { xs: "100%", md: "auto" } }}>
           <Box sx={{ width: { xs: "100%", md: 300 }, flexShrink: 0 }}>
@@ -459,7 +277,7 @@ const ProfileView = () => {
           />
         </Box>
       </Box>
-    </Box>
+    </PageLayout>
   );
 };
 
