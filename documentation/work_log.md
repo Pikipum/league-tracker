@@ -43,7 +43,8 @@
 | 05.02 | 3 | Dockerfiles and compose.yml |
 | 06.02 | 4 | added nginx configuration, updating Dockerfiles and compose.yml, troubleshooting |
 | 06.02 | 4 | improving layout (esp. for smaller screens) |
-| sum  | 163 (06.02) | | 
+| 09.02 | 1 | added preliminary README.md |
+| sum  | 167 (06.02) | | 
 
 | todo |
 | leaderboard |
