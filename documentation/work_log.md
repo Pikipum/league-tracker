@@ -49,7 +49,5 @@
 | 13.02 | 8 | continued refactoring, extracted reusable components, use theme file colors |
 | 16.02 | 4 | cleaning up api call logic, consolidated duplicate code |
 | 16.02 | 1 | moved .css files to sx props |
-| sum  | 177 (09.02) | | 
-
-
-todo: leaderboard, live game, move sx props to css, refactor and reuse components, clean structure
+| 16.02 | 2 | updated readme with instructions and images |
+| sum  | 192 (16.02) | | 
