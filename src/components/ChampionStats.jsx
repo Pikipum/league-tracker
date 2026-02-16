@@ -1,76 +1,84 @@
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
 import GameCountSelect from "./GameCountSelect";
 import ChampionRow from "./ChampionRow";
 import apiClient from "../util/apiClient";
 
-const ChampionStats = ({ puuid }) => {
-  const [championStats, setChampionStats] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+const buildStats = (matches, puuid) => {
+  const champMap = {};
+  matches.forEach((match) => {
+    const participants = match?.info?.participants || match?.payload?.info?.participants || [];
+    const p = participants.find((x) => x.puuid === puuid);
+    if (!p) return;
+    const champName = p.championName;
+    if (!champMap[champName]) {
+      champMap[champName] = { games: 0, wins: 0, kills: 0, deaths: 0, assists: 0 };
+    }
+    champMap[champName].games += 1;
+    champMap[champName].wins += p.win ? 1 : 0;
+    champMap[champName].kills += p.kills || 0;
+    champMap[champName].deaths += p.deaths || 0;
+    champMap[champName].assists += p.assists || 0;
+  });
+
+  return Object.entries(champMap)
+    .map(([name, stats]) => ({
+      name,
+      games: stats.games,
+      wins: stats.wins,
+      losses: stats.games - stats.wins,
+      winrate: Math.round((stats.wins / stats.games) * 100),
+      kda: stats.deaths
+        ? ((stats.kills + stats.assists) / stats.deaths).toFixed(2)
+        : "Perfect",
+      avgKills: (stats.kills / stats.games).toFixed(1),
+      avgDeaths: (stats.deaths / stats.games).toFixed(1),
+      avgAssists: (stats.assists / stats.games).toFixed(1),
+    }))
+    .sort((a, b) => b.games - a.games)
+    .slice(0, 5);
+};
+
+const DB_THRESHOLD = 20;
+
+const ChampionStats = ({ puuid, matchHistory = [] }) => {
   const [gameCount, setGameCount] = useState(20);
+  const [dbStats, setDbStats] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const useDb = gameCount === null || gameCount > DB_THRESHOLD;
 
   useEffect(() => {
+    if (!useDb || !puuid) {
+      setDbStats(null);
+      return;
+    }
+
+    let cancelled = false;
     const fetchStats = async () => {
-      if (!puuid) return;
       setIsLoading(true);
-      setError("");
       try {
         const params = gameCount !== null ? { limit: gameCount } : {};
         const resp = await apiClient.get(`/matches/by-player/${puuid}`, { params });
-        const matches = resp.data || [];
-
-        const champMap = {};
-        matches.forEach((match) => {
-          const p = match.payload?.info?.participants?.find(
-            (x) => x.puuid === puuid,
-          );
-          if (!p) return;
-          const champName = p.championName;
-          if (!champMap[champName]) {
-            champMap[champName] = {
-              games: 0,
-              wins: 0,
-              kills: 0,
-              deaths: 0,
-              assists: 0,
-            };
-          }
-          champMap[champName].games += 1;
-          champMap[champName].wins += p.win ? 1 : 0;
-          champMap[champName].kills += p.kills || 0;
-          champMap[champName].deaths += p.deaths || 0;
-          champMap[champName].assists += p.assists || 0;
-        });
-
-        const statsArray = Object.entries(champMap)
-          .map(([name, stats]) => ({
-            name,
-            games: stats.games,
-            wins: stats.wins,
-            losses: stats.games - stats.wins,
-            winrate: Math.round((stats.wins / stats.games) * 100),
-            kda: stats.deaths
-              ? ((stats.kills + stats.assists) / stats.deaths).toFixed(2)
-              : "Perfect",
-            avgKills: (stats.kills / stats.games).toFixed(1),
-            avgDeaths: (stats.deaths / stats.games).toFixed(1),
-            avgAssists: (stats.assists / stats.games).toFixed(1),
-          }))
-          .sort((a, b) => b.games - a.games)
-          .slice(0, 5);
-
-        setChampionStats(statsArray);
-      } catch (e) {
-        setError("Failed to load champion stats");
+        if (!cancelled) setDbStats(buildStats(resp.data || [], puuid));
+      } catch {
+        if (!cancelled) setDbStats([]);
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
 
     fetchStats();
-  }, [puuid, gameCount]);
+    return () => { cancelled = true; };
+  }, [puuid, gameCount, useDb]);
+
+  const localStats = useMemo(
+    () => buildStats(matchHistory.slice(0, gameCount ?? matchHistory.length), puuid),
+    [puuid, matchHistory, gameCount],
+  );
+
+  const championStats = useDb ? (dbStats ?? []) : localStats;
 
   return (
     <Box
@@ -91,8 +99,7 @@ const ChampionStats = ({ puuid }) => {
         <GameCountSelect gameCount={gameCount} setGameCount={setGameCount} />
       </Box>
       {isLoading && <LoadingCircle />}
-      {error && <Typography color="error">{error}</Typography>}
-      {!isLoading && !error && championStats.length === 0 && (
+      {!isLoading && championStats.length === 0 && (
         <Typography variant="body2" sx={{ color: "#aaa" }}>
           No games found
         </Typography>

@@ -50,4 +50,5 @@
 | 16.02 | 4 | cleaning up api call logic, consolidated duplicate code |
 | 16.02 | 1 | moved .css files to sx props |
 | 16.02 | 2 | updated readme with instructions and images |
+| 16.02 | 1 | fixed logic in top champions panel |
 | sum  | 192 (16.02) | | 
