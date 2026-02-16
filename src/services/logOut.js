@@ -1,13 +1,11 @@
-import axios from "axios";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import apiClient from "../util/apiClient";
 
 const logOut = async () => {
   const token = localStorage.getItem("token");
   try {
     if (token) {
-      await axios.post(
-        `${API_URL}/auth/logout`,
+      await apiClient.post(
+        "/auth/logout",
         {},
         { headers: { Authorization: `Bearer ${token}` } },
       );

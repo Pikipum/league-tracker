@@ -1,10 +1,7 @@
-import axios from "axios";
+import apiClient from "../util/apiClient";
 
 const logIn = async ({ username, password }) => {
-  const { data } = await axios.post(
-    `${process.env.REACT_APP_API_URL}/auth/login`,
-    { username, password }
-  );
+  const { data } = await apiClient.post("/auth/login", { username, password });
   localStorage.setItem("token", data.token);
   window.dispatchEvent(new Event("auth:changed"));
   return data; // { token, expiresAt }

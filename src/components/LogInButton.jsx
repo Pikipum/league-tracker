@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Box,
   Button,
   Dialog,
   DialogTitle,
@@ -7,10 +8,10 @@ import {
   DialogActions,
   TextField,
 } from "@mui/material";
-import "./LogInButton.css";
-import logIn from "./logIn";
-import logOut from "./logOut";
-import createAccount from "./createAccount";
+import logIn from "../services/logIn";
+import logOut from "../services/logOut";
+import createAccount from "../services/createAccount";
+import useAuth from "../hooks/useAuth";
 
 const dialogPaperSx = {
   backgroundColor: "#2a2a2a",
@@ -30,15 +31,24 @@ const fieldSx = {
   },
 };
 
+const loginButtonSx = {
+  bgcolor: "primary.main",
+  color: "#1f1f1f",
+  py: "0.5rem",
+  px: "1.5rem",
+  fontWeight: 700,
+  borderRadius: "8px",
+  boxShadow: "0 10px 22px rgba(0,0,0,0.25)",
+  "&:hover": { bgcolor: "primary.dark" },
+};
+
 const LogInButton = () => {
   const [mode, setMode] = useState(null);
   const [form, setForm] = useState({ username: "", password: "", email: "" });
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [hasToken, setHasToken] = useState(
-    Boolean(localStorage.getItem("token")),
-  );
+  const { token } = useAuth();
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -54,7 +64,6 @@ const LogInButton = () => {
 
   const handleLogOut = () => {
     logOut();
-    setHasToken(false);
   };
 
   const validateEmail = (email) => {
@@ -79,7 +88,6 @@ const LogInButton = () => {
         password: form.password,
         email: form.email,
       });
-      setHasToken(true);
       setMode(null);
     } catch (err) {
       setApiError(
@@ -99,7 +107,6 @@ const LogInButton = () => {
     setLoading(true);
     try {
       await logIn({ username: form.username, password: form.password });
-      setHasToken(true);
       setMode(null);
     } catch (err) {
       setApiError(
@@ -110,20 +117,20 @@ const LogInButton = () => {
       setLoading(false);
     }
   };
-  if (!hasToken && !loading) {
+  if (!token && !loading) {
     return (
       <div>
-        <div className="login-button-wrapper">
+        <Box>
           <Button
             type="button"
             variant="contained"
             color="primary"
-            className="login-button"
+            sx={loginButtonSx}
             onClick={() => setMode("login")}
           >
             Log In
           </Button>
-        </div>
+        </Box>
 
         <Dialog
           open={mode === "login"}
@@ -247,17 +254,17 @@ const LogInButton = () => {
   }
   return (
     <div>
-      <div className="login-button-wrapper">
+      <Box>
         <Button
           type="button"
           variant="contained"
           color="primary"
-          className="login-button"
+          sx={loginButtonSx}
           onClick={() => handleLogOut()}
         >
           Log Out
         </Button>
-      </div>
+      </Box>
     </div>
   );
 };

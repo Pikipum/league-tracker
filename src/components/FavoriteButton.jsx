@@ -2,24 +2,13 @@ import { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import axios from "axios";
 import Tooltip from "@mui/material/Tooltip";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import apiClient from "../util/apiClient";
+import useAuth from "../hooks/useAuth";
 
 const FavoriteButton = ({ profileData, region }) => {
   const [favorited, setFavorited] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem("token"));
-
-  useEffect(() => {
-    const onAuthChange = () => setToken(localStorage.getItem("token"));
-    window.addEventListener("auth:changed", onAuthChange);
-    window.addEventListener("storage", onAuthChange);
-    return () => {
-      window.removeEventListener("auth:changed", onAuthChange);
-      window.removeEventListener("storage", onAuthChange);
-    };
-  }, []);
+  const { token } = useAuth();
 
   useEffect(() => {
     if (!token) {
@@ -28,7 +17,7 @@ const FavoriteButton = ({ profileData, region }) => {
     }
     const fetch = async () => {
       try {
-        const { data } = await axios.get(`${API_URL}/favorites`, {
+        const { data } = await apiClient.get("/favorites", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFavorited(data.some((f) => f.puuid === profileData.puuid));
@@ -46,8 +35,8 @@ const FavoriteButton = ({ profileData, region }) => {
     }
     try {
       if (!favorited) {
-        await axios.post(
-          `${API_URL}/favorites`,
+        await apiClient.post(
+          "/favorites",
           {
             puuid: profileData.puuid,
             gameName: profileData.gameName,
@@ -58,7 +47,7 @@ const FavoriteButton = ({ profileData, region }) => {
         );
         setFavorited(true);
       } else {
-        await axios.delete(`${API_URL}/favorites/${profileData.puuid}`, {
+        await apiClient.delete(`/favorites/${profileData.puuid}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFavorited(false);

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import List from "@mui/material/List";
 import MatchCard from "./MatchCard";
 import LoadingCircle from "./LoadingCircle";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Box from "@mui/material/Box";
 import CenteredMessage from "./CenteredMessage";
+import apiClient from "../util/apiClient";
 import { getRegion } from "../util/helperFunctions";
 
 const getQueueId = (queueName) => {
@@ -28,7 +28,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const fetchWithRetry = async (url, maxRetries = 10) => {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const response = await axios.get(url);
+      const response = await apiClient.get(url);
       return response;
     } catch (error) {
       if (attempt === maxRetries - 1) {
@@ -52,7 +52,6 @@ const MatchHistory = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const api_url = process.env.REACT_APP_API_URL;
   const [matchIdStart, setMatchIdStart] = useState(0);
   const [initialLoad, setInitialLoad] = useState(true);
   const [currentQueue, setCurrentQueue] = useState(queueType);
@@ -79,7 +78,7 @@ const MatchHistory = ({
       const platformRegion = getRegion(currentRegion);
       try {
         const queueId = getQueueId(currentQueue);
-        const idsResponse = await axios.get(`${api_url}/matches/ids/${puuid}`, {
+        const idsResponse = await apiClient.get(`/matches/ids/${puuid}`, {
           params: {
             queue: queueId,
             start: matchIdStart,
@@ -91,7 +90,7 @@ const MatchHistory = ({
         const matchPromises = idsResponse.data.map(async (matchId) => {
           try {
             const res = await fetchWithRetry(
-              `${api_url}/matches/${matchId}?region=${platformRegion}`,
+              `/matches/${matchId}?region=${platformRegion}`,
             );
             return res?.data ?? null;
           } catch (error) {
@@ -124,7 +123,7 @@ const MatchHistory = ({
     };
 
     fetchMatchHistory();
-  }, [puuid, api_url, matchIdStart, currentQueue, currentRegion, setMatchHistory]);
+  }, [puuid, matchIdStart, currentQueue, currentRegion, setMatchHistory]);
 
   if (isLoading && initialLoad) {
     return <LoadingCircle />;

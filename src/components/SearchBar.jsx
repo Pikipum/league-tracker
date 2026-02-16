@@ -1,9 +1,43 @@
-import { Button, TextField } from "@mui/material";
-import "./SearchBar.css";
+import { Button, TextField, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import DarkDropdownMenu from "./DarkDropdownMenu";
 import { getRegionList } from "../util/helperFunctions";
+
+const formSx = {
+  display: "flex",
+  gap: "1rem",
+  width: "min(40rem, 90vw)",
+};
+
+const inputSx = {
+  flex: 1,
+  "& .MuiOutlinedInput-root": {
+    backgroundColor: "#2a2a2a",
+    color: "#f5f5f5",
+    borderRadius: "4px",
+    "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#666" },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#666" },
+  },
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#444",
+  },
+  "& .MuiOutlinedInput-input::placeholder": {
+    color: "#cfcfcf",
+    opacity: 1,
+  },
+};
+
+const buttonSx = {
+  bgcolor: "primary.main",
+  color: "#1e1e1e",
+  fontWeight: "bold",
+  py: 0,
+  px: { xs: "1rem", sm: "2rem" },
+  "&:hover": {
+    bgcolor: "primary.dark",
+  },
+};
 
 const SearchBar = ({ region, setRegion }) => {
   const navigate = useNavigate();
@@ -17,14 +51,14 @@ const SearchBar = ({ region, setRegion }) => {
   };
 
   return (
-    <form className="search-bar-form" onSubmit={(event) => handleSubmit(event)}>
+    <Box component="form" sx={formSx} onSubmit={(event) => handleSubmit(event)}>
       <TextField
         id="outlined-basic"
         variant="outlined"
         placeholder="Search..."
-        className="search-bar-input"
         value={summoner}
         onChange={(event) => setSummoner(event.target.value)}
+        sx={inputSx}
       />
       <DarkDropdownMenu
         label={region}
@@ -32,22 +66,10 @@ const SearchBar = ({ region, setRegion }) => {
         selected={region}
         onSelect={setRegion}
       />
-      <Button
-        variant="contained"
-        type="submit"
-        className="search-bar-button"
-        sx={{
-          bgcolor: "primary.main",
-          color: "#1e1e1e",
-          fontWeight: "bold",
-          "&:hover": {
-            bgcolor: "primary.dark",
-          },
-        }}
-      >
+      <Button variant="contained" type="submit" sx={buttonSx}>
         Search
       </Button>
-    </form>
+    </Box>
   );
 };
 

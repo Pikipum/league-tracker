@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Box, Typography, LinearProgress, Button } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
 import PageLayout from "./PageLayout";
-import axios from "axios";
+import apiClient from "../util/apiClient";
 import { getRegion } from "../util/helperFunctions";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -14,7 +14,6 @@ const StatsScraper = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isScraping, setIsScraping] = useState(false);
   const [region, setRegion] = useState(urlRegion || "EUW");
-  const api_url = process.env.REACT_APP_API_URL;
   const [profileData, setProfileData] = useState();
   const [matchIdsScraped, setMatchIdsScraped] = useState(0);
   const [matchesScraped, setMatchesScraped] = useState(0);
@@ -40,8 +39,8 @@ const StatsScraper = () => {
     const fetchProfile = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `${api_url}/profile/account/by-puuid/${puuid}`,
+        const response = await apiClient.get(
+          `/profile/account/by-puuid/${puuid}`,
         );
         setProfileData(response.data);
       } catch (e) {
@@ -52,7 +51,7 @@ const StatsScraper = () => {
     };
 
     fetchProfile();
-  }, [puuid, api_url]);
+  }, [puuid]);
 
   const fetchWithRateLimit = async (fetchFn, maxRetries = 10) => {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
@@ -114,7 +113,7 @@ const StatsScraper = () => {
         const currentStart = start;
 
         const response = await fetchWithRateLimit(() =>
-          axios.get(`${api_url}/matches/ids/${puuid}`, {
+          apiClient.get(`/matches/ids/${puuid}`, {
             params: { queue: 420, start: currentStart, count, region: platformRegion },
           }),
         );
@@ -182,7 +181,7 @@ const StatsScraper = () => {
 
       try {
         await fetchWithRateLimit(() =>
-          axios.get(`${api_url}/matches/${matchId}`, { params: { region: platformRegion }}),
+          apiClient.get(`/matches/${matchId}`, { params: { region: platformRegion }}),
         );
 
         requestTimes.push(Date.now());

@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Box, Typography } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
 import GameCountSelect from "./GameCountSelect";
 import ChampionRow from "./ChampionRow";
+import apiClient from "../util/apiClient";
 
 const ChampionStats = ({ puuid }) => {
   const [championStats, setChampionStats] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [gameCount, setGameCount] = useState(20);
-  const apiBase = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -19,7 +18,7 @@ const ChampionStats = ({ puuid }) => {
       setError("");
       try {
         const params = gameCount !== null ? { limit: gameCount } : {};
-        const resp = await axios.get(`${apiBase}/matches/by-player/${puuid}`, { params });
+        const resp = await apiClient.get(`/matches/by-player/${puuid}`, { params });
         const matches = resp.data || [];
 
         const champMap = {};
@@ -71,7 +70,7 @@ const ChampionStats = ({ puuid }) => {
     };
 
     fetchStats();
-  }, [puuid, apiBase, gameCount]);
+  }, [puuid, gameCount]);
 
   return (
     <Box

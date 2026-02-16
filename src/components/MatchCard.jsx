@@ -12,11 +12,14 @@ import { styled } from "@mui/material/styles";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { getChampionIconName } from "../util/helperFunctions";
-import { getSummonerSpellName } from "../util/helperFunctions";
-import { getRuneTreeName } from "../util/helperFunctions";
-import { getTreeIconName } from "../util/helperFunctions";
-import { getKeystoneName } from "../util/helperFunctions";
+import {
+  getChampionIconName,
+  getSummonerSpellName,
+  getRuneTreeName,
+  getTreeIconName,
+  getKeystoneName,
+  calcKDA,
+} from "../util/helperFunctions";
 import ExpandedTeamInfo from "./ExpandedTeamInfo";
 import TeamPlayerList from "./TeamPlayerList";
 import { DDRAGON_BASE } from "../constants";
@@ -169,11 +172,7 @@ const MatchCard = ({ matchData, puuid }) => {
               {currentPlayer?.assists}
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {Math.round(
-                ((currentPlayer?.kills + currentPlayer?.assists) /
-                  Math.max(currentPlayer?.deaths, 1)) *
-                  10,
-              ) / 10}{" "}
+              {calcKDA(currentPlayer?.kills, currentPlayer?.deaths, currentPlayer?.assists)}{" "}
               KDA
             </Typography>
             <Typography variant="caption" sx={{ color: "#999" }}>

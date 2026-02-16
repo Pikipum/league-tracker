@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import MatchHistory from "./MatchHistory";
 import Box from "@mui/material/Box";
@@ -11,6 +10,7 @@ import LoadingCircle from "./LoadingCircle";
 import MatchHistoryTopCard from "./MatchHistoryTopBar";
 import PageLayout from "./PageLayout";
 import CenteredMessage from "./CenteredMessage";
+import apiClient from "../util/apiClient";
 import { tagSplitter } from "../util/tagSplitter";
 
 const ProfileView = () => {
@@ -19,7 +19,6 @@ const ProfileView = () => {
   const [backendHealthy, setBackendHealthy] = useState(null);
   const [profileError, setProfileError] = useState(null);
   const { name, region: urlRegion } = useParams();
-  const api_url = process.env.REACT_APP_API_URL;
   const { summonerName, tag, isValid, error: formatError } = tagSplitter(name);
   const [responseStatus, setResponseStatus] = useState();
   const [queueType, setQueueType] = useState("Ranked Solo");
@@ -29,27 +28,25 @@ const ProfileView = () => {
   useEffect(() => {
     const checkBackendHealth = async () => {
       try {
-        await axios.get(`${api_url}/health`, { timeout: 5000 });
+        await apiClient.get("/health", { timeout: 5000 });
         setBackendHealthy(true);
       } catch {
         setBackendHealthy(false);
       }
     };
 
-    if (api_url) {
-      checkBackendHealth();
-    }
-  }, [api_url]);
+    checkBackendHealth();
+  }, []);
 
   useEffect(() => {
-    if (!isValid || !api_url || !backendHealthy) return;
+    if (!isValid || !backendHealthy) return;
 
     const fetchProfile = async () => {
       setIsLoading(true);
       setProfileError(null);
       try {
-        const response = await axios.get(
-          `${api_url}/profile/account/${encodeURIComponent(summonerName)}/${encodeURIComponent(tag)}`,
+        const response = await apiClient.get(
+          `/profile/account/${encodeURIComponent(summonerName)}/${encodeURIComponent(tag)}`,
         );
         setProfileData(response.data);
         setResponseStatus(response.status);
@@ -68,7 +65,7 @@ const ProfileView = () => {
     };
 
     fetchProfile();
-  }, [isValid, summonerName, tag, api_url, backendHealthy]);
+  }, [isValid, summonerName, tag, backendHealthy]);
 
   const handleRetry = () => {
     setBackendHealthy(null);

@@ -13,11 +13,10 @@ import {
   Stack,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import apiClient from "../util/apiClient";
+import useAuth from "../hooks/useAuth";
 
 const initials = (name) =>
   name
@@ -29,17 +28,7 @@ const initials = (name) =>
 const FavoriteProfiles = () => {
   const [favorites, setFavorites] = useState([]);
   const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("token"));
-
-  useEffect(() => {
-    const onAuthChange = () => setToken(localStorage.getItem("token"));
-    window.addEventListener("auth:changed", onAuthChange);
-    window.addEventListener("storage", onAuthChange);
-    return () => {
-      window.removeEventListener("auth:changed", onAuthChange);
-      window.removeEventListener("storage", onAuthChange);
-    };
-  }, []);
+  const { token } = useAuth();
 
   useEffect(() => {
     if (!token) {
@@ -48,7 +37,7 @@ const FavoriteProfiles = () => {
     }
     const fetchFavs = async () => {
       try {
-        const { data } = await axios.get(`${API_URL}/favorites`, {
+        const { data } = await apiClient.get("/favorites", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFavorites(data);
@@ -61,7 +50,7 @@ const FavoriteProfiles = () => {
 
   const remove = async (puuid) => {
     try {
-      await axios.delete(`${API_URL}/favorites/${puuid}`, {
+      await apiClient.delete(`/favorites/${puuid}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFavorites((prev) => prev.filter((f) => f.puuid !== puuid));

@@ -99,3 +99,6 @@ export const getRoutingContinent = (region) => {
   };
   return continentMap[region];
 };
+
+export const calcKDA = (kills, deaths, assists) =>
+  Math.round(((kills + assists) / Math.max(deaths, 1)) * 10) / 10;

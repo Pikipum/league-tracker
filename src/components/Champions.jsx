@@ -1,63 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
 import ChampionRow from "./ChampionRow";
-
-const roles = [
-  { value: "ALL", label: "All", icon: "/assets/img/lanes/fill.png" },
-  { value: "TOP", label: "Top", icon: "/assets/img/lanes/top.png" },
-  { value: "JUNGLE", label: "Jungle", icon: "/assets/img/lanes/jungle.png" },
-  { value: "MIDDLE", label: "Mid", icon: "/assets/img/lanes/middle.png" },
-  { value: "BOTTOM", label: "ADC", icon: "/assets/img/lanes/bottom.png" },
-  { value: "UTILITY", label: "Support", icon: "/assets/img/lanes/support.png" },
-];
-
-const RoleFilter = ({ selectedRole, onRoleChange }) => {
-  return (
-    <ToggleButtonGroup
-      value={selectedRole}
-      exclusive
-      onChange={(e, newRole) => {
-        if (newRole !== null) {
-          onRoleChange(newRole);
-        }
-      }}
-      sx={{
-        bgcolor: "#2a2a2a",
-        borderRadius: 1,
-        "& .MuiToggleButton-root": {
-          color: "#888",
-          border: "none",
-          px: 1.5,
-          py: 0.5,
-          "&:hover": {
-            bgcolor: "#3a3a3a",
-          },
-          "&.Mui-selected": {
-            bgcolor: "#3a3a3a",
-            color: "primary.main",
-            "&:hover": {
-              bgcolor: "#4a4a4a",
-            },
-          },
-        },
-      }}
-    >
-      {roles.map((role) => (
-        <ToggleButton key={role.value} value={role.value}>
-          <Box
-            component="img"
-            src={role.icon}
-            alt={role.label}
-            loading="lazy"
-            sx={{ width: 20, height: 20 }}
-          />
-        </ToggleButton>
-      ))}
-    </ToggleButtonGroup>
-  );
-};
+import RoleFilter from "./RoleFilter";
+import apiClient from "../util/apiClient";
 
 const getTierColor = (tier) => {
   const colors = {
@@ -78,7 +24,6 @@ const Champions = ({ puuid }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedRole, setSelectedRole] = useState("ALL");
-  const api_url = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -88,9 +33,9 @@ const Champions = ({ puuid }) => {
       try {
         const url =
           selectedRole === "ALL"
-            ? `${api_url}/tierlist/by-player/${puuid}`
-            : `${api_url}/tierlist/by-player/${puuid}?position=${selectedRole}`;
-        const resp = await axios.get(url);
+            ? `/tierlist/by-player/${puuid}`
+            : `/tierlist/by-player/${puuid}?position=${selectedRole}`;
+        const resp = await apiClient.get(url);
         const statsArray = resp.data || [];
         setChampionStats(statsArray);
       } catch (e) {
@@ -101,7 +46,7 @@ const Champions = ({ puuid }) => {
     };
 
     fetchStats();
-  }, [puuid, api_url, selectedRole]);
+  }, [puuid, selectedRole]);
 
   return (
     <Box

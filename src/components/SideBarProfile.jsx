@@ -1,15 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import LoadingCircle from "./LoadingCircle";
 import { getRegion } from "../util/helperFunctions";
 import FavoriteButton from "./FavoriteButton";
 import GoldLinearProgress from "./GoldLinearProgress";
+import apiClient from "../util/apiClient";
 import { DDRAGON_BASE } from "../constants";
 
 const SideBarProfile = ({ region, profileData }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const api_url = process.env.REACT_APP_API_URL;
   const [summonerData, setSummonerData] = useState();
   const [summonerIconLevel, setSummonerIconLevel] = useState();
 
@@ -19,11 +18,11 @@ const SideBarProfile = ({ region, profileData }) => {
     const fetchProfile = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `${api_url}/profile/league/${convertedRegion}/${profileData.puuid}`,
+        const response = await apiClient.get(
+          `/profile/league/${convertedRegion}/${profileData.puuid}`,
         );
-        const response_summoner = await axios.get(
-          `${api_url}/profile/summoner/${convertedRegion}/${profileData.puuid}`,
+        const response_summoner = await apiClient.get(
+          `/profile/summoner/${convertedRegion}/${profileData.puuid}`,
         );
         setSummonerData(response.data[0]);
         setSummonerIconLevel(response_summoner.data);
@@ -35,7 +34,7 @@ const SideBarProfile = ({ region, profileData }) => {
     };
 
     fetchProfile();
-  }, [profileData.puuid, api_url, convertedRegion]);
+  }, [profileData.puuid, convertedRegion]);
 
   if (!profileData) return null;
   if (isLoading) return <LoadingCircle />;

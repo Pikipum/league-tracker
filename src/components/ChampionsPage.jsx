@@ -3,20 +3,19 @@ import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import Champions from "./Champions";
 import PageLayout from "./PageLayout";
-import axios from "axios";
+import apiClient from "../util/apiClient";
 
 const ChampionsPage = () => {
   const { puuid, region: urlRegion } = useParams();
   const [region, setRegion] = useState(urlRegion || "EUW");
   const [profileData, setProfileData] = useState(null);
-  const api_url = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     if (!puuid) return;
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(
-          `${api_url}/profile/account/by-puuid/${puuid}`
+        const response = await apiClient.get(
+          `/profile/account/by-puuid/${puuid}`
         );
         setProfileData(response.data);
       } catch (e) {
@@ -24,7 +23,7 @@ const ChampionsPage = () => {
       }
     };
     fetchProfile();
-  }, [puuid, api_url]);
+  }, [puuid]);
 
   return (
     <PageLayout

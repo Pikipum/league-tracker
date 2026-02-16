@@ -1,67 +1,10 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
 import ChampionRow from "./ChampionRow";
+import RoleFilter, { roles } from "./RoleFilter";
 import PageLayout from "./PageLayout";
-
-const roles = [
-  { value: "ALL", label: "All", icon: "/assets/img/lanes/fill.png" },
-  { value: "TOP", label: "Top", icon: "/assets/img/lanes/top.png" },
-  { value: "JUNGLE", label: "Jungle", icon: "/assets/img/lanes/jungle.png" },
-  { value: "MIDDLE", label: "Mid", icon: "/assets/img/lanes/middle.png" },
-  { value: "BOTTOM", label: "ADC", icon: "/assets/img/lanes/bottom.png" },
-  { value: "UTILITY", label: "Support", icon: "/assets/img/lanes/support.png" },
-];
-
-const RoleFilter = ({ selectedRole, onRoleChange }) => {
-  return (
-    <ToggleButtonGroup
-      value={selectedRole}
-      exclusive
-      onChange={(e, newRole) => {
-        if (newRole !== null) {
-          onRoleChange(newRole);
-        }
-      }}
-      sx={{
-        bgcolor: "#2a2a2a",
-        borderRadius: 1,
-        "& .MuiToggleButton-root": {
-          color: "#888",
-          border: "none",
-          px: 2,
-          py: 1,
-          "&:hover": {
-            bgcolor: "#3a3a3a",
-          },
-          "&.Mui-selected": {
-            bgcolor: "#3a3a3a",
-            color: "primary.main",
-            "&:hover": {
-              bgcolor: "#4a4a4a",
-            },
-          },
-        },
-      }}
-    >
-      {roles.map((role) => (
-        <ToggleButton key={role.value} value={role.value}>
-          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
-            <Box
-              component="img"
-              src={role.icon}
-              alt={role.label}
-              loading="lazy"
-              sx={{ width: 24, height: 24 }}
-            />
-            <Typography sx={{ fontSize: 10, textTransform: "none" }}>{role.label}</Typography>
-          </Box>
-        </ToggleButton>
-      ))}
-    </ToggleButtonGroup>
-  );
-};
+import apiClient from "../util/apiClient";
 
 const TierList = () => {
   const [tierList, setTierList] = useState([]);
@@ -69,7 +12,6 @@ const TierList = () => {
   const [error, setError] = useState("");
   const [region, setRegion] = useState("EUW");
   const [selectedRole, setSelectedRole] = useState("ALL");
-  const api_url = process.env.REACT_APP_API_URL
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -77,9 +19,9 @@ const TierList = () => {
       setError("");
       try {
         const url = selectedRole === "ALL" 
-          ? `${api_url}/tierlist`
-          : `${api_url}/tierlist/by-role?position=${selectedRole}`;
-        const resp = await axios.get(url);
+          ? `/tierlist`
+          : `/tierlist/by-role?position=${selectedRole}`;
+        const resp = await apiClient.get(url);
         const statsArray = resp.data || [];
 
         setTierList(statsArray);
@@ -91,7 +33,7 @@ const TierList = () => {
     };
 
     fetchStats();
-  }, [api_url, selectedRole]);
+  }, [selectedRole]);
 
   return (
     <PageLayout region={region} setRegion={setRegion}>
@@ -103,7 +45,7 @@ const TierList = () => {
           gap: 3,
         }}
       >
-        <RoleFilter selectedRole={selectedRole} onRoleChange={setSelectedRole} />
+        <RoleFilter selectedRole={selectedRole} onRoleChange={setSelectedRole} showLabels />
         <Box
           sx={{
             display: "flex",

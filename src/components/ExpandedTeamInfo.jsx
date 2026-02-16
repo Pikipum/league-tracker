@@ -3,11 +3,14 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import GoldLinearProgress from "./GoldLinearProgress";
-import { getChampionIconName } from "../util/helperFunctions";
-import { getSummonerSpellName } from "../util/helperFunctions";
-import { getRuneTreeName } from "../util/helperFunctions";
-import { getTreeIconName } from "../util/helperFunctions";
-import { getKeystoneName } from "../util/helperFunctions";
+import {
+  getChampionIconName,
+  getSummonerSpellName,
+  getRuneTreeName,
+  getTreeIconName,
+  getKeystoneName,
+  calcKDA,
+} from "../util/helperFunctions";
 import { DDRAGON_BASE } from "../constants";
 
 const ExpandedTeamInfo = ({
@@ -116,10 +119,7 @@ const ExpandedTeamInfo = ({
           {player?.kills}/{player?.deaths}/{player?.assists}
         </Typography>
         <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
-          {Math.round(
-            ((player?.kills + player?.assists) / Math.max(player?.deaths, 1)) *
-              10,
-          ) / 10}{" "}
+          {calcKDA(player?.kills, player?.deaths, player?.assists)}{" "}
           KDA
         </Typography>
       </Box>
