@@ -49,7 +49,7 @@ const NavigationBar = ({
         width: "100%",
       }
     : {
-        bgcolor: "#1a1a1a",
+        bgcolor: "background.paper",
         borderBottom: "1px solid #222",
         py: 1,
         mt: 2,
@@ -64,7 +64,7 @@ const NavigationBar = ({
     alignItems: "center",
     ...(sticky
       ? {
-          bgcolor: "#1a1a1a",
+          bgcolor: "background.paper",
           borderBottom: "1px solid #222",
           borderRadius: 2,
           width: "fit-content",
@@ -80,7 +80,7 @@ const NavigationBar = ({
       <Box sx={{ display: { xs: "flex", sm: "none" }, alignItems: "center", gap: 0.5, width: "100%" }}>
         <IconButton
           onClick={() => setDrawerOpen(true)}
-          sx={{ color: "#cfcfcf" }}
+          sx={{ color: "text.secondary" }}
           aria-label="Open navigation menu"
         >
           <MenuIcon />
@@ -88,7 +88,7 @@ const NavigationBar = ({
         {onSearchToggle && (
           <IconButton
             onClick={onSearchToggle}
-            sx={{ color: "#cfcfcf" }}
+            sx={{ color: "text.secondary" }}
             aria-label="Toggle search"
           >
             {searchOpen ? <CloseIcon /> : <SearchIcon />}
@@ -103,7 +103,7 @@ const NavigationBar = ({
         anchor="left"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        PaperProps={{ sx: { bgcolor: "#1a1a1a", color: "#cfcfcf", width: 220 } }}
+        PaperProps={{ sx: { bgcolor: "background.paper", color: "text.secondary", width: 220 } }}
       >
         <List>
           {filteredNavItems.map((item) => (
@@ -142,7 +142,7 @@ const NavigationBar = ({
                 <Typography
                   onClick={() => navigate(item.to)}
                   sx={{
-                    color: "#cfcfcf",
+                    color: "text.secondary",
                     fontSize: 14,
                     fontWeight: 500,
                     cursor: "pointer",

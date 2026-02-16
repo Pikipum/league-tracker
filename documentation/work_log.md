@@ -46,8 +46,8 @@
 | 09.02 | 1 | added preliminary README.md |
 | 09.02 | 7 | improving small screen layout, hide menu items and search behind icons |
 | 09.02 | 2 | refactoring, consolidated many components |
-| sum  | 167 (06.02) | | 
+| 13.02 | 8 | continued refactoring, extracted reusable components, use theme file colors |
+| sum  | 177 (09.02) | | 
 
-| todo |
-| leaderboard |
-| live game |
+
+todo: leaderboard, live game, move sx props to css, refactor and reuse components, clean structure

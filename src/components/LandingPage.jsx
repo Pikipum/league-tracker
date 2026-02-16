@@ -10,7 +10,7 @@ const LandingPage = () => {
   return (
     <Box
       sx={{
-        bgcolor: "#1f1f1f",
+        bgcolor: "background.default",
         minHeight: "100vh",
         px: 2,
         py: 3,

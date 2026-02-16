@@ -13,7 +13,7 @@ const StatsScraperButton = ({ puuid, region }) => {
       noWrap
       onClick={handleClick}
       sx={{
-        color: "#cfcfcf",
+        color: "text.secondary",
         fontSize: 14,
         cursor: "pointer",
         whiteSpace: "nowrap",

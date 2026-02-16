@@ -14,19 +14,19 @@ import createAccount from "./createAccount";
 
 const dialogPaperSx = {
   backgroundColor: "#2a2a2a",
-  color: "#f5f5f5",
+  color: "text.primary",
   border: "1px solid #f3c80a",
   boxShadow: "0 10px 22px rgba(0,0,0,0.35)",
 };
 
 const fieldSx = {
-  "& .MuiInputBase-input": { color: "#f5f5f5" },
-  "& .MuiInputLabel-root": { color: "#cfcfcf" },
-  "& .MuiInputLabel-root.Mui-focused": { color: "#f3c80a" },
+  "& .MuiInputBase-input": { color: "text.primary" },
+  "& .MuiInputLabel-root": { color: "text.secondary" },
+  "& .MuiInputLabel-root.Mui-focused": { color: "primary.main" },
   "& .MuiOutlinedInput-root": {
     "& fieldset": { borderColor: "#555" },
-    "&:hover fieldset": { borderColor: "#f3c80a" },
-    "&.Mui-focused fieldset": { borderColor: "#f3c80a" },
+    "&:hover fieldset": { borderColor: "primary.main" },
+    "&.Mui-focused fieldset": { borderColor: "primary.main" },
   },
 };
 
@@ -130,7 +130,7 @@ const LogInButton = () => {
           onClose={() => setMode(null)}
           PaperProps={{ sx: dialogPaperSx }}
         >
-          <DialogTitle sx={{ color: "#f3c80a" }}>Log in</DialogTitle>
+          <DialogTitle sx={{ color: "primary.main" }}>Log in</DialogTitle>
           <form onSubmit={handleSubmit}>
             <DialogContent sx={{ display: "grid", gap: 2, minWidth: 320 }}>
               <TextField
@@ -157,12 +157,12 @@ const LogInButton = () => {
               />
             </DialogContent>
             <DialogActions sx={{ px: 3, pb: 3 }}>
-              <Button onClick={() => setMode(null)} sx={{ color: "#f5f5f5" }}>
+              <Button onClick={() => setMode(null)} sx={{ color: "text.primary" }}>
                 Cancel
               </Button>
               <Button
                 onClick={() => setMode("create")}
-                sx={{ color: "#f5f5f5" }}
+                sx={{ color: "text.primary" }}
               >
                 Create account
               </Button>
@@ -170,9 +170,9 @@ const LogInButton = () => {
                 type="submit"
                 variant="contained"
                 sx={{
-                  backgroundColor: "#f3c80a",
+                  backgroundColor: "primary.main",
                   color: "#1f1f1f",
-                  "&:hover": { backgroundColor: "#e0b808" },
+                  "&:hover": { backgroundColor: "primary.dark" },
                   fontWeight: 700,
                 }}
               >
@@ -187,7 +187,7 @@ const LogInButton = () => {
           onClose={() => setMode(null)}
           PaperProps={{ sx: dialogPaperSx }}
         >
-          <DialogTitle sx={{ color: "#f3c80a" }}>Create account</DialogTitle>
+          <DialogTitle sx={{ color: "primary.main" }}>Create account</DialogTitle>
           <form onSubmit={handleCreate}>
             <DialogContent sx={{ display: "grid", gap: 2, minWidth: 320 }}>
               <TextField
@@ -224,16 +224,16 @@ const LogInButton = () => {
               />
             </DialogContent>
             <DialogActions sx={{ px: 3, pb: 3 }}>
-              <Button onClick={() => setMode(null)} sx={{ color: "#f5f5f5" }}>
+              <Button onClick={() => setMode(null)} sx={{ color: "text.primary" }}>
                 Cancel
               </Button>
               <Button
                 type="submit"
                 variant="contained"
                 sx={{
-                  backgroundColor: "#f3c80a",
+                  backgroundColor: "primary.main",
                   color: "#1f1f1f",
-                  "&:hover": { backgroundColor: "#e0b808" },
+                  "&:hover": { backgroundColor: "primary.dark" },
                   fontWeight: 700,
                 }}
               >

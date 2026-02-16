@@ -2,12 +2,13 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
-import { LinearProgress } from "@mui/material";
+import GoldLinearProgress from "./GoldLinearProgress";
 import { getChampionIconName } from "../util/helperFunctions";
 import { getSummonerSpellName } from "../util/helperFunctions";
 import { getRuneTreeName } from "../util/helperFunctions";
 import { getTreeIconName } from "../util/helperFunctions";
 import { getKeystoneName } from "../util/helperFunctions";
+import { DDRAGON_BASE } from "../constants";
 
 const ExpandedTeamInfo = ({
   player,
@@ -48,7 +49,7 @@ const ExpandedTeamInfo = ({
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
         <Avatar
-          src={`/assets/16.1.1/img/champion/${getChampionIconName(
+          src={`${DDRAGON_BASE}/img/champion/${getChampionIconName(
             player.championName,
           )}.png`}
           alt={player.championName}
@@ -59,7 +60,7 @@ const ExpandedTeamInfo = ({
           <Box sx={{ display: "flex", gap: 0.25 }}>
             <Avatar
               variant="rounded"
-              src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
+              src={`${DDRAGON_BASE}/img/spell/${getSummonerSpellName(
                 player?.summoner1Id,
               )}.png`}
               slotProps={{ img: { loading: "lazy" } }}
@@ -67,7 +68,7 @@ const ExpandedTeamInfo = ({
             />
             <Avatar
               variant="rounded"
-              src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
+              src={`${DDRAGON_BASE}/img/spell/${getSummonerSpellName(
                 player?.summoner2Id,
               )}.png`}
               slotProps={{ img: { loading: "lazy" } }}
@@ -104,17 +105,17 @@ const ExpandedTeamInfo = ({
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
-            color: "#cfcfcf",
+            color: "text.secondary",
           }}
         >
           {player.riotIdGameName}
         </Typography>
       </Box>
       <Box>
-        <Typography sx={{ fontSize: 13, color: "#f5f5f5" }}>
+        <Typography sx={{ fontSize: 13, color: "text.primary" }}>
           {player?.kills}/{player?.deaths}/{player?.assists}
         </Typography>
-        <Typography sx={{ fontSize: 12, color: "#cfcfcf" }}>
+        <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
           {Math.round(
             ((player?.kills + player?.assists) / Math.max(player?.deaths, 1)) *
               10,
@@ -135,25 +136,16 @@ const ExpandedTeamInfo = ({
         </Typography>
       </Box>
       <Box sx={{ display: { xs: "none", sm: "block" } }}>
-        <Typography sx={{ fontSize: 13, color: "#cfcfcf" }}>
+        <Typography sx={{ fontSize: 13, color: "text.secondary" }}>
           {Math.round((player.totalDamageDealtToChampions || 0) / 100) / 10}k
         </Typography>
-        <LinearProgress
-          variant="determinate"
+        <GoldLinearProgress
           value={Math.min(
             100,
             ((player.totalDamageDealtToChampions || 0) / maxDamage) * 100,
           )}
-          sx={{
-            height: 5,
-            borderRadius: 3,
-            bgcolor: "#444",
-            mt: 0.5,
-            "& .MuiLinearProgress-bar": {
-              bgcolor: "#f3c80a",
-              borderRadius: 3,
-            },
-          }}
+          height={5}
+          sx={{ mt: 0.5 }}
         />
       </Box>
       <Box
@@ -167,7 +159,7 @@ const ExpandedTeamInfo = ({
           <Avatar
             key={index}
             variant="rounded"
-            src={`/assets/16.1.1/img/item/${itemId}.png`}
+            src={`${DDRAGON_BASE}/img/item/${itemId}.png`}
             alt={`Item ${itemId}`}
             slotProps={{ img: { loading: "lazy" } }}
             sx={{ width: 24, height: 24 }}

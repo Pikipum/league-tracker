@@ -10,6 +10,7 @@ import ChampionStats from "./ChampionStats";
 import LoadingCircle from "./LoadingCircle";
 import MatchHistoryTopCard from "./MatchHistoryTopBar";
 import PageLayout from "./PageLayout";
+import CenteredMessage from "./CenteredMessage";
 import { tagSplitter } from "../util/tagSplitter";
 
 const ProfileView = () => {
@@ -77,26 +78,11 @@ const ProfileView = () => {
   if (!isValid) {
     return (
       <PageLayout region={region} setRegion={setRegion}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            flex: 1,
-            gap: 2,
-          }}
-        >
-          <Typography
-            sx={{ color: "#f44336", fontSize: 24, fontWeight: "bold" }}
-          >
-            Invalid Search Format
-          </Typography>
-          <Typography sx={{ color: "#888" }}>{formatError}</Typography>
+        <CenteredMessage title="Invalid Search Format" message={formatError}>
           <Typography sx={{ color: "#666", fontSize: 14 }}>
             Example: G2 Caps#1323 with EUW region.
           </Typography>
-        </Box>
+        </CenteredMessage>
       </PageLayout>
     );
   }
@@ -105,7 +91,7 @@ const ProfileView = () => {
     return (
       <Box
         sx={{
-          bgcolor: "#1f1f1f",
+          bgcolor: "background.default",
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
@@ -114,7 +100,7 @@ const ProfileView = () => {
         }}
       >
         <LoadingCircle />
-        <Typography sx={{ color: "#888", mt: 2 }}>
+        <Typography sx={{ color: "text.disabled", mt: 2 }}>
           Checking server connection...
         </Typography>
       </Box>
@@ -124,37 +110,23 @@ const ProfileView = () => {
   if (backendHealthy === false) {
     return (
       <PageLayout region={region} setRegion={setRegion}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            flex: 1,
-            gap: 2,
-          }}
+        <CenteredMessage
+          title="Server Unavailable"
+          message="Unable to connect to the backend server. Please try again."
         >
-          <Typography
-            sx={{ color: "#f44336", fontSize: 24, fontWeight: "bold" }}
-          >
-            Server Unavailable
-          </Typography>
-          <Typography sx={{ color: "#888" }}>
-            Unable to connect to the backend server. Please try again.
-          </Typography>
           <Button
             variant="contained"
             onClick={handleRetry}
             sx={{
               mt: 2,
-              bgcolor: "#f3c80a",
+              bgcolor: "primary.main",
               color: "#000",
-              "&:hover": { bgcolor: "#d4af09" },
+              "&:hover": { bgcolor: "primary.dark" },
             }}
           >
             Retry
           </Button>
-        </Box>
+        </CenteredMessage>
       </PageLayout>
     );
   }
@@ -163,14 +135,14 @@ const ProfileView = () => {
     return (
       <Box
         sx={{
-          bgcolor: "#1f1f1f",
+          bgcolor: "background.default",
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        <LoadingCircle />;
+        <LoadingCircle />
       </Box>
     );
   }
@@ -178,20 +150,10 @@ const ProfileView = () => {
   if (responseStatus === 429) {
     return (
       <PageLayout region={region} setRegion={setRegion}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            flex: 1,
-            gap: 2,
-          }}
-        >
-          <Typography sx={{ color: "#f44336", fontSize: 18 }}>
-            Rate limit reached, try again later
-          </Typography>
-        </Box>
+        <CenteredMessage
+          title="Rate limit reached, try again later"
+          titleColor="error.main"
+        />
       </PageLayout>
     );
   }
@@ -199,23 +161,7 @@ const ProfileView = () => {
   if (profileError) {
     return (
       <PageLayout region={region} setRegion={setRegion}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            flex: 1,
-            gap: 2,
-          }}
-        >
-          <Typography
-            sx={{ color: "#f44336", fontSize: 24, fontWeight: "bold" }}
-          >
-            Profile Not Found
-          </Typography>
-          <Typography sx={{ color: "#888" }}>{profileError}</Typography>
-        </Box>
+        <CenteredMessage title="Profile Not Found" message={profileError} />
       </PageLayout>
     );
   }
@@ -223,20 +169,7 @@ const ProfileView = () => {
   if (!profileData) {
     return (
       <PageLayout region={region} setRegion={setRegion}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            flex: 1,
-            gap: 2,
-          }}
-        >
-          <Typography sx={{ color: "#888" }}>
-            No profile data available.
-          </Typography>
-        </Box>
+        <CenteredMessage message="No profile data available." />
       </PageLayout>
     );
   }
@@ -252,7 +185,14 @@ const ProfileView = () => {
         region,
       }}
     >
-      <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", flexDirection: { xs: "column", md: "row" } }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          alignItems: "flex-start",
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
         <Box sx={{ width: { xs: "100%", md: "auto" } }}>
           <Box sx={{ width: { xs: "100%", md: 300 }, flexShrink: 0 }}>
             <SideBarProfile region={region} profileData={profileData} />

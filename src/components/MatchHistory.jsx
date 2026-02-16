@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
 import MatchCard from "./MatchCard";
 import LoadingCircle from "./LoadingCircle";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Box from "@mui/material/Box";
+import CenteredMessage from "./CenteredMessage";
 import { getRegion } from "../util/helperFunctions";
 
 const getQueueId = (queueName) => {
@@ -132,35 +132,20 @@ const MatchHistory = ({
 
   if (error && matchHistory.length === 0) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          py: 4,
-        }}
-      >
-        <Typography sx={{ color: "#f44336", fontSize: 16 }}>{error}</Typography>
-      </Box>
+      <CenteredMessage
+        title={error}
+        titleColor="error.main"
+        sx={{ flex: "none", py: 4 }}
+      />
     );
   }
 
   if (!isLoading && matchHistory.length === 0) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          py: 4,
-        }}
-      >
-        <Typography sx={{ color: "#888", fontSize: 16 }}>
-          No matches found for this queue type.
-        </Typography>
-      </Box>
+      <CenteredMessage
+        message="No matches found for this queue type."
+        sx={{ flex: "none", py: 4 }}
+      />
     );
   }
 

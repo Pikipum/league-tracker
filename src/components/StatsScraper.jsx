@@ -236,7 +236,7 @@ const StatsScraper = () => {
     return (
       <Box
         sx={{
-          bgcolor: "#1f1f1f",
+          bgcolor: "background.default",
           minHeight: "100vh",
           display: "flex",
           alignItems: "center",
@@ -278,11 +278,11 @@ const StatsScraper = () => {
           onClick={handleClick}
           sx={{
             minWidth: 300,
-            bgcolor: isScraping ? "#ff6b6b" : "#f3c80a",
+            bgcolor: isScraping ? "error.light" : "primary.main",
             color: "#1f1f1f",
             fontWeight: "bold",
             "&:hover": {
-              bgcolor: isScraping ? "#ff5252" : "#d4af0a",
+              bgcolor: isScraping ? "#ff5252" : "primary.dark",
             },
           }}
         >

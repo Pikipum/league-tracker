@@ -18,6 +18,8 @@ import { getRuneTreeName } from "../util/helperFunctions";
 import { getTreeIconName } from "../util/helperFunctions";
 import { getKeystoneName } from "../util/helperFunctions";
 import ExpandedTeamInfo from "./ExpandedTeamInfo";
+import TeamPlayerList from "./TeamPlayerList";
+import { DDRAGON_BASE } from "../constants";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -102,7 +104,7 @@ const MatchCard = ({ matchData, puuid }) => {
         mb: 2,
         bgcolor: "#2a2a2a",
         borderLeft: 4,
-        borderColor: didWin ? "#f3c80a" : "#ff6b6b",
+        borderColor: didWin ? "primary.main" : "error.light",
         boxShadow: 2,
         maxWidth: 800,
         width: { xs: "100%", md: "70%" },
@@ -114,7 +116,7 @@ const MatchCard = ({ matchData, puuid }) => {
           <Box sx={{ display: "flex", gap: 1 }}>
             <Box
               component="img"
-              src={`/assets/16.1.1/img/champion/${getChampionIconName(
+              src={`${DDRAGON_BASE}/img/champion/${getChampionIconName(
                 currentPlayer?.championName,
               )}.png`}
               alt={currentPlayer?.championName}
@@ -125,7 +127,7 @@ const MatchCard = ({ matchData, puuid }) => {
               <Box sx={{ display: "flex", gap: 0.5 }}>
                 <Avatar
                   variant="rounded"
-                  src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
+                  src={`${DDRAGON_BASE}/img/spell/${getSummonerSpellName(
                     currentPlayer?.summoner1Id,
                   )}.png`}
                   slotProps={{ img: { loading: "lazy" } }}
@@ -133,7 +135,7 @@ const MatchCard = ({ matchData, puuid }) => {
                 />
                 <Avatar
                   variant="rounded"
-                  src={`/assets/16.1.1/img/spell/${getSummonerSpellName(
+                  src={`${DDRAGON_BASE}/img/spell/${getSummonerSpellName(
                     currentPlayer?.summoner2Id,
                   )}.png`}
                   slotProps={{ img: { loading: "lazy" } }}
@@ -162,11 +164,11 @@ const MatchCard = ({ matchData, puuid }) => {
           </Box>
 
           <Stack spacing={0.5} sx={{ minWidth: { xs: 80, sm: 120 } }}>
-            <Typography variant="h6" sx={{ color: "#f5f5f5" }}>
+            <Typography variant="h6" sx={{ color: "text.primary" }}>
               {currentPlayer?.kills}/{currentPlayer?.deaths}/
               {currentPlayer?.assists}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#cfcfcf" }}>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
               {Math.round(
                 ((currentPlayer?.kills + currentPlayer?.assists) /
                   Math.max(currentPlayer?.deaths, 1)) *
@@ -196,7 +198,7 @@ const MatchCard = ({ matchData, puuid }) => {
               <Avatar
                 key={index}
                 variant="rounded"
-                src={`/assets/16.1.1/img/item/${itemId}.png`}
+                src={`${DDRAGON_BASE}/img/item/${itemId}.png`}
                 alt={`Item ${itemId}`}
                 slotProps={{ img: { loading: "lazy" } }}
                 sx={{ width: 28, height: 28 }}
@@ -208,7 +210,7 @@ const MatchCard = ({ matchData, puuid }) => {
                 sx={{
                   width: 28,
                   height: 28,
-                  bgcolor: "#1a1a1a",
+                  bgcolor: "background.paper",
                   borderRadius: 0.5,
                 }}
               />
@@ -217,7 +219,7 @@ const MatchCard = ({ matchData, puuid }) => {
 
           <Avatar
             variant="rounded"
-            src={`/assets/16.1.1/img/item/${currentPlayer?.item6}.png`}
+            src={`${DDRAGON_BASE}/img/item/${currentPlayer?.item6}.png`}
             alt="Trinket"
             slotProps={{ img: { loading: "lazy" } }}
             sx={{ width: 28, height: 28 }}
@@ -227,7 +229,7 @@ const MatchCard = ({ matchData, puuid }) => {
             <Chip
               label={didWin ? "Victory" : "Defeat"}
               sx={{
-                bgcolor: didWin ? "#f3c80a" : "#ff6b6b",
+              bgcolor: didWin ? "primary.main" : "error.light",
                 color: "#1f1f1f",
                 fontWeight: "bold",
                 fontSize: "0.75rem",
@@ -235,7 +237,7 @@ const MatchCard = ({ matchData, puuid }) => {
               }}
               size="small"
             />
-            <Typography variant="caption" sx={{ color: "#cfcfcf", display: { xs: "none", sm: "flex" } }}>
+            <Typography variant="caption" sx={{ color: "text.secondary", display: { xs: "none", sm: "flex" } }}>
               {gameDuration}m
             </Typography>
             <Typography variant="caption" sx={{ color: "#999", display: { xs: "none", sm: "flex" } }}>
@@ -258,79 +260,8 @@ const MatchCard = ({ matchData, puuid }) => {
               ml: "auto",
             }}
           >
-            <Stack spacing={0.5}>
-              {blueTeam.map((player, index) => (
-                <Box
-                  key={index}
-                  sx={{ display: "flex", gap: 0.5, alignItems: "center" }}
-                >
-                  <Avatar
-                    src={`/assets/16.1.1/img/champion/${getChampionIconName(
-                      player.championName,
-                    )}.png`}
-                    alt={player.championName}
-                    slotProps={{ img: { loading: "lazy" } }}
-                    sx={{ width: 20, height: 20 }}
-                  />
-                  <Typography
-                    onClick={() =>
-                      clickProfileName(
-                        `${player.riotIdGameName}#${player.riotIdTagline}`,
-                      )
-                    }
-                    variant="caption"
-                    sx={{
-                      ":hover": { color: "white", cursor: "pointer" },
-                      fontSize: 10,
-                      maxWidth: 50,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      color: "#cfcfcf",
-                    }}
-                  >
-                    {player.riotIdGameName}
-                  </Typography>
-                </Box>
-              ))}
-            </Stack>
-
-            <Stack spacing={0.5}>
-              {redTeam.map((player, index) => (
-                <Box
-                  key={index}
-                  sx={{ display: "flex", gap: 0.5, alignItems: "center" }}
-                >
-                  <Avatar
-                    src={`/assets/16.1.1/img/champion/${getChampionIconName(
-                      player.championName,
-                    )}.png`}
-                    alt={player.championName}
-                    slotProps={{ img: { loading: "lazy" } }}
-                    sx={{ width: 20, height: 20 }}
-                  />
-                  <Typography
-                    onClick={() =>
-                      clickProfileName(
-                        `${player.riotIdGameName}#${player.riotIdTagline}`,
-                      )
-                    }
-                    variant="caption"
-                    sx={{
-                      ":hover": { color: "white", cursor: "pointer" },
-                      fontSize: 10,
-                      maxWidth: 50,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      color: "#cfcfcf",
-                    }}
-                  >
-                    {player.riotIdGameName}
-                  </Typography>
-                </Box>
-              ))}
-            </Stack>
+            <TeamPlayerList players={blueTeam} onClickPlayer={clickProfileName} />
+            <TeamPlayerList players={redTeam} onClickPlayer={clickProfileName} />
           </Box>
         </Box>
       </CardContent>
@@ -339,7 +270,7 @@ const MatchCard = ({ matchData, puuid }) => {
           <Stack
             spacing={0.5}
             sx={{
-              bgcolor: "#1a1a1a",
+              bgcolor: "background.paper",
             }}
           >
             {blueTeam.map((player, index) => (

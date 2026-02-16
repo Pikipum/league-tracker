@@ -10,7 +10,7 @@ const PageLayout = ({ children, region, setRegion, navBarProps = {} }) => {
   return (
     <Box
       sx={{
-        bgcolor: "#1f1f1f",
+        bgcolor: "background.default",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
-import { getChampionIconName } from "../util/helperFunctions";
+import ChampionRow from "./ChampionRow";
 
 const roles = [
   { value: "ALL", label: "All", icon: "/assets/img/lanes/fill.png" },
@@ -36,7 +36,7 @@ const RoleFilter = ({ selectedRole, onRoleChange }) => {
           },
           "&.Mui-selected": {
             bgcolor: "#3a3a3a",
-            color: "#f3c80a",
+            color: "primary.main",
             "&:hover": {
               bgcolor: "#4a4a4a",
             },
@@ -110,7 +110,7 @@ const Champions = ({ puuid }) => {
         flexDirection: "column",
         gap: 1,
         p: 2,
-        bgcolor: "#1a1a1a",
+        bgcolor: "background.paper",
         color: "white",
         borderRadius: 2,
         maxWidth: 400,
@@ -139,76 +139,55 @@ const Champions = ({ puuid }) => {
       )}
 
       {championStats.map((champ) => (
-        <Box
+        <ChampionRow
           key={`${champ.champion_name}-${champ.position}`}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            p: 1,
-            bgcolor: "#2a2a2a",
-            borderRadius: 1,
-          }}
-        >
-          <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
-            <Box sx={{ position: "relative" }}>
-              <Box
-                component="img"
-                src={`/assets/16.1.1/img/champion/${getChampionIconName(
-                  champ.champion_name
-                )}.png`}
-                alt={champ.champion_name}
-                loading="lazy"
-                sx={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 1,
-                }}
-              />
-              <Box
-                sx={{
-                  position: "absolute",
-                  bottom: -4,
-                  right: -4,
-                  bgcolor: getTierColor(champ.tier),
-                  color: "#000",
-                  fontSize: 10,
-                  fontWeight: "bold",
-                  px: 0.5,
-                  borderRadius: 0.5,
-                }}
-              >
-                {champ.tier}
-              </Box>
-            </Box>
+          championName={champ.champion_name}
+          left={
             <Box>
-              <Typography sx={{ fontSize: 14, color: "#f5f5f5" }}>
+              <Typography sx={{ fontSize: 14, color: "text.primary" }}>
                 {champ.champion_name}
               </Typography>
-              <Typography sx={{ color: "#888", fontSize: 12 }}>
+              <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
                 {champ.avg_kills}/{champ.avg_deaths}/{champ.avg_assists} KDA
               </Typography>
               <Typography sx={{ color: "#666", fontSize: 11 }}>
                 {champ.matches} games
               </Typography>
             </Box>
+          }
+          right={
+            <>
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  color: champ.win_rate >= 50 ? "success.main" : "error.main",
+                  fontWeight: "bold",
+                }}
+              >
+                {champ.win_rate}% WR
+              </Typography>
+              <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
+                {champ.wins}W / {champ.matches - champ.wins}L
+              </Typography>
+            </>
+          }
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: -4,
+              right: -4,
+              bgcolor: getTierColor(champ.tier),
+              color: "#000",
+              fontSize: 10,
+              fontWeight: "bold",
+              px: 0.5,
+              borderRadius: 0.5,
+            }}
+          >
+            {champ.tier}
           </Box>
-
-          <Box sx={{ textAlign: "right" }}>
-            <Typography
-              sx={{
-                fontSize: 14,
-                color: champ.win_rate >= 50 ? "#4caf50" : "#f44336",
-                fontWeight: "bold",
-              }}
-            >
-              {champ.win_rate}% WR
-            </Typography>
-            <Typography sx={{ color: "#888", fontSize: 12 }}>
-              {champ.wins}W / {champ.matches - champ.wins}L
-            </Typography>
-          </Box>
-        </Box>
+        </ChampionRow>
       ))}
     </Box>
   );

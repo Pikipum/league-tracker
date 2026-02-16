@@ -73,8 +73,8 @@ const FavoriteProfiles = () => {
   if (!token)
     return (
       <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
-        <Paper sx={{ p: 4, bgcolor: "#1a1a1a", maxWidth: 900, width: "100%" }}>
-          <Typography sx={{ color: "#f3c80a", fontWeight: 700, mb: 1 }}>
+        <Paper sx={{ p: 4, bgcolor: "background.paper", maxWidth: 900, width: "100%" }}>
+          <Typography sx={{ color: "primary.main", fontWeight: 700, mb: 1 }}>
             Favorites
           </Typography>
           <Typography sx={{ color: "#ccc" }}>
@@ -102,10 +102,10 @@ const FavoriteProfiles = () => {
           alignItems="center"
           sx={{ mb: 1 }}
         >
-          <Typography sx={{ color: "#f3c80a", fontWeight: 800, fontSize: 20 }}>
+          <Typography sx={{ color: "primary.main", fontWeight: 800, fontSize: 20 }}>
             Favorites
           </Typography>
-          <Typography sx={{ color: "#888", fontSize: 13 }}>
+          <Typography sx={{ color: "text.disabled", fontSize: 13 }}>
             {favorites.length} saved
           </Typography>
         </Stack>
@@ -130,7 +130,7 @@ const FavoriteProfiles = () => {
                 }
                 sx={{
                   mb: 1,
-                  bgcolor: "#1a1a1a",
+                  bgcolor: "background.paper",
                   borderRadius: 1,
                   "&:hover": { bgcolor: "#222" },
                 }}
@@ -139,7 +139,7 @@ const FavoriteProfiles = () => {
                   <Avatar
                     sx={{
                       bgcolor: "#2b2b2b",
-                      color: "#f3c80a",
+                      color: "primary.main",
                       width: 48,
                       height: 48,
                     }}
@@ -153,7 +153,7 @@ const FavoriteProfiles = () => {
                       <Typography sx={{ color: "#fff", fontWeight: 700 }}>
                         {f.game_name}
                       </Typography>
-                      <Typography sx={{ color: "#888", fontSize: 13 }}>
+                      <Typography sx={{ color: "text.disabled", fontSize: 13 }}>
                         #{f.tag_line}
                       </Typography>
                     </Box>
@@ -175,7 +175,7 @@ const FavoriteProfiles = () => {
                       e.stopPropagation();
                       remove(f.puuid);
                     }}
-                    sx={{ color: "#f3c80a" }}
+                    sx={{ color: "primary.main" }}
                   >
                     <DeleteIcon />
                   </IconButton>

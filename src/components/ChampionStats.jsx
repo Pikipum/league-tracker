@@ -3,7 +3,7 @@ import axios from "axios";
 import { Box, Typography } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
 import GameCountSelect from "./GameCountSelect";
-import { getChampionIconName } from "../util/helperFunctions";
+import ChampionRow from "./ChampionRow";
 
 const ChampionStats = ({ puuid }) => {
   const [championStats, setChampionStats] = useState([]);
@@ -81,9 +81,9 @@ const ChampionStats = ({ puuid }) => {
         gap: 1,
         p: 1,
         m: 1,
-        bgcolor: "#1a1a1a",
+        bgcolor: "background.paper",
         color: "white",
-        borderColor: "#f3c80a",
+        borderColor: "primary.main",
         borderRadius: 2,
       }}
     >
@@ -99,50 +99,30 @@ const ChampionStats = ({ puuid }) => {
         </Typography>
       )}
       {championStats.map((champ) => (
-        <Box
+        <ChampionRow
           key={champ.name}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            p: 1,
-            bgcolor: "#2a2a2a",
-            borderRadius: 1,
-          }}
-        >
-          <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
-            <Box
-              component="img"
-              src={`/assets/16.1.1/img/champion/${getChampionIconName(
-                champ.name,
-              )}.png`}
-              alt={champ.name}
-              loading="lazy"
-              sx={{
-                width: 48,
-                height: 48,
-                borderRadius: 1,
-              }}
-            />
+          championName={champ.name}
+          left={
             <Box>
-              <Typography sx={{ fontSize: 16, color: "#f5f5f5" }}>
+              <Typography sx={{ fontSize: 16, color: "text.primary" }}>
                 {champ.name}
               </Typography>
-              <Typography sx={{ color: "#888", fontSize: 12 }}>
+              <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
                 {champ.kda} KDA
               </Typography>
             </Box>
-          </Box>
-
-          <Box sx={{ textAlign: "right" }}>
-            <Typography sx={{ fontSize: 13, color: "#f5f5f5" }}>
-              {champ.winrate}% WR
-            </Typography>
-            <Typography sx={{ color: "#888", fontSize: 12 }}>
-              {champ.wins}W / {champ.losses}L
-            </Typography>
-          </Box>
-        </Box>
+          }
+          right={
+            <>
+              <Typography sx={{ fontSize: 13, color: "text.primary" }}>
+                {champ.winrate}% WR
+              </Typography>
+              <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
+                {champ.wins}W / {champ.losses}L
+              </Typography>
+            </>
+          }
+        />
       ))}
     </Box>
   );

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import LoadingCircle from "./LoadingCircle";
-import { getChampionIconName } from "../util/helperFunctions";
+import ChampionRow from "./ChampionRow";
 import PageLayout from "./PageLayout";
 
 const roles = [
@@ -37,7 +37,7 @@ const RoleFilter = ({ selectedRole, onRoleChange }) => {
           },
           "&.Mui-selected": {
             bgcolor: "#3a3a3a",
-            color: "#f3c80a",
+            color: "primary.main",
             "&:hover": {
               bgcolor: "#4a4a4a",
             },
@@ -111,9 +111,9 @@ const TierList = () => {
             gap: 1,
             p: 1,
             m: 1,
-            bgcolor: "#1a1a1a",
+            bgcolor: "background.paper",
             color: "white",
-            borderColor: "#f3c80a",
+            borderColor: "primary.main",
             maxWidth: 400,
             minWidth: { xs: 0, sm: 350 },
             width: "100%",
@@ -131,53 +131,33 @@ const TierList = () => {
           </Typography>
         )}
         {tierList.map((champ) => (
-          <Box
+          <ChampionRow
             key={champ.rank}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              p: 1,
-              bgcolor: "#2a2a2a",
-              borderRadius: 1,
-            }}
-          >
-            <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
-              <Box
-                component="img"
-                src={`/assets/16.1.1/img/champion/${getChampionIconName(
-                  champ.champion_name,
-                )}.png`}
-                alt={champ.champion_name}
-                loading="lazy"
-                sx={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 1,
-                }}
-              />
+            championName={champ.champion_name}
+            left={
               <Box>
-                <Typography sx={{ fontSize: 16, color: "#f5f5f5" }}>
+                <Typography sx={{ fontSize: 16, color: "text.primary" }}>
                   {champ.champion_name}
                 </Typography>
-                <Typography sx={{ color: "#888", fontSize: 12 }}>
+                <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
                   {champ.tier}
                 </Typography>
-                <Typography sx={{ color: "#888", fontSize: 12 }}>
+                <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
                   {champ.pick_rate}% Pick rate
                 </Typography>
               </Box>
-            </Box>
-
-            <Box sx={{ textAlign: "right" }}>
-              <Typography sx={{ fontSize: 13, color: "#f5f5f5" }}>
-                {champ.win_rate}% WR
-              </Typography>
-              <Typography sx={{ color: "#888", fontSize: 12 }}>
-                {champ.wins}W / {champ.matches - champ.wins}L
-              </Typography>
-            </Box>
-          </Box>
+            }
+            right={
+              <>
+                <Typography sx={{ fontSize: 13, color: "text.primary" }}>
+                  {champ.win_rate}% WR
+                </Typography>
+                <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
+                  {champ.wins}W / {champ.matches - champ.wins}L
+                </Typography>
+              </>
+            }
+          />
         ))}
         </Box>
       </Box>

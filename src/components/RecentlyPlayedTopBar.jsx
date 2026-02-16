@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Box, Typography } from "@mui/material";
 import { getChampionIconName } from "../util/helperFunctions";
+import { DDRAGON_BASE } from "../constants";
 
 const RecentlyPlayedTopBar = ({ puuid, matchHistory }) => {
   const stats = useMemo(() => {
@@ -71,7 +72,7 @@ const RecentlyPlayedTopBar = ({ puuid, matchHistory }) => {
   if (!stats || stats.totalGames === 0) {
     return (
       <Box sx={{ display: "flex", alignItems: "center", py: 1, px: 2 }}>
-        <Typography sx={{ color: "#888", fontSize: 14 }}>
+        <Typography sx={{ color: "text.disabled", fontSize: 14 }}>
           Loading stats...
         </Typography>
       </Box>
@@ -92,11 +93,11 @@ const RecentlyPlayedTopBar = ({ puuid, matchHistory }) => {
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
         <Box>
           <Typography
-            sx={{ color: "#e0e0e0", fontWeight: "bold", fontSize: 14 }}
+            sx={{ color: "text.primary", fontWeight: "bold", fontSize: 14 }}
           >
             {stats.winrate}% WR
           </Typography>
-          <Typography sx={{ color: "#888", fontSize: 12 }}>
+          <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
             Last {stats.totalGames} games
           </Typography>
         </Box>
@@ -109,7 +110,7 @@ const RecentlyPlayedTopBar = ({ puuid, matchHistory }) => {
         >
           <Box
             component="img"
-            src={`/assets/16.1.1/img/champion/${getChampionIconName(champ.name)}.png`}
+            src={`${DDRAGON_BASE}/img/champion/${getChampionIconName(champ.name)}.png`}
             alt={champ.name}
             loading="lazy"
             sx={{ width: 36, height: 36, borderRadius: "50%" }}
@@ -124,7 +125,7 @@ const RecentlyPlayedTopBar = ({ puuid, matchHistory }) => {
             >
               {champ.winrate}% ({champ.wins}W {champ.losses}L)
             </Typography>
-            <Typography sx={{ color: "#888", fontSize: 11 }}>
+            <Typography sx={{ color: "text.disabled", fontSize: 11 }}>
               {champ.kda} KDA
             </Typography>
           </Box>

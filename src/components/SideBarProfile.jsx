@@ -1,9 +1,11 @@
-import { Box, Typography, LinearProgress } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import LoadingCircle from "./LoadingCircle";
 import { getRegion } from "../util/helperFunctions";
 import FavoriteButton from "./FavoriteButton";
+import GoldLinearProgress from "./GoldLinearProgress";
+import { DDRAGON_BASE } from "../constants";
 
 const SideBarProfile = ({ region, profileData }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +55,7 @@ const SideBarProfile = ({ region, profileData }) => {
         gap: 2,
         p: 2,
         m: 1,
-        bgcolor: "#1a1a1a",
+        bgcolor: "background.paper",
         borderRadius: 2,
         maxWidth: { xs: "100%", md: 320 },
       }}
@@ -61,7 +63,7 @@ const SideBarProfile = ({ region, profileData }) => {
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
         <Box
           component="img"
-          src={`/assets/16.1.1/img/profileicon/${summonerIconLevel?.profileIconId}.png`}
+          src={`${DDRAGON_BASE}/img/profileicon/${summonerIconLevel?.profileIconId}.png`}
           alt="Profile Icon"
           loading="lazy"
           sx={{
@@ -79,15 +81,12 @@ const SideBarProfile = ({ region, profileData }) => {
               alignItems: "center",
             }}
           >
-            <Typography
-              noWrap
-              sx={{ color: "white", fontWeight: "bold", fontSize: 18, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-            >
+            <Typography noWrap sx={{ color: "text.primary", fontWeight: "bold", fontSize: 18, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               {profileData.gameName}
             </Typography>
             <FavoriteButton profileData={profileData} region={region} />
           </Box>
-          <Typography sx={{ color: "#888", fontSize: 14 }}>
+          <Typography sx={{ color: "text.disabled", fontSize: 14 }}>
             #{profileData.tagLine}
           </Typography>
           <Typography sx={{ color: "#aaa", fontSize: 12 }}>
@@ -121,35 +120,25 @@ const SideBarProfile = ({ region, profileData }) => {
                 }}
               >
                 <Typography
-                  sx={{ color: "#f3c80a", fontWeight: "bold", fontSize: 16 }}
+              sx={{ color: "primary.main", fontWeight: "bold", fontSize: 16 }}
                 >
                   {summonerData.tier}{["MASTER", "GRANDMASTER", "CHALLENGER"].includes(summonerData.tier) ? "" : ` ${summonerData.rank}`}
                 </Typography>
-                <Typography sx={{ color: "#888", fontSize: 14 }}>
+                <Typography sx={{ color: "text.disabled", fontSize: 14 }}>
                   {summonerData.leaguePoints} LP
                 </Typography>
               </Box>
-              <LinearProgress
-                variant="determinate"
+              <GoldLinearProgress
                 value={summonerData.leaguePoints}
-                sx={{
-                  height: 6,
-                  borderRadius: 3,
-                  bgcolor: "#444",
-                  mt: 1,
-                  "& .MuiLinearProgress-bar": {
-                    bgcolor: "#f3c80a",
-                    borderRadius: 3,
-                  },
-                }}
+                sx={{ mt: 1 }}
               />
               <Box
                 sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
               >
-                <Typography sx={{ color: "#888", fontSize: 12 }}>
+                <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
                   {winrate}% WR
                 </Typography>
-                <Typography sx={{ color: "#888", fontSize: 12 }}>
+                <Typography sx={{ color: "text.disabled", fontSize: 12 }}>
                   {summonerData.wins}W - {summonerData.losses}L
                 </Typography>
               </Box>
