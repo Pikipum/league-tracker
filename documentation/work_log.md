@@ -47,7 +47,7 @@
 | 09.02 | 7 | improving small screen layout, hide menu items and search behind icons |
 | 09.02 | 2 | refactoring, consolidated many components |
 | 13.02 | 8 | continued refactoring, extracted reusable components, use theme file colors |
-| 16.02 | 4 | cleaning up api call logic, consolidated duplicate code |
+| 15.02 | 4 | cleaning up api call logic, consolidated duplicate code |
 | 16.02 | 1 | moved .css files to sx props |
 | 16.02 | 2 | updated readme with instructions and images |
 | 16.02 | 1 | fixed logic in top champions panel, made nginx conf public |
