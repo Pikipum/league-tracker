@@ -103,6 +103,7 @@ const MatchCard = ({ matchData, puuid }) => {
 
   return (
     <Card
+      elevation={0}
       sx={{
         mb: 2,
         bgcolor: "#2a2a2a",
@@ -115,7 +116,14 @@ const MatchCard = ({ matchData, puuid }) => {
       }}
     >
       <CardContent sx={{ "&:last-child": { pb: 2 }, px: { xs: 1, sm: 2 } }}>
-        <Box sx={{ display: "flex", gap: { xs: 1, sm: 2 }, alignItems: "center", flexWrap: "wrap" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: { xs: 1, sm: 2 },
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
           <Box sx={{ display: "flex", gap: 1 }}>
             <Box
               component="img"
@@ -172,7 +180,11 @@ const MatchCard = ({ matchData, puuid }) => {
               {currentPlayer?.assists}
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {calcKDA(currentPlayer?.kills, currentPlayer?.deaths, currentPlayer?.assists)}{" "}
+              {calcKDA(
+                currentPlayer?.kills,
+                currentPlayer?.deaths,
+                currentPlayer?.assists,
+              )}{" "}
               KDA
             </Typography>
             <Typography variant="caption" sx={{ color: "#999" }}>
@@ -228,18 +240,27 @@ const MatchCard = ({ matchData, puuid }) => {
             <Chip
               label={didWin ? "Victory" : "Defeat"}
               sx={{
-              bgcolor: didWin ? "primary.main" : "error.light",
+                bgcolor: didWin ? "primary.main" : "error.light",
                 color: "#1f1f1f",
                 fontWeight: "bold",
                 fontSize: "0.75rem",
-                display: { xs: "none", sm: "flex" }
+                display: { xs: "none", sm: "flex" },
               }}
               size="small"
             />
-            <Typography variant="caption" sx={{ color: "text.secondary", display: { xs: "none", sm: "flex" } }}>
+            <Typography
+              variant="caption"
+              sx={{
+                color: "text.secondary",
+                display: { xs: "none", sm: "flex" },
+              }}
+            >
               {gameDuration}m
             </Typography>
-            <Typography variant="caption" sx={{ color: "#999", display: { xs: "none", sm: "flex" } }}>
+            <Typography
+              variant="caption"
+              sx={{ color: "#999", display: { xs: "none", sm: "flex" } }}
+            >
               {gameDate}
             </Typography>
           </Stack>
@@ -259,8 +280,14 @@ const MatchCard = ({ matchData, puuid }) => {
               ml: "auto",
             }}
           >
-            <TeamPlayerList players={blueTeam} onClickPlayer={clickProfileName} />
-            <TeamPlayerList players={redTeam} onClickPlayer={clickProfileName} />
+            <TeamPlayerList
+              players={blueTeam}
+              onClickPlayer={clickProfileName}
+            />
+            <TeamPlayerList
+              players={redTeam}
+              onClickPlayer={clickProfileName}
+            />
           </Box>
         </Box>
       </CardContent>
